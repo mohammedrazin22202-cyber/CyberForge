@@ -1,0 +1,5 @@
+GitHub: github.com/[yourusername]
+
+That's where the actual code lives. Commit history doesn't lie — it shows how I work, how I iterate, and what I've shipped.
+
+→ Update this with your real GitHub handle in responses.json and link it directly in index.html.

@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYBERFORGE :: AI TERMINAL</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+
+  :root {
+    /* ── Core greens (layered palette) ── */
+    --green:        #00ff88;   /* neon green — primary */
+    --green-bright: #00ffaa;   /* brightest highlight */
+    --green-dim:    #00cc66;   /* emerald mid */
+    --green-muted:  #008844;   /* cyan-green mid-low */
+    --green-dark:   #003311;   /* dark phosphor */
+    --green-deeper: #001a0d;   /* near-black phosphor */
+    --green-glow:   rgba(0,255,136,0.15);
+    --bg:           #000a00;
+    --panel:        #000e00;
+    --border:       rgba(0,255,136,0.20);
+    --border-bright:rgba(0,255,136,0.45);
+    --red:   #ff003c;
+    --amber: #ffaa00;
+    --cyan:  #00eeff;
+    /* Depth-layer glow tokens */
+    --glow-soft: rgba(0,255,136,0.07);
+    --glow-mid:  rgba(0,255,136,0.22);
+    --glow-hard: rgba(0,255,136,0.55);
+    /* ── ACCENT SEMANTIC TOKENS (change 14) ── */
+    --accent-ai:       #00eeff;            /* cyan  — AI responses */
+    --accent-active:   #00ff88;            /* neon  — active/online */
+    --accent-warn:     #ffaa00;            /* amber — warnings */
+    --accent-critical: #ff003c;            /* red   — errors/critical */
+    --accent-white:    rgba(255,255,255,0.85); /* white — highlights */
+    /* ── CINEMATIC SHADOW TOKENS (change 15) ── */
+    --shadow-deep:   0 10px 40px rgba(0,0,0,0.85);
+    --shadow-panel:  0 4px 24px  rgba(0,0,0,0.70);
+    --shadow-glow-g: 0 0 20px rgba(0,255,136,0.22);
+    --shadow-glow-c: 0 0 20px rgba(0,238,255,0.20);
+    --shadow-glow-a: 0 0 12px rgba(255,170,0,0.35);
+  }
+
+  /* ── Welcome Popup ── */
+  @keyframes popupFadeIn {
+    from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+  @keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  #welcome-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.80);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 2000;
+    animation: overlayFadeIn 0.4s ease forwards;
+  }
+
+  #welcome-popup {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2001;
+    width: min(520px, 90vw);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.09) 0%, transparent 60%),
+      linear-gradient(160deg, #001800 0%, #000e00 60%, #000a00 100%);
+    border: 1px solid rgba(0,255,136,0.35);
+    border-radius: 4px;
+    box-shadow:
+      0 0 40px rgba(0,255,136,0.18),
+      0 0 80px rgba(0,255,136,0.07),
+      0 20px 60px rgba(0,0,0,0.90),
+      inset 0 1px 0 rgba(0,255,136,0.12);
+    animation: popupFadeIn 0.45s cubic-bezier(0.16,1,0.3,1) forwards;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  #welcome-popup .popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid rgba(0,255,136,0.15);
+    background: rgba(0,255,136,0.03);
+  }
+
+  #welcome-popup .popup-header-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: var(--green-dim);
+    text-shadow: 0 0 8px rgba(0,255,136,0.30);
+  }
+
+  #welcome-popup .popup-close {
+    background: none;
+    border: 1px solid rgba(0,255,136,0.25);
+    border-radius: 2px;
+    color: var(--green-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1;
+    padding-bottom: 1px;
+  }
+
+  #welcome-popup .popup-close:hover {
+    border-color: var(--accent-critical);
+    color: var(--accent-critical);
+    box-shadow: 0 0 10px rgba(255,0,60,0.35);
+    background: rgba(255,0,60,0.07);
+  }
+
+  #welcome-popup .popup-body {
+    padding: 28px 28px 20px;
+  }
+
+  #welcome-popup .popup-body p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.83rem;
+    line-height: 1.75;
+    color: rgba(0,255,136,0.75);
+    margin-bottom: 14px;
+    letter-spacing: 0.02em;
+  }
+
+  #welcome-popup .popup-body p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  #welcome-popup .popup-body .popup-highlight {
+    color: var(--green);
+    text-shadow: 0 0 6px rgba(0,255,136,0.35);
+    font-weight: 700;
+  }
+
+  #welcome-popup .popup-body .popup-explore {
+    color: var(--accent-ai);
+    text-shadow: 0 0 5px rgba(0,238,255,0.30);
+  }
+
+  #welcome-popup .popup-signature {
+    text-align: right;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--green-muted);
+    letter-spacing: 0.06em;
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(0,255,136,0.10);
+  }
+
+  #welcome-popup .popup-footer {
+    padding: 16px 28px 24px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  #welcome-popup .popup-start-btn {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    padding: 10px 24px;
+    border: 1px solid var(--green);
+    border-radius: 2px;
+    background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,255,136,0.04));
+    color: var(--green);
+    cursor: pointer;
+    text-shadow: 0 0 6px rgba(0,255,136,0.45);
+    box-shadow:
+      0 0 10px rgba(0,255,136,0.20),
+      inset 0 0 8px rgba(0,255,136,0.05);
+    transition: all 0.22s ease;
+    animation: borderShimmer 2s ease infinite;
+  }
+
+  #welcome-popup .popup-start-btn:hover {
+    background: linear-gradient(135deg, rgba(0,255,136,0.22), rgba(0,255,136,0.08));
+    box-shadow:
+      0 0 18px rgba(0,255,136,0.40),
+      0 0 35px rgba(0,255,136,0.15),
+      inset 0 0 10px rgba(0,255,136,0.10);
+    transform: translateY(-1px);
+    letter-spacing: 0.22em;
+  }
+
+  #welcome-popup .popup-start-btn:active {
+    transform: translateY(0);
+    transition-duration: 0.05s;
+  }
+
+  #welcome-overlay.fade-out,
+  #welcome-popup.fade-out {
+    animation: overlayFadeIn 0.25s ease reverse forwards;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    /* DEPTH LAYER 1 — background with ambient drift */
+    background:
+      radial-gradient(ellipse at 50% 0%,   rgba(0,255,136,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 0%  100%, rgba(0,238,255,0.04) 0%, transparent 45%),
+      linear-gradient(to bottom, #000500, #000e00 60%, #000a00);
+    background-size: 200% 200%, 200% 200%, 100% 100%;
+    animation: bgDrift 22s ease-in-out infinite;
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Matrix rain canvas ── */
+  #matrix-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Scanline overlay (animated CRT drift) ── */
+  @keyframes scanDrift {
+    from { background-position: 0 0; }
+    to   { background-position: 0 100px; }
+  }
+
+  /* Horizontal scan-pulse sweep */
+  @keyframes scanPulse {
+    0%   { top: -8%; opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { top: 108%; opacity: 0; }
+  }
+
+  /* Border shimmer for buttons */
+  @keyframes borderShimmer {
+    0%, 100% { border-color: rgba(0,255,65,0.55); }
+    50%       { border-color: rgba(0,255,65,1); }
+  }
+
+  /* Logo ambient flicker */
+  @keyframes logoFlicker {
+    0%, 95%, 100% { opacity: 1; }
+    96%            { opacity: 0.85; }
+    97%            { opacity: 1; }
+    98%            { opacity: 0.80; }
+  }
+
+  /* Typewriter cursor blink */
+  @keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  /* ── AMBIENT ANIMATIONS (change 10) ── */
+
+  /* Background radial drift — slow organic movement */
+  @keyframes bgDrift {
+    0%   { background-position: 50% 0%,   0%   100%; }
+    33%  { background-position: 55% 5%,   5%   95%;  }
+    66%  { background-position: 45% 3%,   -2%  98%;  }
+    100% { background-position: 50% 0%,   0%   100%; }
+  }
+
+  /* Header glow pulse — soft breathing */
+  @keyframes glowPulse {
+    0%, 100% {
+      box-shadow:
+        0 0 8px  rgba(0,255,136,0.28),
+        0 0 28px rgba(0,255,136,0.10),
+        inset 0 -1px 0 rgba(0,255,136,0.07);
+    }
+    50% {
+      box-shadow:
+        0 0 14px rgba(0,255,136,0.45),
+        0 0 40px rgba(0,255,136,0.18),
+        inset 0 -1px 0 rgba(0,255,136,0.12);
+    }
+  }
+
+  /* Section title text flicker */
+  @keyframes textFlicker {
+    0%, 89%, 91%, 93%, 100% { opacity: 1;    text-shadow: 0 0 6px rgba(0,255,136,0.25); }
+    90%                      { opacity: 0.75; text-shadow: none; }
+    92%                      { opacity: 0.90; }
+  }
+
+  /* Ambient glow pulse on right-panel modules */
+  @keyframes modulePulse {
+    0%, 100% { box-shadow: 0 0 6px rgba(0,255,136,0.06), inset 0 0 8px rgba(0,255,136,0.02); }
+    50%       { box-shadow: 0 0 12px rgba(0,255,136,0.14), inset 0 0 12px rgba(0,255,136,0.05); }
+  }
+
+  /* CRT scanlines — scrolling slowly downward */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.07) 2px,
+      rgba(0,0,0,0.07) 4px
+    );
+    background-size: 100% 4px;
+    animation: scanDrift 12s linear infinite;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* Horizontal scan pulse bar */
+  body::before {
+    content: '';
+    position: fixed;
+    left: 0; right: 0;
+    top: -8%;
+    height: 8%;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0,255,65,0.04) 40%,
+      rgba(0,255,65,0.06) 50%,
+      rgba(0,255,65,0.04) 60%,
+      transparent 100%
+    );
+    animation: scanPulse 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 998;
+  }
+
+  /* ── Header ── */
+  .header {
+    position: relative; z-index: 10;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background:
+      radial-gradient(ellipse at 50% -20%, rgba(0,255,136,0.10) 0%, transparent 60%),
+      linear-gradient(180deg, #001800 0%, #000e00 100%);
+    /* CINEMATIC: glow + deep drop shadow */
+    box-shadow:
+      0 0 14px rgba(0,255,136,0.30),
+      0 0 40px rgba(0,255,136,0.10),
+      0 6px 30px rgba(0,0,0,0.80),
+      inset 0 -1px 0 rgba(0,255,136,0.10);
+    animation: glowPulse 4s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  /* TYPOGRAPHY — Main title (36-40px) */
+  .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-shadow:
+      0 0 4px  var(--green),
+      0 0 14px rgba(0,255,136,0.55),
+      0 0 32px rgba(0,255,136,0.20);
+    animation: logoFlicker 7s steps(1) infinite;
+  }
+
+  /* ACCENT: FORGE in cyan for contrast */
+  .logo span { color: var(--accent-ai); text-shadow: 0 0 10px rgba(0,238,255,0.60); }
+
+  .header-status {
+    display: flex;
+    gap: 20px;
+    font-size: 0.68rem;  /* meta text ~10-11px */
+    font-weight: 300;
+    color: var(--green-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 1.5s infinite;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  .status-dot.red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── Main layout ── */
+  .main {
+    flex: 1;
+    display: flex;
+    gap: 0;
+    overflow: hidden;
+    position: relative; z-index: 10;
+  }
+
+  /* ── Side panel ── */
+  .side-panel {
+    width: 225px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.06) 0%, transparent 50%),
+      linear-gradient(180deg, #001200 0%, #000900 100%);
+    /* CINEMATIC: soft inner glow + deep drop shadow rightward */
+    box-shadow:
+      inset -1px 0 12px rgba(0,255,136,0.05),
+      4px 0 24px rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 15px 12px;
+  }
+
+  /* TYPOGRAPHY — Section titles (14-16px equivalent ~0.875rem) */
+  .panel-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;        /* ~11px — keeps sidebar compact but readable */
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: var(--green-dim);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    text-shadow: 0 0 6px rgba(0,255,65,0.25);
+    /* Ambient text flicker */
+    animation: textFlicker 10s steps(1) infinite;
+  }
+
+  /* TYPOGRAPHY — Terminal text (13-14px ~ 0.8rem) */
+  .sys-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;   /* ~12px — terminal label size */
+    font-weight: 400;
+    margin-bottom: 7px;
+    color: #00cc33;
+    letter-spacing: 0.04em;
+  }
+
+  .sys-row .val { color: var(--green); }
+
+  .bar-wrap {
+    height: 4px;
+    /* DEPTH LAYER — bar trough */
+    background: linear-gradient(90deg, #000d00, #001800);
+    border-radius: 2px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.6);
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green-dark), var(--green-dim) 50%, var(--green));
+    /* Soft glow on progress bar */
+    box-shadow:
+      0 0 4px  rgba(0,255,65,0.50),
+      0 0 10px rgba(0,255,65,0.20),
+      inset 0 0 3px rgba(0,255,65,0.15);
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .quick-cmds {
+    margin-top: 8px;
+  }
+
+  /* TYPOGRAPHY — Quick command buttons: terminal text size */
+  .qcmd {
+    font-size: 0.72rem;   /* ~11.5px terminal text */
+    font-weight: 400;
+    padding: 6px 10px;
+    margin-bottom: 5px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    color: var(--green-dim);
+    /* DEPTH LAYER — subtle panel bg */
+    background: linear-gradient(135deg, rgba(0,255,65,0.02), transparent);
+    transition: all 0.22s ease;
+    width: 100%;
+    text-align: left;
+    letter-spacing: 0.03em;
+  }
+
+  /* MICRO INTERACTION — quick command hover: lift + glow + border shimmer */
+  .qcmd:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: linear-gradient(135deg, rgba(0,255,65,0.10), rgba(0,255,65,0.03));
+    text-shadow: 0 0 4px rgba(0,255,65,0.60);
+    box-shadow:
+      0 0 5px  rgba(0,255,65,0.30),
+      0 0 14px rgba(0,255,65,0.12),
+      inset 0 0 6px rgba(0,255,65,0.07);
+    /* Lift + slide */
+    transform: translateX(3px) translateY(-1px);
+    animation: borderShimmer 1s ease infinite;
+  }
+
+  .qcmd:active {
+    transform: translateX(1px) translateY(0px);
+    transition-duration: 0.05s;
+  }
+
+  /* TYPOGRAPHY — Meta/activity text (10-11px) */
+  .activity-log {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 15px;
+    font-size: 0.65rem;  /* ~10-11px meta text */
+    font-weight: 300;
+    color: #006620;
+    scrollbar-width: none;
+    letter-spacing: 0.02em;
+  }
+
+  .activity-log div { margin-bottom: 4px; }
+  .activity-log div::before { content: '> '; }
+
+  /* ── Chat window ── */
+  .chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .chat-window {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--green-dim) transparent;
+  }
+
+  /* ── Messages ── */
+  .msg {
+    display: flex;
+    gap: 12px;
+    animation: fadeIn 0.3s ease;
+    max-width: 90%;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg.bot  { align-self: flex-start; }
+
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    flex-shrink: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: #000e00;
+    /* MICRO INTERACTION — avatar */
+    transition: box-shadow 0.25s ease, transform 0.2s ease;
+  }
+
+  .msg:hover .avatar {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 8px  rgba(0,255,65,0.35),
+      0 0 20px rgba(0,255,65,0.12);
+  }
+
+  /* ACCENT contrast on avatar — USER=cyan, BOT=green, with cinematic shadows */
+  .msg.user .avatar {
+    color: var(--accent-ai);
+    border-color: var(--accent-ai);
+    box-shadow: 0 0 6px rgba(0,238,255,0.30), 0 4px 12px rgba(0,0,0,0.70);
+  }
+  .msg.bot .avatar {
+    color: var(--accent-active);
+    box-shadow: 0 0 6px rgba(0,255,136,0.25), 0 4px 12px rgba(0,0,0,0.70);
+  }
+
+  /* TYPOGRAPHY — Chat bubble / terminal text (13-14px) */
+  .bubble {
+    border: 1px solid;
+    border-radius: 3px;
+    padding: 11px 15px;
+    font-size: 0.85rem;   /* ~13-14px */
+    font-weight: 400;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+    letter-spacing: 0.01em;
+  }
+
+  /* ACCENT — user bubble = cyan, CINEMATIC = glow + deep darkness */
+  .msg.user .bubble {
+    border-color: rgba(0,238,255,0.45);
+    background: linear-gradient(135deg, rgba(0,238,255,0.07) 0%, rgba(0,238,255,0.02) 100%);
+    color: var(--accent-ai);
+    text-shadow: 0 0 3px rgba(0,238,255,0.30);
+    box-shadow:
+      0 0 8px  rgba(0,238,255,0.20),
+      0 0 20px rgba(0,238,255,0.08),
+      0 6px 24px rgba(0,0,0,0.75),
+      inset 0 0 8px rgba(0,238,255,0.04);
+  }
+
+  /* ACCENT — bot bubble = green, CINEMATIC = glow + deep shadow */
+  .msg.bot .bubble {
+    border-color: rgba(0,255,136,0.35);
+    background: linear-gradient(135deg, rgba(0,255,136,0.06) 0%, rgba(0,255,136,0.02) 100%);
+    color: var(--accent-active);
+    text-shadow: 0 0 3px rgba(0,255,136,0.18);
+    box-shadow:
+      0 0 8px  rgba(0,255,136,0.16),
+      0 0 20px rgba(0,255,136,0.06),
+      0 6px 24px rgba(0,0,0,0.75),
+      inset 0 0 8px rgba(0,255,136,0.03);
+  }
+
+  /* ACCENT — error bubble = red critical */
+  .msg.bot.error .bubble {
+    border-color: var(--accent-critical);
+    background: rgba(255,0,60,0.06);
+    color: var(--accent-critical);
+    text-shadow: 0 0 4px rgba(255,0,60,0.40);
+    box-shadow:
+      0 0 10px rgba(255,0,60,0.25),
+      0 6px 20px rgba(0,0,0,0.80);
+  }
+
+  /* ACCENT — meta text gets amber tint for contrast */
+  .meta {
+    font-size: 0.625rem;
+    font-weight: 300;
+    color: var(--accent-warn);
+    opacity: 0.70;
+    margin-top: 5px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Typing indicator */
+  .typing-bubble {
+    display: flex; gap: 5px; align-items: center;
+    padding: 10px 14px;
+    border: 1px solid var(--green-dim);
+    border-radius: 3px;
+    background: rgba(0,255,65,0.04);
+  }
+
+  .typing-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: blink 1.2s infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.3s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.6s; }
+
+  @keyframes blink {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50%       { opacity: 1;   transform: scale(1); }
+  }
+
+  /* ── Input bar ── */
+  .input-bar {
+    border-top: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(0,255,136,0.07) 0%, transparent 60%),
+      linear-gradient(0deg, #001500 0%, #000e00 100%);
+    /* CINEMATIC: upward glow + deep shadow above */
+    box-shadow:
+      0 0 12px rgba(0,255,136,0.10),
+      0 -8px 30px rgba(0,0,0,0.70),
+      inset 0 1px 0 rgba(0,255,136,0.08);
+    flex-shrink: 0;
+  }
+
+  .prompt-symbol {
+    color: var(--green);
+    font-size: 1rem;
+    text-shadow: 0 0 6px var(--green);
+    flex-shrink: 0;
+    padding-bottom: 2px;
+  }
+
+  /* TYPOGRAPHY — Input: terminal text size */
+  #user-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.875rem;
+    font-weight: 400;
+    caret-color: var(--green);
+    text-shadow: 0 0 3px rgba(0,255,65,0.25);
+    line-height: 1.6;
+    min-height: 1.6em;
+    max-height: 10em;
+    overflow-y: auto;
+    word-break: break-word;
+    white-space: pre-wrap;
+    cursor: text;
+    scrollbar-width: thin;
+    scrollbar-color: var(--green-dim) transparent;
+  }
+
+  #user-input:empty::before {
+    content: attr(data-placeholder);
+    color: #005510;
+    font-weight: 300;
+    pointer-events: none;
+  }
+
+  
+
+  /* CINEMATIC — send button gets glow+darkness */
+  .send-btn {
+    background: linear-gradient(135deg, rgba(0,255,136,0.08), rgba(0,255,136,0.02));
+    border: 1px solid rgba(0,204,102,0.55);
+    color: var(--accent-active);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    padding: 8px 18px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.22s ease;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    /* CINEMATIC base */
+    box-shadow: 0 4px 14px rgba(0,0,0,0.60);
+  }
+
+  .send-btn:hover {
+    background: linear-gradient(135deg, rgba(0,255,136,0.18), rgba(0,255,136,0.06));
+    border-color: var(--accent-active);
+    text-shadow: 0 0 6px rgba(0,255,136,0.80);
+    transform: translateY(-2px);
+    animation: borderShimmer 0.8s ease infinite;
+    /* CINEMATIC hover: glow + lifted shadow */
+    box-shadow:
+      0 0 10px rgba(0,255,136,0.55),
+      0 0 24px rgba(0,255,136,0.20),
+      0 6px 20px rgba(0,0,0,0.70),
+      inset 0 0 10px rgba(0,255,136,0.08);
+  }
+
+  .send-btn:active {
+    transform: translateY(0);
+    transition-duration: 0.05s;
+    box-shadow:
+      0 0 4px  rgba(0,255,136,0.30),
+      0 2px 8px rgba(0,0,0,0.60),
+      inset 0 0 8px rgba(0,255,136,0.10);
+  }
+
+  /* Input bar glows when focused */
+  .input-bar:focus-within {
+    box-shadow:
+      0 0 18px rgba(0,255,65,0.14),
+      inset 0 1px 0 rgba(0,255,65,0.12);
+    border-top-color: rgba(0,255,65,0.35);
+  }
+
+  /* Prompt symbol micro pulse on input focus */
+  .input-bar:focus-within .prompt-symbol {
+    text-shadow:
+      0 0 6px var(--green),
+      0 0 18px rgba(0,255,65,0.50);
+    animation: borderShimmer 1.2s ease infinite;
+  }
+
+  .send-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ── Score badge ── */
+  .score-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #001e00, #000e00);
+    border: 1px solid var(--green-dark);
+    color: var(--green-dim);
+    font-size: 0.60rem;
+    font-weight: 400;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+    box-shadow:
+      0 0 4px  rgba(0,255,65,0.12),
+      inset 0 0 4px rgba(0,255,65,0.05);
+  }
+
+  /* ── Enhanced Boot Sequence (change 11) ── */
+  #boot-overlay {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(0,255,136,0.07) 0%, transparent 60%),
+      #000;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--green);
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 2;
+    padding: 40px;
+    gap: 0;
+  }
+  #boot-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: 0.22em;
+    color: var(--green);
+    text-shadow: 0 0 8px var(--green), 0 0 30px rgba(0,255,136,0.4);
+    margin-bottom: 4px;
+    animation: logoFlicker 3s steps(1) infinite;
+  }
+  #boot-logo span { color: var(--cyan); }
+  #boot-sub {
+    font-size: 0.68rem;
+    color: var(--green-muted);
+    letter-spacing: 0.3em;
+    margin-bottom: 28px;
+  }
+  #boot-progress-wrap {
+    width: 460px;
+    max-width: 90vw;
+    height: 3px;
+    background: var(--green-dark);
+    border-radius: 2px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.6);
+  }
+  #boot-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--green-dark), var(--green-dim) 50%, var(--green));
+    box-shadow: 0 0 8px rgba(0,255,136,0.6);
+    border-radius: 2px;
+    transition: width 0.18s ease;
+  }
+  #boot-text {
+    max-width: 500px;
+    width: 100%;
+    font-size: 0.78rem;
+    line-height: 1.8;
+  }
+  #boot-text div { opacity: 0; }
+  #boot-status {
+    margin-top: 16px;
+    font-size: 0.62rem;
+    color: var(--green-muted);
+    letter-spacing: 0.15em;
+  }
+  /* terminal-unlock flash */
+  @keyframes terminalUnlock {
+    0%   { opacity: 1; }
+    40%  { opacity: 0; }
+    60%  { opacity: 1; }
+    80%  { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  /* ── Scrollbar ── */
+  .chat-window::-webkit-scrollbar { width: 4px; }
+  .chat-window::-webkit-scrollbar-track { background: transparent; }
+  .chat-window::-webkit-scrollbar-thumb { background: var(--green-dim); }
+
+  /* ════════════════════════════════════════════════════
+     GLASSMORPHISM — applied VERY subtly to key surfaces
+     ════════════════════════════════════════════════════ */
+  .header {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .side-panel {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* ════════════════════════════════════════════════════
+     RIGHT PANEL — System Modules
+     ════════════════════════════════════════════════════ */
+  .right-panel {
+    width: 220px;
+    flex-shrink: 0;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 11px;
+    overflow: hidden;
+    /* GLASS layer */
+    background: rgba(0, 20, 6, 0.45);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: inset 1px 0 14px rgba(0,255,136,0.04);
+  }
+
+  /* Shared module card */
+  .r-module {
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 10px 11px;
+    /* Glass card */
+    background: rgba(0, 255, 136, 0.03);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    box-shadow:
+      0 0 6px  rgba(0,255,136,0.08),
+      inset 0 0 8px rgba(0,255,136,0.03);
+    transition: box-shadow 0.3s ease;
+    /* Ambient module pulse */
+    animation: modulePulse 5s ease-in-out infinite;
+  }
+  .r-module:hover {
+    box-shadow:
+      0 0 10px rgba(0,255,136,0.16),
+      inset 0 0 10px rgba(0,255,136,0.06);
+    border-color: var(--border-bright);
+  }
+
+  .r-module-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.20em;
+    color: var(--green-dim);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 5px rgba(0,255,136,0.25);
+  }
+
+  /* ── MODULE 1: AI Confidence ── */
+  .confidence-ring-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .conf-ring-svg { width: 80px; height: 80px; }
+  .conf-ring-bg  { fill: none; stroke: var(--green-dark); stroke-width: 6; }
+  .conf-ring-val {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 220;
+    stroke-dashoffset: 55; /* ~75% full */
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+    filter: drop-shadow(0 0 4px rgba(0,255,136,0.60));
+  }
+  .conf-ring-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    fill: var(--green-bright);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .conf-ring-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem;
+    fill: var(--green-muted);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .conf-label {
+    font-size: 0.62rem;
+    color: var(--green-muted);
+    text-align: center;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── MODULE 2: Packet Log ── */
+  .pkt-log {
+    font-size: 0.60rem;
+    font-weight: 300;
+    color: var(--green-muted);
+    line-height: 1.7;
+    height: 80px;
+    overflow: hidden;
+    letter-spacing: 0.02em;
+  }
+  .pkt-log div {
+    animation: fadeIn 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pkt-log .pkt-ok   { color: var(--green-dim); }
+  .pkt-log .pkt-warn { color: var(--amber); }
+  .pkt-log .pkt-hi   { color: var(--green-bright); }
+
+  /* ── MODULE 3: Network Hex Map ── */
+  .hex-map-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 0;
+  }
+  .hex-svg { width: 140px; height: 90px; overflow: visible; }
+
+  @keyframes hexPulse {
+    0%, 100% { opacity: 0.25; }
+    50%       { opacity: 1; }
+  }
+  @keyframes linkFlow {
+    0%   { stroke-dashoffset: 30; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  /* ── Autocomplete dropdown (change 12) ── */
+  .input-wrap { flex: 1; position: relative; display: flex; flex-direction: column; }
+  #autocomplete-list {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 0; right: 0;
+    background: rgba(0, 18, 5, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid var(--border-bright);
+    border-radius: 3px;
+    box-shadow: 0 0 14px rgba(0,255,136,0.18), inset 0 0 8px rgba(0,255,136,0.04);
+    max-height: 180px;
+    overflow-y: auto;
+    z-index: 200;
+    display: none;
+  }
+  #autocomplete-list.open { display: block; }
+  .ac-item {
+    padding: 7px 12px;
+    font-size: 0.78rem;
+    color: var(--green-dim);
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0,255,136,0.07);
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ac-item:last-child { border-bottom: none; }
+  .ac-item:hover, .ac-item.ac-active {
+    background: rgba(0,255,136,0.10);
+    color: var(--green-bright);
+    text-shadow: 0 0 4px rgba(0,255,136,0.50);
+  }
+  .ac-item .ac-prefix { color: var(--green-muted); margin-right: 6px; }
+
+</style>
+</head>
+<body>
+
+<!-- Matrix rain -->
+<!-- Welcome Popup -->
+<div id="welcome-overlay"></div>
+<div id="welcome-popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+  <div class="popup-header">
+    <span class="popup-header-title" id="popup-title">// SYSTEM MESSAGE</span>
+    <button class="popup-close" id="popup-close-x" title="Close" aria-label="Close popup">&#x2715;</button>
+  </div>
+  <div class="popup-body">
+    <p><span class="popup-highlight">CYBERFORGE</span> is not an API-generated chatbot.</p>
+    <p>This AI terminal was hand-built by me from the ground up. Every response, behavior, and interaction has been personally designed and written to simulate a direct conversation with me.</p>
+    <p>You are not talking to a generic assistant. You are exploring my projects, skills, and thought process through an interactive AI interface.</p>
+    <p><span class="popup-explore">Ask anything. Explore freely.</span></p>
+    <div class="popup-signature">&#8212; MOHAMMED RAZIN</div>
+  </div>
+  <div class="popup-footer">
+    <button class="popup-start-btn" id="popup-start-btn">START CHATTING</button>
+  </div>
+</div>
+
+<canvas id="matrix-canvas"></canvas>
+
+<!-- Boot overlay (enhanced startup sequence) -->
+<div id="boot-overlay">
+  <div id="boot-logo">CYBER<span>FORGE</span></div>
+  <div id="boot-sub">AI TERMINAL :: v3.7.1</div>
+  <div id="boot-progress-wrap"><div id="boot-progress-bar"></div></div>
+  <div id="boot-text"></div>
+  <div id="boot-status">INITIALIZING AI CORE...</div>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo">CYBER<span>FORGE</span> :: AI NODE</div>
+  <div class="header-status">
+    <span><span class="status-dot" id="conn-dot"></span><span id="conn-label">CONNECTING...</span></span>
+    <span id="clock">00:00:00</span>
+    <span>NODE-01</span>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- Side panel -->
+  <div class="side-panel">
+    <div class="panel-title">:: SYSTEM STATUS ::</div>
+
+    <div class="sys-row"><span>CPU</span><span class="val" id="cpu-val">72%</span></div>
+    <div class="bar-wrap"><div class="bar-fill" id="cpu-bar" style="width:72%"></div></div>
+
+    <div class="sys-row"><span>MEM</span><span class="val" id="mem-val">48%</span></div>
+    <div class="bar-wrap"><div class="bar-fill" id="mem-bar" style="width:48%"></div></div>
+
+    <div class="sys-row"><span>NET</span><span class="val" id="net-val">91%</span></div>
+    <div class="bar-wrap"><div class="bar-fill" id="net-bar" style="width:91%"></div></div>
+
+    <div class="sys-row"><span>ENTRIES</span><span class="val" id="entries-val">—</span></div>
+    <div class="sys-row"><span>LOADED</span><span class="val" id="loaded-val">—</span></div>
+
+    <div class="panel-title" style="margin-top:15px;">:: QUICK ACCESS ::</div>
+    <div class="quick-cmds" id="quick-cmds">
+      <button class="qcmd" onclick="quickAsk('Who are you')">Who are you?</button>
+      <button class="qcmd" onclick="quickAsk('What is VConnect')">VConnect</button>
+      <button class="qcmd" onclick="quickAsk('Tell me about LogiSense')">LogiSense</button>
+      <button class="qcmd" onclick="quickAsk('What are your skills')">Skills</button>
+      <button class="qcmd" onclick="quickAsk('What technologies do you know')">Tech Stack</button>
+      <button class="qcmd" onclick="quickAsk('Why should we hire you')">Hire you?</button>
+      <button class="qcmd" onclick="quickAsk('What is your best project')">Best Project</button>
+    </div>
+
+    <div class="panel-title" style="margin-top:15px;">:: ACTIVITY ::</div>
+    <div class="activity-log" id="activity-log"></div>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-area">
+    <div class="chat-window" id="chat-window"></div>
+
+    <div class="input-bar">
+      <span class="prompt-symbol">&gt;_</span>
+      <div class="input-wrap">
+      <div id="autocomplete-list"></div>
+        <div id="user-input" contenteditable="true" data-placeholder="Enter query, human..." spellcheck="false"></div>
+      </div>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">TRANSMIT</button>
+    </div>
+  </div>
+
+  <!-- Right panel — System Modules -->
+  <div class="right-panel">
+
+    <!-- MODULE 1: AI Confidence Ring -->
+    <div class="r-module">
+      <div class="r-module-title">:: AI CONFIDENCE ::</div>
+      <div class="confidence-ring-wrap">
+        <svg class="conf-ring-svg" viewBox="0 0 80 80">
+          <circle class="conf-ring-bg"  cx="40" cy="40" r="35"/>
+          <circle class="conf-ring-val" id="conf-ring" cx="40" cy="40" r="35"/>
+          <text class="conf-ring-text" x="40" y="37" id="conf-pct">75%</text>
+          <text class="conf-ring-sub"  x="40" y="52">MATCH</text>
+        </svg>
+        <div class="conf-label" id="conf-label">AWAITING QUERY</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2: Live Packet Log -->
+    <div class="r-module">
+      <div class="r-module-title">:: PACKET LOG ::</div>
+      <div class="pkt-log" id="pkt-log"></div>
+    </div>
+
+    <!-- MODULE 3: Network Hex Map -->
+    <div class="r-module">
+      <div class="r-module-title">:: NEURAL NET ::</div>
+      <div class="hex-map-wrap">
+        <svg class="hex-svg" viewBox="0 0 140 90">
+          <!-- Links -->
+          <line id="lnk-01" x1="25" y1="20" x2="70" y2="45" stroke="#00ff88" stroke-width="0.8" stroke-dasharray="6 4" opacity="0.35">
+            <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1.8s" repeatCount="indefinite"/>
+          </line>
+          <line id="lnk-02" x1="115" y1="20" x2="70" y2="45" stroke="#00ffaa" stroke-width="0.8" stroke-dasharray="6 4" opacity="0.35">
+            <animate attributeName="stroke-dashoffset" from="0" to="30" dur="2.2s" repeatCount="indefinite"/>
+          </line>
+          <line id="lnk-03" x1="25" y1="70" x2="70" y2="45" stroke="#00cc66" stroke-width="0.8" stroke-dasharray="6 4" opacity="0.30">
+            <animate attributeName="stroke-dashoffset" from="30" to="0" dur="2.6s" repeatCount="indefinite"/>
+          </line>
+          <line id="lnk-04" x1="115" y1="70" x2="70" y2="45" stroke="#00ff88" stroke-width="0.8" stroke-dasharray="6 4" opacity="0.30">
+            <animate attributeName="stroke-dashoffset" from="0" to="30" dur="1.4s" repeatCount="indefinite"/>
+          </line>
+          <!-- Nodes -->
+          <polygon id="hex-c" points="70,33 80,39 80,51 70,57 60,51 60,39" fill="rgba(0,255,136,0.08)" stroke="#00ff88" stroke-width="1.2">
+            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+          </polygon>
+          <polygon points="25,10 33,15 33,25 25,30 17,25 17,15" fill="rgba(0,255,170,0.05)" stroke="#00ffaa" stroke-width="0.9">
+            <animate attributeName="opacity" values="0.3;0.9;0.3" dur="3.1s" repeatCount="indefinite"/>
+          </polygon>
+          <polygon points="115,10 123,15 123,25 115,30 107,25 107,15" fill="rgba(0,204,102,0.05)" stroke="#00cc66" stroke-width="0.9">
+            <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+          </polygon>
+          <polygon points="25,60 33,65 33,75 25,80 17,75 17,65" fill="rgba(0,255,136,0.05)" stroke="#008844" stroke-width="0.9">
+            <animate attributeName="opacity" values="0.2;0.8;0.2" dur="4s" repeatCount="indefinite"/>
+          </polygon>
+          <polygon points="115,60 123,65 123,75 115,80 107,75 107,65" fill="rgba(0,255,136,0.05)" stroke="#00ff88" stroke-width="0.9">
+            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.9s" repeatCount="indefinite"/>
+          </polygon>
+          <!-- Node dot centres -->
+          <circle cx="70" cy="45" r="3" fill="#00ff88" opacity="0.9">
+            <animate attributeName="r" values="2.5;4;2.5" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="25" cy="20" r="2" fill="#00ffaa" opacity="0.7">
+            <animate attributeName="opacity" values="0.4;1;0.4" dur="3.1s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="115" cy="20" r="2" fill="#00cc66" opacity="0.7">
+            <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="25" cy="70" r="2" fill="#008844" opacity="0.6">
+            <animate attributeName="opacity" values="0.2;0.8;0.2" dur="4s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="115" cy="70" r="2" fill="#00ff88" opacity="0.7">
+            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.9s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+    </div>
+
+  </div><!-- /right-panel -->
+
+</div><!-- /main -->
+
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+// AUDIO ENGINE (change 13) — Web Audio API, zero external files
+// ══════════════════════════════════════════════════════════════════════════════
+let _ac = null;
+function getAC() {
+  if (!_ac) _ac = new (window.AudioContext || window.webkitAudioContext)();
+  return _ac;
+}
+
+function playTone({ freq = 440, type = 'sine', vol = 0.08, dur = 0.06, attack = 0.004, decay = 0.05 } = {}) {
+  try {
+    const ac  = getAC();
+    const osc = ac.createOscillator();
+    const env = ac.createGain();
+    osc.connect(env);
+    env.connect(ac.destination);
+    osc.type      = type;
+    osc.frequency.setValueAtTime(freq, ac.currentTime);
+    env.gain.setValueAtTime(0, ac.currentTime);
+    env.gain.linearRampToValueAtTime(vol,  ac.currentTime + attack);
+    env.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + attack + decay);
+    osc.start(ac.currentTime);
+    osc.stop(ac.currentTime + attack + decay + 0.01);
+  } catch(e) {}
+}
+
+/* keyboard click — tiny noise burst */
+function sndKey() {
+  playTone({ freq: 1200 + Math.random()*400, type:'square', vol:0.04, attack:0.001, decay:0.025 });
+}
+
+/* terminal blip — on send */
+function sndBlip() {
+  playTone({ freq: 880, type:'square', vol:0.07, attack:0.003, decay:0.07 });
+  setTimeout(() => playTone({ freq: 1320, type:'square', vol:0.05, attack:0.002, decay:0.05 }), 60);
+}
+
+/* hover blip — on button hover */
+function sndHover() {
+  playTone({ freq: 660, type:'sine', vol:0.035, attack:0.002, decay:0.04 });
+}
+
+/* response chime — on bot reply */
+function sndChime() {
+  [523, 659, 784].forEach((f, i) =>
+    setTimeout(() => playTone({ freq: f, type:'sine', vol:0.06, attack:0.005, decay:0.12 }), i * 80)
+  );
+}
+
+/* startup hum — during boot, fades out */
+function sndBoot() {
+  try {
+    const ac  = getAC();
+    const osc = ac.createOscillator();
+    const env = ac.createGain();
+    osc.connect(env); env.connect(ac.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(60, ac.currentTime);
+    osc.frequency.linearRampToValueAtTime(120, ac.currentTime + 2.5);
+    env.gain.setValueAtTime(0, ac.currentTime);
+    env.gain.linearRampToValueAtTime(0.05, ac.currentTime + 0.4);
+    env.gain.linearRampToValueAtTime(0,    ac.currentTime + 3.2);
+    osc.start(ac.currentTime);
+    osc.stop(ac.currentTime + 3.3);
+  } catch(e) {}
+}
+
+/* Wire key-click to input */
+document.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('user-input');
+  if (inp) inp.addEventListener('keydown', e => { if (e.key.length === 1 || e.key==='Backspace') sndKey(); });
+
+  /* Hover sounds on all buttons */
+  document.querySelectorAll('.send-btn, .qcmd').forEach(btn => {
+    btn.addEventListener('mouseenter', sndHover);
+  });
+});
+
+// ── Matrix Rain ──────────────────────────────────────────────────────────────
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>{}[]|;:.,/?!@#$%^&*';
+
+let drops = [];
+
+function initMatrix() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const cols = Math.floor(canvas.width / 16);
+  drops = Array(cols).fill(1);
+}
+
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(0,0,0,0.05)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  drops.forEach((y, i) => {
+    const ch = chars[Math.floor(Math.random() * chars.length)];
+    // Vary colour: mostly neon-green, occasional cyan/emerald accent
+    const r = Math.random();
+    ctx.fillStyle = r > 0.97 ? '#00ffaa'   // bright flash
+                 : r > 0.93 ? '#00eeff'   // cyan accent
+                 : r > 0.88 ? '#00cc66'   // emerald
+                 : '#00ff88';             // primary neon
+    ctx.font = '14px Share Tech Mono';
+    ctx.fillText(ch, i * 16, y * 16);
+    if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  });
+}
+
+initMatrix();
+setInterval(drawMatrix, 45);
+window.addEventListener('resize', initMatrix);
+
+// ── Clock ────────────────────────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    String(now.getHours()).padStart(2,'0') + ':' +
+    String(now.getMinutes()).padStart(2,'0') + ':' +
+    String(now.getSeconds()).padStart(2,'0');
+}
+setInterval(updateClock, 1000);
+
+// ── Fake system stats ─────────────────────────────────────────────────────────
+function jitter(cur, min, max) {
+  return Math.min(max, Math.max(min, cur + (Math.random() - 0.5) * 8));
+}
+
+let cpuV = 72, memV = 48, netV = 91;
+setInterval(() => {
+  cpuV = jitter(cpuV, 30, 97);
+  memV = jitter(memV, 20, 80);
+  netV = jitter(netV, 60, 99);
+  document.getElementById('cpu-val').textContent = cpuV.toFixed(0) + '%';
+  document.getElementById('cpu-bar').style.width = cpuV + '%';
+  document.getElementById('mem-val').textContent = memV.toFixed(0) + '%';
+  document.getElementById('mem-bar').style.width = memV + '%';
+  document.getElementById('net-val').textContent = netV.toFixed(0) + '%';
+  document.getElementById('net-bar').style.width = netV + '%';
+}, 1800);
+
+// ── Activity log ──────────────────────────────────────────────────────────────
+function addActivity(msg) {
+  const log = document.getElementById('activity-log');
+  const d = document.createElement('div');
+  d.textContent = msg;
+  log.prepend(d);
+  while (log.children.length > 20) log.removeChild(log.lastChild);
+}
+
+// ── MODULE 1: AI Confidence Ring ──────────────────────────────────────────────
+const CIRC = 2 * Math.PI * 35; // circumference ≈ 219.9
+function setConfidence(pct, label) {
+  const ring  = document.getElementById('conf-ring');
+  const pctEl = document.getElementById('conf-pct');
+  const lblEl = document.getElementById('conf-label');
+  const offset = CIRC * (1 - pct / 100);
+  ring.style.strokeDasharray  = CIRC;
+  ring.style.strokeDashoffset = offset;
+  // colour shift: low=muted, high=bright
+  ring.style.stroke = pct > 70 ? '#00ffaa' : pct > 40 ? '#00ff88' : '#00cc66';
+  pctEl.textContent = pct + '%';
+  if (lblEl) lblEl.textContent = label || 'MATCH';
+}
+// idle drift animation
+setConfidence(75, 'AWAITING QUERY');
+setInterval(() => {
+  const v = 55 + Math.floor(Math.random() * 30);
+  setConfidence(v, 'STANDBY');
+}, 5000);
+
+// ── MODULE 2: Packet Log ticker ───────────────────────────────────────────────
+const PKT_NODES = ['192.168.0.1','10.0.0.2','NODE-07','RELAY-C','AI-CORE','SYN-01'];
+const PKT_PROTO = ['TCP','UDP','WS ','RPC','HTTP'];
+const PKT_MSG   = ['SYN sent','ACK recv','HANDSHAKE OK','DATA 2KB','TIMEOUT','RETRY x1','ENCRYPT OK'];
+function randPkt() {
+  const src  = PKT_NODES[Math.floor(Math.random()*PKT_NODES.length)];
+  const dst  = PKT_NODES[Math.floor(Math.random()*PKT_NODES.length)];
+  const proto= PKT_PROTO[Math.floor(Math.random()*PKT_PROTO.length)];
+  const msg  = PKT_MSG  [Math.floor(Math.random()*PKT_MSG.length)];
+  const warn = msg.includes('TIMEOUT')||msg.includes('RETRY');
+  const hi   = msg.includes('OK');
+  return { text: `[${proto}] ${src}→${dst} ${msg}`, warn, hi };
+}
+function tickPacketLog() {
+  const log = document.getElementById('pkt-log');
+  if (!log) return;
+  const p = randPkt();
+  const d = document.createElement('div');
+  d.textContent = p.text;
+  if (p.warn) d.className = 'pkt-warn';
+  else if (p.hi) d.className = 'pkt-hi';
+  else d.className = 'pkt-ok';
+  log.prepend(d);
+  while (log.children.length > 5) log.removeChild(log.lastChild);
+}
+tickPacketLog();
+setInterval(tickPacketLog, 1400);
+
+// ── Boot sequence (enhanced — change 11) ──────────────────────────────────────
+const bootLines = [
+  '>> CYBERFORGE AI TERMINAL v3.7.1',
+  '>> Initializing neural matrix...',
+  '>> Loading knowledge base [dataset.json]...',
+  '>> Mounting keyword scoring engine...',
+  '>> Establishing encrypted channel [AES-256]...',
+  '>> Calibrating intent recognition model...',
+  '>> Running self-diagnostic... PASS',
+  '>> System integrity: VERIFIED ✓',
+  '>> All nodes ONLINE. Terminal unlocked.',
+];
+
+const bootStatuses = [
+  'INITIALIZING AI CORE...',
+  'LOADING NEURAL WEIGHTS...',
+  'SCANNING KNOWLEDGE BASE...',
+  'MOUNTING SECURE CHANNEL...',
+  'CALIBRATING INTENT ENGINE...',
+  'RUNNING SELF-DIAGNOSTIC...',
+  'VERIFYING INTEGRITY...',
+  'UNLOCKING TERMINAL...',
+  'READY',
+];
+
+async function runBoot() {
+  sndBoot();   // startup hum
+  const container  = document.getElementById('boot-text');
+  const progressEl = document.getElementById('boot-progress-bar');
+  const statusEl   = document.getElementById('boot-status');
+
+  for (let i = 0; i < bootLines.length; i++) {
+    // Update status label
+    if (statusEl) statusEl.textContent = bootStatuses[i] || 'READY';
+
+    // Advance progress bar
+    const pct = Math.round(((i + 1) / bootLines.length) * 100);
+    if (progressEl) progressEl.style.width = pct + '%';
+
+    // Render log line
+    const d = document.createElement('div');
+    d.textContent = bootLines[i];
+    d.style.opacity = '0';
+    // Color the VERIFIED / ONLINE lines brighter
+    if (bootLines[i].includes('VERIFIED') || bootLines[i].includes('ONLINE')) {
+      d.style.color = 'var(--green-bright)';
+      d.style.textShadow = '0 0 8px rgba(0,255,170,0.6)';
+    }
+    container.appendChild(d);
+    await delay(170);
+    d.style.transition = 'opacity 0.25s';
+    d.style.opacity = '1';
+  }
+
+  // Brief hold at 100%
+  await delay(500);
+
+  // Terminal-unlock flash
+  const overlay = document.getElementById('boot-overlay');
+  overlay.style.animation = 'terminalUnlock 0.4s ease forwards';
+  await delay(420);
+
+  overlay.style.transition = 'opacity 0.55s';
+  overlay.style.opacity = '0';
+  await delay(560);
+  overlay.remove();
+  initChat();
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── Chat core ─────────────────────────────────────────────────────────────────
+const chatWindow = document.getElementById('chat-window');
+const userInput  = document.getElementById('user-input');
+const sendBtn    = document.getElementById('send-btn');
+
+// ── Autocomplete engine (change 12) ───────────────────────────────────────────
+const AC_SUGGESTIONS = [
+  // ── Section 1: About Me ──────────────────────────────────────────
+  'who are you',
+  'what is cyberforge',
+  'tell me about yourself',
+  'what do you do',
+  'what technologies do you know',
+  'what are your skills',
+  'are you a developer',
+  'what is your specialization',
+  'what are you currently learning',
+  'why did you build this website',
+  // ── Section 2: Projects ──────────────────────────────────────────
+  'tell me about vconnect',
+  'what problem does vconnect solve',
+  'how many villages are in vconnect',
+  'tell me about logisense',
+  'how does logisense work',
+  'what technologies were used in logisense',
+  'what is your best project',
+  'which project are you most proud of',
+  'what challenges did you face while building projects',
+  'which project took the longest',
+  'did you work in a team',
+  'what was your role',
+  'what backend technologies do you use',
+  'do you use databases',
+  'which apis have you used',
+  'have you built chatbots before',
+  'what ai projects have you done',
+  'show your latest project',
+  'what are you currently building',
+  'what project are you planning next',
+  // ── Section 3: Python & Data ────────────────────────────────────
+  'why python',
+  'what python libraries do you know',
+  'do you know pandas',
+  'do you know numpy',
+  'what is data science',
+  'what is machine learning',
+  'have you worked with datasets',
+  'what data visualization tools do you use',
+  'do you know power bi',
+  'do you know tableau',
+  'what is data cleaning',
+  'what is eda',
+  'what is your favorite python project',
+  'have you used automation in python',
+  'what ide do you use',
+  // ── Section 4: AI & Cyber ───────────────────────────────────────
+  'what is cyberforge ai',
+  'why the cyberpunk theme',
+  'are you interested in cybersecurity',
+  'what is ethical hacking',
+  'what is phishing',
+  'what is encryption',
+  'what is ai automation',
+  'what is prompt engineering',
+  'can ai replace developers',
+  'what ai tools do you use',
+  'have you used chatgpt apis',
+  'what is computer vision',
+  'what is opencv',
+  'what is automation scripting',
+  'what is your dream ai project',
+  // ── Section 5: Hiring & Career ──────────────────────────────────
+  'are you looking for a job',
+  'what roles are you interested in',
+  'are you open to internships',
+  'are you available for freelance work',
+  'what is your experience level',
+  'why should we hire you',
+  'what makes you different',
+  'are you a quick learner',
+  'can you work in teams',
+  'are you open to relocation',
+  'what are your strengths',
+  'what are your weaknesses',
+  'what motivates you',
+  'what is your career goal',
+  'what type of company are you looking for',
+  // ── Section 6: Navigation ───────────────────────────────────────
+  'show projects',
+  'open github',
+  'open linkedin',
+  'download resume',
+  'contact information',
+  'show certifications',
+  'show skills',
+  'open portfolio',
+  'show achievements',
+  'show experience',
+  // ── Section 7: Personal ─────────────────────────────────────────
+  'what inspires you',
+  'why technology',
+  'what do you enjoy building most',
+  'what was your hardest bug',
+  'what is your favorite programming language',
+  'coffee or tea',
+  'day or night coder',
+  'what keeps you motivated',
+  // ── Section 8: Easter Eggs / Commands ──────────────────────────
+  'initialize cyberforge',
+  'run system scan',
+  'activate ai mode',
+  'enter hacker mode',
+  'access denied',
+  'reveal hidden project',
+  'wake up cyberforge ai',
+];
+
+const acList = document.getElementById('autocomplete-list');
+let acIndex = -1;
+
+function renderAC(matches) {
+  acList.innerHTML = '';
+  acIndex = -1;
+  if (!matches.length) { acList.classList.remove('open'); return; }
+  matches.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'ac-item';
+    div.innerHTML = `<span class="ac-prefix">&gt;</span>${m}`;
+    div.addEventListener('mousedown', e => {
+      e.preventDefault();
+      userInput.textContent = m;
+      // move caret to end
+      const range = document.createRange();
+      range.selectNodeContents(userInput);
+      range.collapse(false);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      acList.classList.remove('open');
+      userInput.focus();
+    });
+    acList.appendChild(div);
+  });
+  acList.classList.add('open');
+}
+
+// ── contenteditable input listener ───────────────────────────────────────────
+userInput.addEventListener('input', () => {
+  const q = userInput.textContent.trim().toLowerCase();
+  if (!q) { acList.classList.remove('open'); return; }
+  const matches = AC_SUGGESTIONS.filter(s => s.toLowerCase().includes(q)).slice(0, 6);
+  renderAC(matches);
+});
+
+userInput.addEventListener('keydown', e => {
+  const items = acList.querySelectorAll('.ac-item');
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    acIndex = Math.min(acIndex + 1, items.length - 1);
+    items.forEach((el, i) => el.classList.toggle('ac-active', i === acIndex));
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    acIndex = Math.max(acIndex - 1, -1);
+    items.forEach((el, i) => el.classList.toggle('ac-active', i === acIndex));
+  } else if (e.key === 'Tab' && acList.classList.contains('open')) {
+    e.preventDefault();
+    const chosen = acIndex >= 0 && items[acIndex] ? items[acIndex] : items[0];
+    if (chosen) {
+      userInput.textContent = chosen.textContent.replace(/^>/, '').trim();
+    }
+    acList.classList.remove('open');
+  } else if (e.key === 'Escape') {
+    acList.classList.remove('open');
+  } else if (e.key === 'Enter') {
+    if (acIndex >= 0 && items[acIndex]) {
+      e.preventDefault();
+      userInput.textContent = items[acIndex].textContent.replace(/^>/, '').trim();
+      acList.classList.remove('open');
+    } else {
+      e.preventDefault();
+      acList.classList.remove('open');
+      sendMessage();
+    }
+  }
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.input-wrap')) acList.classList.remove('open');
+});
+
+// ── Typewriter engine ─────────────────────────────────────────────────────────
+async function typewrite(bubble, text, metaEl, speed = 18) {
+  // Blinking cursor span
+  const cursor = document.createElement('span');
+  cursor.style.cssText = 'display:inline-block;width:0.6ch;background:var(--green);animation:cursorBlink 0.7s step-end infinite;margin-left:1px;vertical-align:text-bottom;';
+  bubble.appendChild(cursor);
+
+  const lines = text.split('\n');
+  for (let li = 0; li < lines.length; li++) {
+    const line = lines[li];
+    for (let ci = 0; ci < line.length; ci++) {
+      // Insert char node before cursor
+      const ch = document.createTextNode(line[ci]);
+      bubble.insertBefore(ch, cursor);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+      await delay(speed);
+    }
+    // Newline between lines (not after last)
+    if (li < lines.length - 1) {
+      bubble.insertBefore(document.createTextNode('\n'), cursor);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+      await delay(speed * 3); // brief pause at line break
+    }
+  }
+
+  // Remove cursor, show meta
+  cursor.remove();
+  if (metaEl) metaEl.style.opacity = '1';
+}
+
+function addMessage(role, text, meta = '') {
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + role;
+  if (role === 'bot' && text.startsWith('>> ERROR')) msg.classList.add('error');
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar';
+  avatar.textContent = role === 'user' ? 'USR' : 'AI';
+
+  const right = document.createElement('div');
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+
+  let metaEl = null;
+  if (meta) {
+    metaEl = document.createElement('div');
+    metaEl.className = 'meta';
+    metaEl.innerHTML = meta;
+    metaEl.style.opacity = '0'; // hidden until typewriter done
+    metaEl.style.transition = 'opacity 0.4s ease';
+    right.appendChild(bubble);
+    right.appendChild(metaEl);
+  } else {
+    right.appendChild(bubble);
+  }
+
+  msg.appendChild(avatar);
+  msg.appendChild(right);
+  chatWindow.appendChild(msg);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+
+  // Bot messages get typewriter; user messages appear instantly
+  if (role === 'bot') {
+    typewrite(bubble, text, metaEl);
+  } else {
+    bubble.textContent = text;
+    if (metaEl) metaEl.style.opacity = '1';
+  }
+
+  return msg;
+}
+
+function showTyping() {
+  const msg = document.createElement('div');
+  msg.className = 'msg bot';
+  msg.id = 'typing-indicator';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar';
+  avatar.textContent = 'AI';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'typing-bubble';
+  for (let i = 0; i < 3; i++) {
+    const d = document.createElement('div');
+    d.className = 'typing-dot';
+    bubble.appendChild(d);
+  }
+
+  msg.appendChild(avatar);
+  msg.appendChild(bubble);
+  chatWindow.appendChild(msg);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+async function sendMessage() {
+  const text = userInput.textContent.trim();
+  if (!text) return;
+
+  userInput.textContent = '';
+  acList.classList.remove('open');
+  sendBtn.disabled = true;
+
+  // Show THINKING on the confidence ring
+  setConfidence(0, 'THINKING...');
+  document.getElementById('conf-ring').style.stroke = 'var(--amber)';
+
+  addMessage('user', text);
+  addActivity('Query: ' + text.substring(0, 25));
+  sndBlip();   // terminal blip on transmit
+  showTyping();
+
+  try {
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text })
+    });
+
+    const data = await res.json();
+    hideTyping();
+
+    // Update confidence ring with real score (scale to 0–100%)
+    const scorePct = Math.min(100, Math.round((data.score / 20) * 100));
+    const scoreLabel = scorePct > 60 ? 'MATCHED' : scorePct > 30 ? 'PARTIAL' : 'LOW MATCH';
+    setConfidence(scorePct, scoreLabel);
+
+    const scoreInfo = data.score > 0
+      ? `SCORE: <span class="score-badge">${data.score}pts</span>  FILE: ${data.file || '—'}`
+      : 'SCORE: 0 — no match';
+
+    addMessage('bot', data.response, scoreInfo);
+    sndChime();   // success chime on bot reply
+    addActivity('Response: score=' + data.score);
+
+  } catch (err) {
+    hideTyping();
+    addMessage('bot', '>> CONNECTION ERROR. Backend unreachable.\n>> Ensure app.py is running on port 5000.');
+    addActivity('ERROR: fetch failed');
+  }
+
+  sendBtn.disabled = false;
+  userInput.focus();
+}
+
+function quickAsk(q) {
+  userInput.textContent = q;
+  sendMessage();
+}
+
+window.addEventListener('resize', () => {});  // no-op, contenteditable handles itself
+
+
+
+// ── Init chat after boot ──────────────────────────────────────────────────────
+async function initChat() {
+  // Fetch system status
+  try {
+    const s = await fetch('/status');
+    const d = await s.json();
+    document.getElementById('entries-val').textContent = d.total_entries;
+    document.getElementById('loaded-val').textContent  = d.responses_loaded;
+    document.getElementById('conn-dot').classList.remove('red');
+    document.getElementById('conn-label').textContent = 'ONLINE';
+    addActivity('System status: ONLINE');
+    addActivity(`${d.responses_loaded}/${d.total_entries} responses loaded`);
+  } catch {
+    document.getElementById('conn-dot').classList.add('red');
+    document.getElementById('conn-label').textContent = 'OFFLINE';
+  }
+
+  addMessage('bot',
+    '>> CYBERFORGE AI ONLINE.\n' +
+    '>> Neural matrix loaded. Keyword scoring engine ACTIVE.\n' +
+    '>> Enter your query, Operator.\n' +
+    '>> Type anything — I will find the best match.'
+  );
+
+  userInput.focus();
+}
+
+// ── Welcome Popup ─────────────────────────────────────────────────────────────
+(function() {
+  const overlay = document.getElementById('welcome-overlay');
+  const popup   = document.getElementById('welcome-popup');
+
+  function closePopup() {
+    overlay.classList.add('fade-out');
+    popup.classList.add('fade-out');
+    setTimeout(() => {
+      overlay.remove();
+      popup.remove();
+    }, 260);
+  }
+
+  document.getElementById('popup-close-x').addEventListener('click', closePopup);
+  document.getElementById('popup-start-btn').addEventListener('click', closePopup);
+
+  // Close on overlay click
+  overlay.addEventListener('click', closePopup);
+})();
+
+runBoot();
+</script>
+</body>
+</html>
