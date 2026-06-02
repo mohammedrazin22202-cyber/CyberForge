@@ -45,7 +45,7 @@ for _, row in df.iterrows():
             entry['keywords'].append(val.lower())
     data.append(entry)
 
-with open(OUTPUT_PATH, 'w') as f:
-    json.dump(data, f, indent=2)
+with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
 
-print(f'✓ Exported {len(data)} entries to dataset.json')
+print(f'Exported {len(data)} entries to dataset.json')

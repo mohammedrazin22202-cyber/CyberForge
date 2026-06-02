@@ -3,7 +3,6 @@
     "file_name": "1.1.Who are you.txt",
     "key_sentences": [
       "who are you",
-      "tell me about yourself",
       "introduce yourself",
       "developer background",
       "who made this",
@@ -34,25 +33,19 @@
       "individual",
       "candidate",
       "who",
-      "you",
       "yourself",
       "introduce",
       "intro",
       "meet",
       "name",
+      "razin",
+      "mohammed",
       "identify",
-      "sup",
-      "hello",
-      "hey",
-      "yo",
       "info",
       "basic",
       "greet",
       "information",
-      "data",
-      "status",
       "origin",
-      "existence",
       "essence",
       "summary",
       "about",
@@ -67,6 +60,11 @@
       "devloper",
       "r u who",
       "hu r u",
+      "razin",
+      "mohammed razin",
+      "h mohammed razin",
+      "who is razin",
+      "who is mohammed",
       "yoou"
     ]
   },
@@ -83,10 +81,7 @@
       "what is cyberforge overview",
       "what is cyberforge details",
       "what is cyberforge information",
-      "wat is cyberforge",
-      "what is cyberforge",
-      "what is cyberforge",
-      "what is cyberforge"
+      "wat is cyberforge"
     ],
     "keywords": [
       "platform",
@@ -154,10 +149,7 @@
       "tell me about yourself overview",
       "tell me about yourself details",
       "tell me about yourself information",
-      "tell me about urself",
-      "tell me about urself",
-      "tell me about yourself",
-      "tell me about yourself"
+      "tell me about urself"
     ],
     "keywords": [
       "summary",
@@ -178,7 +170,6 @@
       "about",
       "story",
       "life",
-      "me",
       "describe",
       "elaborate",
       "speak",
@@ -225,10 +216,7 @@
       "what do you do overview",
       "what do you do details",
       "what do you do information",
-      "wat do u do",
-      "what do you do",
-      "what do you do",
-      "what do you do"
+      "wat do u do"
     ],
     "keywords": [
       "occupation",
@@ -296,10 +284,7 @@
       "what technologies do you know overview",
       "what technologies do you know details",
       "what technologies do you know information",
-      "wat technologies do u know",
-      "what technologies do you know",
-      "what technologies do you know",
-      "what technologies do you know"
+      "wat technologies do u know"
     ],
     "keywords": [
       "stack",
@@ -368,9 +353,7 @@
       "what are your skills details",
       "what are your skills information",
       "wat are ur skills",
-      "what r ur skills",
-      "what are your skills",
-      "what are your skills"
+      "what r ur skills"
     ],
     "keywords": [
       "competencies",
@@ -439,9 +422,7 @@
       "are you a developer details",
       "are you a developer information",
       "are u a developer",
-      "r you a developer",
-      "are you a developer",
-      "are you a developer"
+      "r you a developer"
     ],
     "keywords": [
       "software engineer",
@@ -510,9 +491,7 @@
       "what is your specialization details",
       "what is your specialization information",
       "wat is ur specialization",
-      "what is ur specialization",
-      "what is your specialization",
-      "what is your specialization"
+      "what is ur specialization"
     ],
     "keywords": [
       "niche",
@@ -581,9 +560,7 @@
       "what are you currently learning details",
       "what are you currently learning information",
       "wat are u currently learning",
-      "what r you currently learning",
-      "what are you currently learning",
-      "what are you currently learning"
+      "what r you currently learning"
     ],
     "keywords": [
       "ongoing education",
@@ -651,10 +628,7 @@
       "why did you build this website overview",
       "why did you build this website details",
       "why did you build this website information",
-      "why did u build this website",
-      "why did you build this website",
-      "why did you build this website",
-      "why did you build this website"
+      "why did u build this website"
     ],
     "keywords": [
       "portfolio deployment",
@@ -721,11 +695,7 @@
       "can you explain tell me about vconnect",
       "tell me about vconnect overview",
       "tell me about vconnect details",
-      "tell me about vconnect information",
-      "tell me about vconnect",
-      "tell me about vconnect",
-      "tell me about vconnect",
-      "tell me about vconnect"
+      "tell me about vconnect information"
     ],
     "keywords": [
       "rural platform",
@@ -793,10 +763,7 @@
       "what problem does vconnect solve overview",
       "what problem does vconnect solve details",
       "what problem does vconnect solve information",
-      "wat problem does vconnect solve",
-      "what problem does vconnect solve",
-      "what problem does vconnect solve",
-      "what problem does vconnect solve"
+      "wat problem does vconnect solve"
     ],
     "keywords": [
       "issue mitigation",
@@ -864,10 +831,7 @@
       "how many villages are in vconnect overview",
       "how many villages are in vconnect details",
       "how many villages are in vconnect information",
-      "how many villages are in vconnect",
-      "how many villages r in vconnect",
-      "how many villages are in vconnect",
-      "how many villages are in vconnect"
+      "how many villages r in vconnect"
     ],
     "keywords": [
       "database count",
@@ -934,11 +898,7 @@
       "can you explain tell me about logisense",
       "tell me about logisense overview",
       "tell me about logisense details",
-      "tell me about logisense information",
-      "tell me about logisense",
-      "tell me about logisense",
-      "tell me about logisense",
-      "tell me about logisense"
+      "tell me about logisense information"
     ],
     "keywords": [
       "logistics optimization",
@@ -1005,11 +965,7 @@
       "can you explain how does logisense work",
       "how does logisense work overview",
       "how does logisense work details",
-      "how does logisense work information",
-      "how does logisense work",
-      "how does logisense work",
-      "how does logisense work",
-      "how does logisense work"
+      "how does logisense work information"
     ],
     "keywords": [
       "algorithm",
@@ -1077,10 +1033,7 @@
       "what technologies were used in logisense overview",
       "what technologies were used in logisense details",
       "what technologies were used in logisense information",
-      "wat technologies were used in logisense",
-      "what technologies were used in logisense",
-      "what technologies were used in logisense",
-      "what technologies were used in logisense"
+      "wat technologies were used in logisense"
     ],
     "keywords": [
       "stack composition",
@@ -1150,8 +1103,7 @@
       "what is your best project information",
       "wat is ur best project",
       "what is ur best project",
-      "what is your best proj",
-      "what is your best project"
+      "what is your best proj"
     ],
     "keywords": [
       "flagship application",
@@ -1189,7 +1141,6 @@
       "standard",
       "success",
       "ranking",
-      "status",
       "champion",
       "pinnacle",
       "zenith",
@@ -1221,8 +1172,7 @@
       "which project are you most proud of information",
       "which project are u most proud of",
       "which project r you most proud of",
-      "which proj are you most proud of",
-      "which project are you most proud of"
+      "which proj are you most proud of"
     ],
     "keywords": [
       "milestone deployment",
@@ -1291,9 +1241,7 @@
       "what challenges did you face while building projects details",
       "what challenges did you face while building projects information",
       "wat challenges did u face while building projects",
-      "what challenges did you face while building projects",
-      "what challenges did you face while building projs",
-      "what challenges did you face while building projects"
+      "what challenges did you face while building projs"
     ],
     "keywords": [
       "debugging hurdles",
@@ -1361,10 +1309,7 @@
       "which project took the longest overview",
       "which project took the longest details",
       "which project took the longest information",
-      "which project took the longest",
-      "which project took the longest",
-      "which proj took the longest",
-      "which project took the longest"
+      "which proj took the longest"
     ],
     "keywords": [
       "extended timeline",
@@ -1432,10 +1377,7 @@
       "did you work in a team overview",
       "did you work in a team details",
       "did you work in a team information",
-      "did u work in a team",
-      "did you work in a team",
-      "did you work in a team",
-      "did you work in a team"
+      "did u work in a team"
     ],
     "keywords": [
       "collaborative effort",
@@ -1504,9 +1446,7 @@
       "what was your role details",
       "what was your role information",
       "wat was ur role",
-      "what was ur role",
-      "what was your role",
-      "what was your role"
+      "what was ur role"
     ],
     "keywords": [
       "position",
@@ -1574,10 +1514,7 @@
       "what backend technologies do you use overview",
       "what backend technologies do you use details",
       "what backend technologies do you use information",
-      "wat backend technologies do u use",
-      "what backend technologies do you use",
-      "what backend technologies do you use",
-      "what backend technologies do you use"
+      "wat backend technologies do u use"
     ],
     "keywords": [
       "server side",
@@ -1645,10 +1582,7 @@
       "do you use databases overview",
       "do you use databases details",
       "do you use databases information",
-      "do u use databases",
-      "do you use databases",
-      "do you use databases",
-      "do you use databases"
+      "do u use databases"
     ],
     "keywords": [
       "dbms",
@@ -1716,10 +1650,7 @@
       "which apis have you used overview",
       "which apis have you used details",
       "which apis have you used information",
-      "which apis have u used",
-      "which apis have you used",
-      "which apis have you used",
-      "which apis have you used"
+      "which apis have u used"
     ],
     "keywords": [
       "endpoint integration",
@@ -1787,10 +1718,7 @@
       "have you built chatbots before overview",
       "have you built chatbots before details",
       "have you built chatbots before information",
-      "have u built chatbots before",
-      "have you built chatbots before",
-      "have you built chatbots before",
-      "have you built chatbots before"
+      "have u built chatbots before"
     ],
     "keywords": [
       "conversational ai",
@@ -1859,9 +1787,7 @@
       "what ai projects have you done details",
       "what ai projects have you done information",
       "wat ai projects have u done",
-      "what ai projects have you done",
-      "what ai projs have you done",
-      "what ai projects have you done"
+      "what ai projs have you done"
     ],
     "keywords": [
       "artificial intelligence",
@@ -1930,9 +1856,7 @@
       "show your latest project details",
       "show your latest project information",
       "show ur latest project",
-      "show ur latest project",
-      "show your latest proj",
-      "show your latest project"
+      "show your latest proj"
     ],
     "keywords": [
       "recent deployment",
@@ -1964,7 +1888,7 @@
       "recent build",
       "latest app",
       "new code",
-      "what\u2019s new",
+      "what’s new",
       "current",
       "recent",
       "newest",
@@ -1974,7 +1898,6 @@
       "present",
       "today",
       "update",
-      "now",
       "latst",
       "newst",
       "resent",
@@ -2001,9 +1924,7 @@
       "what are you currently building details",
       "what are you currently building information",
       "wat are u currently building",
-      "what r you currently building",
-      "what are you currently building",
-      "what are you currently building"
+      "what r you currently building"
     ],
     "keywords": [
       "in progress",
@@ -2025,7 +1946,7 @@
       "making now",
       "doing lately",
       "current grind",
-      "today\u2019s work",
+      "today’s work",
       "right now",
       "developing",
       "constructing",
@@ -2073,8 +1994,7 @@
       "what project are you planning next information",
       "wat project are u planning next",
       "what project r you planning next",
-      "what proj are you planning next",
-      "what project are you planning next"
+      "what proj are you planning next"
     ],
     "keywords": [
       "future roadmap",
@@ -2095,7 +2015,7 @@
       "next move",
       "future plans",
       "upcoming work",
-      "what\u2019s next",
+      "what’s next",
       "plan ahead",
       "next idea",
       "future build",
@@ -2141,11 +2061,7 @@
       "can you explain why python",
       "why python overview",
       "why python details",
-      "why python information",
-      "why python",
-      "why python",
-      "why python",
-      "why python"
+      "why python information"
     ],
     "keywords": [
       "dynamic typing",
@@ -2213,10 +2129,7 @@
       "what python libraries do you know overview",
       "what python libraries do you know details",
       "what python libraries do you know information",
-      "wat python libraries do u know",
-      "what python libraries do you know",
-      "what python libraries do you know",
-      "what python libraries do you know"
+      "wat python libraries do u know"
     ],
     "keywords": [
       "py package index",
@@ -2284,10 +2197,7 @@
       "do you know pandas overview",
       "do you know pandas details",
       "do you know pandas information",
-      "do u know pandas",
-      "do you know pandas",
-      "do you know pandas",
-      "do you know pandas"
+      "do u know pandas"
     ],
     "keywords": [
       "data manipulation",
@@ -2323,7 +2233,6 @@
       "tables",
       "rows",
       "columns",
-      "data",
       "sorting",
       "cleaning",
       "organization",
@@ -2355,10 +2264,7 @@
       "do you know numpy overview",
       "do you know numpy details",
       "do you know numpy information",
-      "do u know numpy",
-      "do you know numpy",
-      "do you know numpy",
-      "do you know numpy"
+      "do u know numpy"
     ],
     "keywords": [
       "numerical computing",
@@ -2426,10 +2332,7 @@
       "what is data science overview",
       "what is data science details",
       "what is data science information",
-      "wat is data science",
-      "what is data science",
-      "what is data science",
-      "what is data science"
+      "wat is data science"
     ],
     "keywords": [
       "data extracting",
@@ -2497,10 +2400,7 @@
       "what is machine learning overview",
       "what is machine learning details",
       "what is machine learning information",
-      "wat is machine learning",
-      "what is machine learning",
-      "what is machine learning",
-      "what is machine learning"
+      "wat is machine learning"
     ],
     "keywords": [
       "supervised modeling",
@@ -2568,10 +2468,7 @@
       "have you worked with datasets overview",
       "have you worked with datasets details",
       "have you worked with datasets information",
-      "have u worked with datasets",
-      "have you worked with datasets",
-      "have you worked with datasets",
-      "have you worked with datasets"
+      "have u worked with datasets"
     ],
     "keywords": [
       "data acquisition",
@@ -2639,10 +2536,7 @@
       "what data visualization tools do you use overview",
       "what data visualization tools do you use details",
       "what data visualization tools do you use information",
-      "wat data visualization tools do u use",
-      "what data visualization tools do you use",
-      "what data visualization tools do you use",
-      "what data visualization tools do you use"
+      "wat data visualization tools do u use"
     ],
     "keywords": [
       "graphical representation",
@@ -2710,10 +2604,7 @@
       "do you know power bi overview",
       "do you know power bi details",
       "do you know power bi information",
-      "do u know power bi",
-      "do you know power bi",
-      "do you know power bi",
-      "do you know power bi"
+      "do u know power bi"
     ],
     "keywords": [
       "dax queries",
@@ -2781,10 +2672,7 @@
       "do you know tableau overview",
       "do you know tableau details",
       "do you know tableau information",
-      "do u know tableau",
-      "do you know tableau",
-      "do you know tableau",
-      "do you know tableau"
+      "do u know tableau"
     ],
     "keywords": [
       "worksheet creation",
@@ -2852,10 +2740,7 @@
       "what is data cleaning overview",
       "what is data cleaning details",
       "what is data cleaning information",
-      "wat is data cleaning",
-      "what is data cleaning",
-      "what is data cleaning",
-      "what is data cleaning"
+      "wat is data cleaning"
     ],
     "keywords": [
       "data scrubbing",
@@ -2923,10 +2808,7 @@
       "what is eda overview",
       "what is eda details",
       "what is eda information",
-      "wat is eda",
-      "what is eda",
-      "what is eda",
-      "what is eda"
+      "wat is eda"
     ],
     "keywords": [
       "exploratory analysis",
@@ -2996,8 +2878,7 @@
       "what is your favorite python project information",
       "wat is ur favorite python project",
       "what is ur favorite python project",
-      "what is your favorite python proj",
-      "what is your favorite python project"
+      "what is your favorite python proj"
     ],
     "keywords": [
       "pythonic build",
@@ -3065,10 +2946,7 @@
       "have you used automation in python overview",
       "have you used automation in python details",
       "have you used automation in python information",
-      "have u used automation in python",
-      "have you used automation in python",
-      "have you used automation in python",
-      "have you used automation in python"
+      "have u used automation in python"
     ],
     "keywords": [
       "task scheduling",
@@ -3136,10 +3014,7 @@
       "what ide do you use overview",
       "what ide do you use details",
       "what ide do you use information",
-      "wat ide do u use",
-      "what ide do you use",
-      "what ide do you use",
-      "what ide do you use"
+      "wat ide do u use"
     ],
     "keywords": [
       "development environment",
@@ -3207,10 +3082,7 @@
       "what is cyberforge ai overview",
       "what is cyberforge ai details",
       "what is cyberforge ai information",
-      "wat is cyberforge ai",
-      "what is cyberforge ai",
-      "what is cyberforge ai",
-      "what is cyberforge ai"
+      "wat is cyberforge ai"
     ],
     "keywords": [
       "intelligent security",
@@ -3277,11 +3149,7 @@
       "can you explain why the cyberpunk theme",
       "why the cyberpunk theme overview",
       "why the cyberpunk theme details",
-      "why the cyberpunk theme information",
-      "why the cyberpunk theme",
-      "why the cyberpunk theme",
-      "why the cyberpunk theme",
-      "why the cyberpunk theme"
+      "why the cyberpunk theme information"
     ],
     "keywords": [
       "aesthetic preference",
@@ -3350,9 +3218,7 @@
       "are you interested in cybersecurity details",
       "are you interested in cybersecurity information",
       "are u interested in cybersecurity",
-      "r you interested in cybersecurity",
-      "are you interested in cybersecurity",
-      "are you interested in cybersecurity"
+      "r you interested in cybersecurity"
     ],
     "keywords": [
       "info security",
@@ -3420,10 +3286,7 @@
       "what is ethical hacking overview",
       "what is ethical hacking details",
       "what is ethical hacking information",
-      "wat is ethical hacking",
-      "what is ethical hacking",
-      "what is ethical hacking",
-      "what is ethical hacking"
+      "wat is ethical hacking"
     ],
     "keywords": [
       "white hat hacking",
@@ -3491,10 +3354,7 @@
       "what is phishing overview",
       "what is phishing details",
       "what is phishing information",
-      "wat is phishing",
-      "what is phishing",
-      "what is phishing",
-      "what is phishing"
+      "wat is phishing"
     ],
     "keywords": [
       "social engineering",
@@ -3562,10 +3422,7 @@
       "what is encryption overview",
       "what is encryption details",
       "what is encryption information",
-      "wat is encryption",
-      "what is encryption",
-      "what is encryption",
-      "what is encryption"
+      "wat is encryption"
     ],
     "keywords": [
       "ciphertext",
@@ -3633,10 +3490,7 @@
       "what is ai automation overview",
       "what is ai automation details",
       "what is ai automation information",
-      "wat is ai automation",
-      "what is ai automation",
-      "what is ai automation",
-      "what is ai automation"
+      "wat is ai automation"
     ],
     "keywords": [
       "robotic process automation",
@@ -3704,10 +3558,7 @@
       "what is prompt engineering overview",
       "what is prompt engineering details",
       "what is prompt engineering information",
-      "wat is prompt engineering",
-      "what is prompt engineering",
-      "what is prompt engineering",
-      "what is prompt engineering"
+      "wat is prompt engineering"
     ],
     "keywords": [
       "context window optimization",
@@ -3774,11 +3625,7 @@
       "can you explain can ai replace developers",
       "can ai replace developers overview",
       "can ai replace developers details",
-      "can ai replace developers information",
-      "can ai replace developers",
-      "can ai replace developers",
-      "can ai replace developers",
-      "can ai replace developers"
+      "can ai replace developers information"
     ],
     "keywords": [
       "augmented programming",
@@ -3846,10 +3693,7 @@
       "what ai tools do you use overview",
       "what ai tools do you use details",
       "what ai tools do you use information",
-      "wat ai tools do u use",
-      "what ai tools do you use",
-      "what ai tools do you use",
-      "what ai tools do you use"
+      "wat ai tools do u use"
     ],
     "keywords": [
       "integrated ai services",
@@ -3917,10 +3761,7 @@
       "have you used chatgpt apis overview",
       "have you used chatgpt apis details",
       "have you used chatgpt apis information",
-      "have u used chatgpt apis",
-      "have you used chatgpt apis",
-      "have you used chatgpt apis",
-      "have you used chatgpt apis"
+      "have u used chatgpt apis"
     ],
     "keywords": [
       "openai integration",
@@ -3988,10 +3829,7 @@
       "what is computer vision overview",
       "what is computer vision details",
       "what is computer vision information",
-      "wat is computer vision",
-      "what is computer vision",
-      "what is computer vision",
-      "what is computer vision"
+      "wat is computer vision"
     ],
     "keywords": [
       "image processing",
@@ -4059,10 +3897,7 @@
       "what is opencv overview",
       "what is opencv details",
       "what is opencv information",
-      "wat is opencv",
-      "what is opencv",
-      "what is opencv",
-      "what is opencv"
+      "wat is opencv"
     ],
     "keywords": [
       "computer vision library",
@@ -4130,10 +3965,7 @@
       "what is automation scripting overview",
       "what is automation scripting details",
       "what is automation scripting information",
-      "wat is automation scripting",
-      "what is automation scripting",
-      "what is automation scripting",
-      "what is automation scripting"
+      "wat is automation scripting"
     ],
     "keywords": [
       "shell scripting",
@@ -4203,8 +4035,7 @@
       "what is your dream ai project information",
       "wat is ur dream ai project",
       "what is ur dream ai project",
-      "what is your dream ai proj",
-      "what is your dream ai project"
+      "what is your dream ai proj"
     ],
     "keywords": [
       "future architecture",
@@ -4273,9 +4104,7 @@
       "are you looking for a job details",
       "are you looking for a job information",
       "are u looking for a job",
-      "r you looking for a job",
-      "are you looking for a job",
-      "are you looking for a job"
+      "r you looking for a job"
     ],
     "keywords": [
       "seeking employment",
@@ -4310,7 +4139,6 @@
       "career move",
       "availability",
       "future",
-      "status",
       "work",
       "growth",
       "next",
@@ -4344,9 +4172,7 @@
       "what roles are you interested in details",
       "what roles are you interested in information",
       "wat roles are u interested in",
-      "what roles r you interested in",
-      "what roles are you interested in",
-      "what roles are you interested in"
+      "what roles r you interested in"
     ],
     "keywords": [
       "target designations",
@@ -4415,9 +4241,7 @@
       "are you open to internships details",
       "are you open to internships information",
       "are u open to internships",
-      "r you open to internships",
-      "are you open to internships",
-      "are you open to internships"
+      "r you open to internships"
     ],
     "keywords": [
       "entry level training",
@@ -4486,9 +4310,7 @@
       "are you available for freelance work details",
       "are you available for freelance work information",
       "are u available for freelance work",
-      "r you available for freelance work",
-      "are you available for freelance work",
-      "are you available for freelance work"
+      "r you available for freelance work"
     ],
     "keywords": [
       "independent contracting",
@@ -4557,9 +4379,7 @@
       "what is your experience level details",
       "what is your experience level information",
       "wat is ur experience level",
-      "what is ur experience level",
-      "what is your experience level",
-      "what is your experience level"
+      "what is ur experience level"
     ],
     "keywords": [
       "professional tenure",
@@ -4594,7 +4414,6 @@
       "years coding",
       "time",
       "history",
-      "status",
       "rank",
       "level",
       "background",
@@ -4628,8 +4447,6 @@
       "why should we hire you details",
       "why should we hire you information",
       "why should we hire u",
-      "why should we hire you",
-      "why should we hire you",
       "why should we hire you"
     ],
     "keywords": [
@@ -4698,10 +4515,7 @@
       "what makes you different overview",
       "what makes you different details",
       "what makes you different information",
-      "wat makes u different",
-      "what makes you different",
-      "what makes you different",
-      "what makes you different"
+      "wat makes u different"
     ],
     "keywords": [
       "unique selling point",
@@ -4770,9 +4584,7 @@
       "are you a quick learner details",
       "are you a quick learner information",
       "are u a quick learner",
-      "r you a quick learner",
-      "are you a quick learner",
-      "are you a quick learner"
+      "r you a quick learner"
     ],
     "keywords": [
       "rapid onboarding",
@@ -4840,10 +4652,7 @@
       "can you work in teams overview",
       "can you work in teams details",
       "can you work in teams information",
-      "can u work in teams",
-      "can you work in teams",
-      "can you work in teams",
-      "can you work in teams"
+      "can u work in teams"
     ],
     "keywords": [
       "cross functional collaboration",
@@ -4912,9 +4721,7 @@
       "are you open to relocation details",
       "are you open to relocation information",
       "are u open to relocation",
-      "r you open to relocation",
-      "are you open to relocation",
-      "are you open to relocation"
+      "r you open to relocation"
     ],
     "keywords": [
       "geographic mobility",
@@ -4983,9 +4790,7 @@
       "what are your strengths details",
       "what are your strengths information",
       "wat are ur strengths",
-      "what r ur strengths",
-      "what are your strengths",
-      "what are your strengths"
+      "what r ur strengths"
     ],
     "keywords": [
       "technical proficiency",
@@ -5054,9 +4859,7 @@
       "what are your weaknesses details",
       "what are your weaknesses information",
       "wat are ur weaknesses",
-      "what r ur weaknesses",
-      "what are your weaknesses",
-      "what are your weaknesses"
+      "what r ur weaknesses"
     ],
     "keywords": [
       "skill limitations",
@@ -5124,10 +4927,7 @@
       "what motivates you overview",
       "what motivates you details",
       "what motivates you information",
-      "wat motivates u",
-      "what motivates you",
-      "what motivates you",
-      "what motivates you"
+      "wat motivates u"
     ],
     "keywords": [
       "intrinsic motivators",
@@ -5196,9 +4996,7 @@
       "what is your career goal details",
       "what is your career goal information",
       "wat is ur career goal",
-      "what is ur crer goal",
-      "what is your career goal",
-      "what is your career goal"
+      "what is ur crer goal"
     ],
     "keywords": [
       "professional trajectory",
@@ -5267,9 +5065,7 @@
       "what type of company are you looking for details",
       "what type of company are you looking for information",
       "wat type of company are u looking for",
-      "what type of company r you looking for",
-      "what type of company are you looking for",
-      "what type of company are you looking for"
+      "what type of company r you looking for"
     ],
     "keywords": [
       "organizational culture",
@@ -5337,10 +5133,7 @@
       "show projects overview",
       "show projects details",
       "show projects information",
-      "show projects",
-      "show projects",
-      "show projs",
-      "show projects"
+      "show projs"
     ],
     "keywords": [
       "portfolio inventory",
@@ -5407,11 +5200,7 @@
       "can you explain open github",
       "open github overview",
       "open github details",
-      "open github information",
-      "open github",
-      "open github",
-      "open github",
-      "open github"
+      "open github information"
     ],
     "keywords": [
       "git repository",
@@ -5478,11 +5267,7 @@
       "can you explain open linkedin",
       "open linkedin overview",
       "open linkedin details",
-      "open linkedin information",
-      "open linkedin",
-      "open linkedin",
-      "open linkedin",
-      "open linkedin"
+      "open linkedin information"
     ],
     "keywords": [
       "professional network",
@@ -5549,11 +5334,7 @@
       "can you explain download resume",
       "download resume overview",
       "download resume details",
-      "download resume information",
-      "download resume",
-      "download resume",
-      "download resume",
-      "download resume"
+      "download resume information"
     ],
     "keywords": [
       "curriculum vitae",
@@ -5591,7 +5372,6 @@
       "info",
       "summary",
       "record",
-      "data",
       "bio",
       "profile",
       "history",
@@ -5620,11 +5400,7 @@
       "can you explain contact information",
       "contact information overview",
       "contact information details",
-      "contact information information",
-      "contact information",
-      "contact information",
-      "contact information",
-      "contact information"
+      "contact information information"
     ],
     "keywords": [
       "communication channels",
@@ -5655,7 +5431,7 @@
       "my contact",
       "hit me up",
       "connect now",
-      "let\u2019s talk",
+      "let’s talk",
       "contact info",
       "message",
       "email",
@@ -5691,11 +5467,7 @@
       "can you explain show certifications",
       "show certifications overview",
       "show certifications details",
-      "show certifications information",
-      "show certifications",
-      "show certifications",
-      "show certifications",
-      "show certifications"
+      "show certifications information"
     ],
     "keywords": [
       "accredited credentials",
@@ -5762,11 +5534,7 @@
       "can you explain show skills",
       "show skills overview",
       "show skills details",
-      "show skills information",
-      "show skills",
-      "show skills",
-      "show skills",
-      "show skills"
+      "show skills information"
     ],
     "keywords": [
       "proficiency matrix",
@@ -5833,11 +5601,7 @@
       "can you explain open portfolio",
       "open portfolio overview",
       "open portfolio details",
-      "open portfolio information",
-      "open portfolio",
-      "open portfolio",
-      "open portfolio",
-      "open portfolio"
+      "open portfolio information"
     ],
     "keywords": [
       "digital portfolio access",
@@ -5904,11 +5668,7 @@
       "can you explain show achievements",
       "show achievements overview",
       "show achievements details",
-      "show achievements information",
-      "show achievements",
-      "show achievements",
-      "show achievements",
-      "show achievements"
+      "show achievements information"
     ],
     "keywords": [
       "career milestones",
@@ -5946,7 +5706,6 @@
       "victory",
       "pride",
       "results",
-      "status",
       "impact",
       "honors",
       "reach",
@@ -5975,11 +5734,7 @@
       "can you explain show experience",
       "show experience overview",
       "show experience details",
-      "show experience information",
-      "show experience",
-      "show experience",
-      "show experience",
-      "show experience"
+      "show experience information"
     ],
     "keywords": [
       "professional chronology",
@@ -6047,10 +5802,7 @@
       "what inspires you overview",
       "what inspires you details",
       "what inspires you information",
-      "wat inspires u",
-      "what inspires you",
-      "what inspires you",
-      "what inspires you"
+      "wat inspires u"
     ],
     "keywords": [
       "ideological drivers",
@@ -6118,9 +5870,6 @@
       "why technology overview",
       "why technology details",
       "why technology information",
-      "why technology",
-      "why technology",
-      "why technology",
       "why tech"
     ],
     "keywords": [
@@ -6189,10 +5938,7 @@
       "what do you enjoy building most overview",
       "what do you enjoy building most details",
       "what do you enjoy building most information",
-      "wat do u enjoy building most",
-      "what do you enjoy building most",
-      "what do you enjoy building most",
-      "what do you enjoy building most"
+      "wat do u enjoy building most"
     ],
     "keywords": [
       "architecture preferences",
@@ -6261,9 +6007,7 @@
       "what was your hardest bug details",
       "what was your hardest bug information",
       "wat was ur hardest bug",
-      "what was ur hardest bug",
-      "what was your hardest bug",
-      "what was your hardest bug"
+      "what was ur hardest bug"
     ],
     "keywords": [
       "complex debugging",
@@ -6332,9 +6076,7 @@
       "what is your favorite programming language details",
       "what is your favorite programming language information",
       "wat is ur favorite programming language",
-      "what is ur favorite programming language",
-      "what is your favorite programming language",
-      "what is your favorite programming language"
+      "what is ur favorite programming language"
     ],
     "keywords": [
       "primary language",
@@ -6405,7 +6147,14 @@
       "helo",
       "hii",
       "hi there",
-      "hey there"
+      "hey there",
+      "sup",
+      "wassup",
+      "what up",
+      "wazzup",
+      "whats up",
+      "what's good",
+      "yo yo"
     ],
     "keywords": [
       "hiya",
@@ -6472,11 +6221,7 @@
       "can you explain day or night coder",
       "day or night coder overview",
       "day or night coder details",
-      "day or night coder information",
-      "day or night coder",
-      "day or night coder",
-      "day or night coder",
-      "day or night coder"
+      "day or night coder information"
     ],
     "keywords": [
       "diurnal schedule",
@@ -6544,10 +6289,7 @@
       "what keeps you motivated overview",
       "what keeps you motivated details",
       "what keeps you motivated information",
-      "wat keeps u motivated",
-      "what keeps you motivated",
-      "what keeps you motivated",
-      "what keeps you motivated"
+      "wat keeps u motivated"
     ],
     "keywords": [
       "intrinsic drive",
@@ -6614,11 +6356,7 @@
       "can you explain initialize cyberforge",
       "initialize cyberforge overview",
       "initialize cyberforge details",
-      "initialize cyberforge information",
-      "initialize cyberforge",
-      "initialize cyberforge",
-      "initialize cyberforge",
-      "initialize cyberforge"
+      "initialize cyberforge information"
     ],
     "keywords": [
       "boot sequence",
@@ -6685,11 +6423,7 @@
       "can you explain run system scan",
       "run system scan overview",
       "run system scan details",
-      "run system scan information",
-      "run system scan",
-      "run system scan",
-      "run system scan",
-      "run system scan"
+      "run system scan information"
     ],
     "keywords": [
       "integrity check",
@@ -6756,11 +6490,7 @@
       "can you explain activate ai mode",
       "activate ai mode overview",
       "activate ai mode details",
-      "activate ai mode information",
-      "activate ai mode",
-      "activate ai mode",
-      "activate ai mode",
-      "activate ai mode"
+      "activate ai mode information"
     ],
     "keywords": [
       "toggle intelligence",
@@ -6827,11 +6557,7 @@
       "can you explain enter hacker mode",
       "enter hacker mode overview",
       "enter hacker mode details",
-      "enter hacker mode information",
-      "enter hacker mode",
-      "enter hacker mode",
-      "enter hacker mode",
-      "enter hacker mode"
+      "enter hacker mode information"
     ],
     "keywords": [
       "terminal access",
@@ -6898,11 +6624,7 @@
       "can you explain access denied",
       "access denied overview",
       "access denied details",
-      "access denied information",
-      "access denied",
-      "access denied",
-      "access denied",
-      "access denied"
+      "access denied information"
     ],
     "keywords": [
       "authorization failure",
@@ -6921,7 +6643,7 @@
       "privilege error",
       "blocked request",
       "stay out",
-      "can\u2019t enter",
+      "can’t enter",
       "no access",
       "locked",
       "blocked",
@@ -6970,10 +6692,7 @@
       "reveal hidden project overview",
       "reveal hidden project details",
       "reveal hidden project information",
-      "reveal hidden project",
-      "reveal hidden project",
-      "reveal hidden proj",
-      "reveal hidden project"
+      "reveal hidden proj"
     ],
     "keywords": [
       "secret repository",
@@ -7040,11 +6759,7 @@
       "can you explain wake up cyberforge ai",
       "wake up cyberforge ai overview",
       "wake up cyberforge ai details",
-      "wake up cyberforge ai information",
-      "wake up cyberforge ai",
-      "wake up cyberforge ai",
-      "wake up cyberforge ai",
-      "wake up cyberforge ai"
+      "wake up cyberforge ai information"
     ],
     "keywords": [
       "system resumption",
@@ -7084,7 +6799,6 @@
       "pulse",
       "start",
       "rise",
-      "hello",
       "being",
       "presence",
       "wak up",
@@ -7397,7 +7111,6 @@
       "describe ttl and cache invalidation.",
       "how do you optimize edge caching?",
       "cachin",
-      "latensy",
       "speed boost",
       "request sync"
     ],
@@ -7540,7 +7253,6 @@
       "how do you resolve write conflicts?",
       "race condishon",
       "deadlok",
-      "conflict fix",
       "sync safety"
     ],
     "keywords": [
@@ -7751,10 +7463,8 @@
       "explain high-availability architecture.",
       "describe health monitoring and recovery.",
       "how do you mitigate single points of failure?",
-      "failur",
       "singel point",
-      "backup plan",
-      "resilience"
+      "backup plan"
     ],
     "keywords": [
       "redundancy planning",
@@ -7966,7 +7676,6 @@
       "how do you optimize the learning curve?",
       "bais",
       "varience",
-      "fit balance",
       "trade-off"
     ],
     "keywords": [
@@ -8096,7 +7805,6 @@
   {
     "file_name": "10.5.What was your strategy for Feature Selection in your latest AI project.txt",
     "key_sentences": [
-      "feature pick",
       "describe your feature selection strategy.",
       "how do you rank data importance?",
       "explain your dimensionality reduction.",
@@ -8108,7 +7816,6 @@
       "how do you use principal component analysis?",
       "pickin",
       "lasso",
-      "importance",
       "pca"
     ],
     "keywords": [
@@ -8284,7 +7991,6 @@
       "empty info",
       "gap fix",
       "data repair",
-      "empty",
       "missing",
       "gap",
       "repair",
@@ -8321,8 +8027,7 @@
       "how do you handle user sparsity?",
       "coldstert",
       "recommender",
-      "start fresh",
-      "zero data"
+      "start fresh"
     ],
     "keywords": [
       "user cold start",
@@ -8357,14 +8062,12 @@
       "zero data fix",
       "start",
       "zero",
-      "new",
       "beginning",
       "history",
       "growth",
       "problem",
       "logic",
       "first",
-      "data",
       "coldstart",
       "cold stert",
       "no histry",
@@ -8392,7 +8095,6 @@
       "how do you benchmark execution speed?",
       "latensy",
       "millisec",
-      "response",
       "lag check"
     ],
     "keywords": [
@@ -9421,7 +9123,6 @@
       "data structure choice",
       "fast storage",
       "choice",
-      "data",
       "flexibility",
       "scale",
       "structure",
@@ -9670,8 +9371,7 @@
       "how do you handle browser repaints?",
       "stylin",
       "bundel size",
-      "ui frame",
-      "framework"
+      "ui frame"
     ],
     "keywords": [
       "style encapsulation",
@@ -9741,8 +9441,7 @@
       "how do you handle immutability?",
       "prop drilin",
       "imutability",
-      "store logic",
-      "frontend"
+      "store logic"
     ],
     "keywords": [
       "component state lifecycle",
@@ -9780,7 +9479,6 @@
       "logic",
       "control",
       "state",
-      "data",
       "update",
       "consistency",
       "presence",
@@ -9811,7 +9509,6 @@
       "describe enterprise-level design.",
       "how do you plan a system modernization?",
       "redo proj",
-      "dream build",
       "version 2",
       "revision"
     ],
@@ -10013,7 +9710,6 @@
   {
     "file_name": "13.2.Tell me about a Successful Failure a project that failed but taught you a vital lesson.txt",
     "key_sentences": [
-      "growth",
       "describe a successful failure.",
       "what did you learn from a flop?",
       "explain your resilience in projects.",
@@ -10153,7 +9849,7 @@
     ]
   },
   {
-    "file_name": "13.4.What is the most un-intuitive bug you\u2019ve ever found.txt",
+    "file_name": "13.4.What is the most un-intuitive bug you’ve ever found.txt",
     "key_sentences": [
       "mystery",
       "what is the weirdest bug found?",
@@ -10226,7 +9922,6 @@
   {
     "file_name": "13.5.How do you prioritize features when you have a limited window for development.txt",
     "key_sentences": [
-      "features",
       "how do you prioritize features?",
       "describe your mvp scoping logic.",
       "explain your roadmap strategy.",
@@ -10309,7 +10004,6 @@
       "how do you handle unassigned tasks?",
       "ownershep",
       "lead-ship",
-      "extra mile",
       "take charge"
     ],
     "keywords": [

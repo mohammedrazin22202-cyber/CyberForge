@@ -554,6 +554,66 @@
 
   .nav-links a.active::after { transform: scaleX(1); }
 
+  /* ── HAMBURGER MENU ── */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(0,255,65,0.3);
+    padding: 6px;
+    flex-shrink: 0;
+  }
+  .nav-hamburger span {
+    display: block;
+    height: 1.5px;
+    background: var(--matrix-green);
+    box-shadow: 0 0 6px var(--matrix-green);
+    transition: all 0.25s ease;
+    transform-origin: center;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Mobile dropdown nav panel */
+  .nav-mobile-panel {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(0,4,0,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,255,65,0.2);
+    z-index: 9998;
+    padding: 70px 0 24px;
+    flex-direction: column;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.8);
+  }
+  .nav-mobile-panel.open { display: flex; }
+  .nav-mobile-panel a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(0,163,18,0.7);
+    text-decoration: none;
+    padding: 14px 32px;
+    border-bottom: 1px solid rgba(0,255,65,0.06);
+    transition: all 0.2s;
+  }
+  .nav-mobile-panel a:hover,
+  .nav-mobile-panel a.active {
+    color: var(--matrix-green);
+    background: rgba(0,255,65,0.04);
+    padding-left: 40px;
+    text-shadow: 0 0 10px var(--matrix-green);
+  }
+
   /* ── HERO ── */
   #hero {
     position: relative;
@@ -1210,6 +1270,8 @@
     color: #ffffff;
     line-height: 1.6;
   }
+
+  .pill-row {
     display: flex;
     gap: 8px;
     margin-top: 24px;
@@ -1561,6 +1623,13 @@
 
   .learning-card:hover::after { transform: scaleX(1); }
 
+  .learning-card-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
   .learning-icon {
     font-size: 1.6rem;
     margin-bottom: 12px;
@@ -1704,14 +1773,16 @@
 
   .contact-email {
     font-family: 'Orbitron', monospace;
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-size: clamp(0.75rem, 3.5vw, 1.4rem);
     color: var(--matrix-green);
     text-shadow: 0 0 15px var(--matrix-green);
     text-decoration: none;
     display: block;
     margin: 20px 0 30px;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     transition: all 0.2s;
+    word-break: break-all;
+    overflow-wrap: anywhere;
   }
 
   .contact-email:hover { text-shadow: 0 0 30px var(--matrix-green); }
@@ -2316,10 +2387,610 @@
     .nav-links a { font-size: 0.65rem; }
     .about-grid { grid-template-columns: 1fr; gap: 40px; }
     section { padding: 60px 20px; }
-    .project-card { padding: 28px 24px; }
+    /* project-card padding now handled in the mobile block above */
+
+    /* ── PROJECT CARDS — mobile fix ── */
+    #projects {
+      padding: 60px 16px;
+    }
+    .project-card {
+      padding: 28px 20px 28px 24px;
+    }
+    .project-number {
+      font-size: 2rem;
+      top: 16px;
+      right: 16px;
+      color: rgba(0,255,65,0.25);
+      opacity: 1;
+    }
+    .project-title {
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      line-height: 1.5;
+      padding-right: 40px; /* stop text running under the 01/02 number */
+    }
+    .project-desc {
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .project-metrics {
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .metric-value {
+      font-size: 1.1rem;
+    }
+    .metric-label {
+      font-size: 0.55rem;
+      letter-spacing: 1px;
+    }
+    .par-block {
+      margin-top: 18px;
+      padding-top: 16px;
+      gap: 12px;
+    }
+    .par-row {
+      flex-direction: column;
+      gap: 4px;
+    }
+    .par-label {
+      font-size: 0.55rem;
+      letter-spacing: 2px;
+      min-width: unset;
+    }
+    .par-text {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+
+
+    /* ── SECTION TITLES — scale down on mobile ── */
+    .section-title {
+      font-size: clamp(1.2rem, 6vw, 1.8rem);
+      letter-spacing: 1px;
+      margin-bottom: 32px;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    /* ── AI MODULES GRID — single column on mobile ── */
+    .learning-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .learning-card {
+      padding: 18px 14px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
+    .learning-icon {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+    .learning-card-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .learning-title {
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .learning-desc {
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .learning-bar-wrap {
+      margin-top: 6px;
+    }
+
+    /* ── NAV — hamburger on mobile ── */
+    nav {
+      top: 8px;
+      width: calc(100vw - 16px);
+      padding: 0 14px;
+      height: 48px;
+    }
+    .nav-logo-img { height: 30px; }
+    .nav-links { display: none; }         /* hide desktop links */
+    .nav-hamburger { display: flex; }     /* show hamburger */
+
+    /* ── HERO SECTION — centered on mobile ── */
+    #hero {
+      padding: 80px 20px 40px;
+      text-align: center;
+      align-items: center;
+      gap: 36px;
+    }
+    .hero-left {
+      align-items: center;
+      width: 100%;
+    }
+    .hero-pre {
+      text-align: center;
+    }
+    .hero-name {
+      font-size: clamp(2.6rem, 12vw, 4.5rem);
+      text-align: center;
+    }
+    .hero-titles {
+      align-items: center;
+    }
+    .hero-title-line {
+      justify-content: center;
+      letter-spacing: 4px;
+      font-size: clamp(0.75rem, 3.5vw, 1rem);
+    }
+    .hero-cta {
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .hero-cta .btn {
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+    }
+    .hero-right {
+      width: min(100%, 420px);
+    }
+
+    /* ── CONTACT SECTION — mobile centering & email fix ── */
+    #contact {
+      padding: 60px 16px;
+      text-align: center;
+    }
+    .contact-box {
+      padding: 36px 20px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      margin: 0 auto;
+    }
+    .contact-email {
+      font-size: clamp(0.7rem, 4vw, 1rem);
+      letter-spacing: 0.5px;
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      text-align: center;
+    }
+    .contact-phone,
+    .contact-linkedin {
+      text-align: center;
+    }
+    .contact-box div[style*="display:flex"] {
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .contact-box .btn {
+      width: 100%;
+      max-width: 280px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+  }
+
+  /* ── BOOT SCREEN MOBILE — separate breakpoint to avoid desktop bleed ── */
+  @media (max-width: 600px) {
+    .loader-inner {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr auto;
+      width: min(96vw, 480px);
+      height: min(92vh, 700px);
+      overflow-y: auto;
+    }
+
+    /* Header spans full width (already grid-column 1/-1) */
+    .loader-header {
+      padding: 10px 16px;
+    }
+    .loader-header-id {
+      font-size: 0.50rem;
+      letter-spacing: 2px;
+    }
+
+    /* Left panel: center everything */
+    .loader-left {
+      grid-column: 1 / -1;
+      align-items: center;
+      text-align: center;
+      padding: 28px 24px 16px;
+      border-right: none;
+      border-bottom: 1px solid rgba(0,255,65,0.12);
+      gap: 14px;
+    }
+
+    .loader-logo-img {
+      width: min(120px, 30vw);
+    }
+
+    .loader-name-big {
+      font-size: clamp(1.6rem, 8vw, 2.4rem);
+      text-align: center;
+    }
+
+    .loader-role-tags {
+      align-items: center;
+    }
+
+    .loader-role-tag {
+      justify-content: center;
+    }
+
+    .loader-action-btns {
+      width: 100%;
+      max-width: 280px;
+    }
+
+    /* Hide right terminal panel on mobile to keep it clean */
+    .loader-right {
+      display: none;
+    }
+
+    /* Footer spans full width */
+    .loader-footer {
+      grid-column: 1 / -1;
+      padding: 10px 16px;
+    }
+
+    .loader-bar-label {
+      font-size: 0.50rem;
+      letter-spacing: 2px;
+    }
+
+    /* Skip intro button */
+    #loader-close-btn {
+      top: 10px;
+      right: 12px;
+      font-size: 0.50rem;
+      padding: 5px 12px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .loader-inner {
+      width: 98vw;
+    }
+    .loader-name-big {
+      font-size: clamp(1.4rem, 9vw, 2rem);
+    }
   }
 
   /* ── CYBERFORGE AI CHAT BUTTON ── */
+  /* CyberForge OS UI additions */
+  body.theme-matrix {
+    --matrix-green: #00ff41;
+    --matrix-mid: #00a312;
+    --matrix-dim: #003b00;
+    --cyan: #00e5ff;
+  }
+  body.theme-cyan {
+    --matrix-green: #55f7ff;
+    --matrix-mid: #18b9d7;
+    --matrix-dim: #073040;
+    --cyan: #8ffff7;
+    --matrix-glow: rgba(85,247,255,0.36);
+  }
+  body.theme-red {
+    --matrix-green: #ff315a;
+    --matrix-mid: #b91838;
+    --matrix-dim: #3a0712;
+    --cyan: #ffd166;
+    --matrix-glow: rgba(255,49,90,0.36);
+  }
+  body.theme-minimal {
+    --matrix-green: #e7fff1;
+    --matrix-mid: #91b8a1;
+    --matrix-dim: #1a2620;
+    --cyan: #ffffff;
+    --matrix-glow: rgba(231,255,241,0.18);
+  }
+  body.recruiter-mode #matrix-canvas,
+  body.recruiter-mode .loader-scanlines,
+  body.recruiter-mode .loader-vignette {
+    opacity: 0.08 !important;
+  }
+  body.recruiter-mode *,
+  body.recruiter-mode *::before,
+  body.recruiter-mode *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+  body.recruiter-mode .section-title,
+  body.recruiter-mode .hero-name {
+    text-shadow: none !important;
+  }
+  body.cyber-mode #matrix-canvas {
+    opacity: 0.7;
+  }
+  body.cyber-mode .project-card,
+  body.cyber-mode .terminal-card {
+    box-shadow: 0 0 42px var(--matrix-glow), inset 0 0 34px rgba(0,255,65,0.05);
+  }
+
+  #cf-osbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99980;
+    min-height: 58px;
+    padding: 9px clamp(14px, 3vw, 34px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    background: rgba(0,0,0,0.78);
+    border-bottom: 1px solid rgba(0,255,65,0.18);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+  .cf-os-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    font-family: 'Orbitron', monospace;
+    color: var(--matrix-green);
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    text-shadow: 0 0 12px var(--matrix-glow);
+    white-space: nowrap;
+  }
+  .cf-os-dot {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(0,255,65,0.42);
+    border-radius: 10px;
+    background:
+      linear-gradient(135deg, rgba(0,255,65,0.10), rgba(0,0,0,0.55)),
+      rgba(0,10,0,0.88);
+    box-shadow: 0 0 14px rgba(0,255,65,0.38), inset 0 0 10px rgba(0,255,65,0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .cf-os-dot img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    object-position: center 30%;
+    filter: saturate(1.25) contrast(1.12);
+  }
+  .cf-os-links,
+  .cf-os-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .cf-os-link,
+  .cf-os-btn,
+  .cf-os-select {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    color: var(--matrix-mid);
+    border: 1px solid rgba(0,255,65,0.18);
+    background: rgba(0,0,0,0.48);
+    padding: 8px 10px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+  }
+  .cf-os-link:hover,
+  .cf-os-btn:hover,
+  .cf-os-select:focus {
+    color: #000;
+    background: var(--matrix-green);
+    border-color: var(--matrix-green);
+    box-shadow: 0 0 20px var(--matrix-glow);
+  }
+  .cf-os-btn.active {
+    color: #000;
+    background: var(--matrix-green);
+    border-color: var(--matrix-green);
+  }
+  nav {
+    top: 74px;
+  }
+
+  .cf-welcome {
+    position: fixed;
+    top: 72px;
+    right: 22px;
+    z-index: 99999;
+    max-width: min(360px, calc(100vw - 32px));
+    padding: 14px 16px;
+    border: 1px solid rgba(0,255,65,0.28);
+    background: rgba(0,0,0,0.88);
+    color: var(--matrix-green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.55;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.7), 0 0 24px var(--matrix-glow);
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .cf-welcome.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .loader-skip-forever {
+    position: absolute;
+    top: 14px;
+    right: 126px;
+    z-index: 20;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--matrix-mid);
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(0,255,65,0.18);
+    padding: 7px 12px;
+    cursor: pointer;
+  }
+  .loader-skip-forever:hover {
+    color: #000;
+    background: var(--matrix-green);
+    border-color: var(--matrix-green);
+  }
+
+  .project-preview {
+    margin: 24px 0 18px;
+    border: 1px solid rgba(0,255,65,0.18);
+    background: linear-gradient(135deg, rgba(0,255,65,0.05), rgba(0,0,0,0.72));
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(190px, 0.75fr);
+    gap: 18px;
+    padding: 18px;
+    min-height: 220px;
+  }
+  .preview-screen {
+    border: 1px solid rgba(0,255,65,0.22);
+    background:
+      linear-gradient(90deg, rgba(0,255,65,0.06) 1px, transparent 1px),
+      linear-gradient(rgba(0,255,65,0.06) 1px, transparent 1px),
+      rgba(0,0,0,0.62);
+    background-size: 22px 22px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .preview-screen::before {
+    content: attr(data-title);
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--matrix-mid);
+    margin-bottom: 14px;
+  }
+  .preview-chart {
+    height: 120px;
+    display: flex;
+    align-items: end;
+    gap: 10px;
+  }
+  .preview-bar {
+    flex: 1;
+    min-width: 12px;
+    height: var(--h);
+    background: linear-gradient(180deg, var(--matrix-green), var(--matrix-mid));
+    box-shadow: 0 0 16px var(--matrix-glow);
+  }
+  .preview-line {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 58px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), transparent);
+    box-shadow: 0 0 12px var(--cyan);
+  }
+  .preview-kpis {
+    display: grid;
+    gap: 10px;
+  }
+  .preview-kpi {
+    border: 1px solid rgba(0,255,65,0.16);
+    padding: 12px;
+    background: rgba(0,0,0,0.42);
+  }
+  .preview-kpi strong {
+    display: block;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.15rem;
+    color: var(--matrix-green);
+  }
+  .preview-kpi span {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.72rem;
+    color: var(--text);
+  }
+
+  #cf-launcher {
+    position: fixed;
+    inset: 0;
+    z-index: 99994;
+    display: none;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 80px 18px 18px;
+  }
+  #cf-launcher.open {
+    display: grid;
+    place-items: center;
+  }
+  .cf-launcher-box {
+    width: min(760px, 100%);
+    max-height: min(720px, calc(100dvh - 110px));
+    overflow: auto;
+    border: 1px solid rgba(0,255,65,0.28);
+    background: rgba(0,8,2,0.96);
+    box-shadow: 0 22px 80px rgba(0,0,0,0.8), 0 0 28px var(--matrix-glow);
+    padding: 20px;
+  }
+  .cf-launcher-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  .cf-launcher-title {
+    font-family: 'Orbitron', monospace;
+    letter-spacing: 0.18em;
+    color: var(--matrix-green);
+    font-size: 0.9rem;
+  }
+  .cf-prompt-groups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .cf-prompt-group {
+    border: 1px solid rgba(0,255,65,0.14);
+    padding: 14px;
+    background: rgba(0,0,0,0.36);
+  }
+  .cf-prompt-group h3 {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--cyan);
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 10px;
+  }
+  .cf-prompt-chip {
+    display: inline-flex;
+    margin: 0 7px 8px 0;
+    border: 1px solid rgba(0,255,65,0.2);
+    background: rgba(0,255,65,0.04);
+    color: var(--matrix-mid);
+    padding: 8px 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    cursor: pointer;
+  }
+  .cf-prompt-chip:hover {
+    color: #000;
+    background: var(--matrix-green);
+  }
+
   #cf-chat-toggle {
     position: fixed;
     bottom: 32px;
@@ -2361,6 +3032,195 @@
     box-shadow: 0 0 8px var(--cyan);
     animation: pulse-dot 1.5s ease-in-out infinite;
   }
+  #cf-chat-toggle span {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    transform: translateY(-1px);
+  }
+  #cf-assistant-panel {
+    position: fixed;
+    top: 82px;
+    right: 24px;
+    bottom: 24px;
+    width: min(470px, calc(100vw - 32px));
+    z-index: 99993;
+    display: none;
+    grid-template-rows: auto 1fr;
+    border: 1px solid rgba(0,255,65,0.28);
+    background: rgba(0,8,2,0.96);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.85), 0 0 34px var(--matrix-glow);
+  }
+  #cf-assistant-panel.open {
+    display: grid;
+  }
+  .cf-assistant-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(0,255,65,0.16);
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--matrix-green);
+    letter-spacing: 0.12em;
+    font-size: 0.68rem;
+  }
+  .cf-assistant-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .cf-assistant-actions a,
+  .cf-assistant-actions button {
+    border: 1px solid rgba(0,255,65,0.2);
+    background: rgba(0,0,0,0.48);
+    color: var(--matrix-mid);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    padding: 7px 9px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .cf-assistant-actions a:hover,
+  .cf-assistant-actions button:hover {
+    color: #000;
+    background: var(--matrix-green);
+  }
+  #cf-assistant-frame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #000;
+  }
+  #cf-mobile-actions {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    #cf-osbar {
+      min-height: 54px;
+      gap: 10px;
+      padding: 8px 10px;
+    }
+    .cf-os-links {
+      display: none;
+    }
+    .cf-os-brand {
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+    }
+    .cf-os-select,
+    .cf-os-btn {
+      max-width: 92px;
+      padding: 7px 8px;
+      font-size: 0.56rem;
+    }
+    nav {
+      top: 62px;
+    }
+    .project-preview {
+      grid-template-columns: 1fr;
+      padding: 14px;
+    }
+    .cf-prompt-groups {
+      grid-template-columns: 1fr;
+    }
+    #cf-chat-toggle {
+      bottom: 86px;
+      right: 18px;
+      width: 52px;
+      height: 52px;
+    }
+    #cf-assistant-panel {
+      inset: 64px 10px 72px;
+      width: auto;
+    }
+    #cf-mobile-actions {
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      z-index: 99991;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid rgba(0,255,65,0.18);
+      background: rgba(0,0,0,0.84);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 16px 42px rgba(0,0,0,0.72);
+    }
+    #cf-mobile-actions a,
+    #cf-mobile-actions button {
+      border: 1px solid rgba(0,255,65,0.18);
+      background: rgba(0,255,65,0.04);
+      color: var(--matrix-green);
+      min-height: 42px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    footer {
+      padding-bottom: 86px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .loader-skip-forever {
+      right: auto;
+      left: 12px;
+      top: 10px;
+      font-size: 0.48rem;
+      padding: 5px 10px;
+    }
+  }
+
+/* ===== MATRIX READABILITY PATCH ===== */
+.project-card,
+.workflow-card,
+.skill-category,
+.learning-card,
+.achieve-card,
+.cert-card,
+.contact-box,
+.stat-box,
+.terminal-card,
+.about-block,
+.workflow-help,
+.certmodal-box,
+.tsmodal-box,
+.vmodal-box{
+    position:relative;
+    overflow:hidden;
+}
+
+.project-card::after,
+.workflow-card::after,
+.skill-category::after,
+.learning-card::after,
+.achieve-card::after,
+.cert-card::after,
+.contact-box::after,
+.stat-box::after,
+.terminal-card::after,
+.about-block::after,
+.workflow-help::after,
+.certmodal-box::after,
+.tsmodal-box::after,
+.vmodal-box::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.88);
+    z-index:-1;
+}
+/* ===== END PATCH ===== */
+
 </style>
 </head>
 <body>
@@ -2371,6 +3231,7 @@
   <div class="loader-vignette"></div>
   <div class="loader-scanlines"></div>
   <button id="loader-close-btn" onclick="enterPortfolio()">SKIP INTRO</button>
+  <button class="loader-skip-forever" onclick="skipBootForever()">SKIP FOREVER</button>
 
   <div class="loader-inner">
     <!-- Top header bar -->
@@ -2475,6 +3336,30 @@
 
 <canvas id="matrix-canvas"></canvas>
 
+<div id="cf-welcome" class="cf-welcome" role="status" aria-live="polite"></div>
+
+<header id="cf-osbar" aria-label="CyberForge OS navigation">
+  <div class="cf-os-brand"><span class="cf-os-dot"><img src="cyberforge_logo.png" alt="" aria-hidden="true" /></span><span>CYBERFORGE OS</span></div>
+  <div class="cf-os-links">
+    <a class="cf-os-link" href="/">Portfolio</a>
+    <a class="cf-os-link" href="/chatbot" target="_blank" rel="noopener">Chatbot</a>
+    <a class="cf-os-link" href="/voice" target="_blank" rel="noopener">Voice</a>
+    <a class="cf-os-link" href="My_Resume.pdf" download="Mohammed_Razin_H_Resume.pdf">Resume</a>
+    <a class="cf-os-link" href="https://github.com/mohammedrazin22202-cyber" target="_blank" rel="noopener">GitHub</a>
+    <a class="cf-os-link" href="https://www.linkedin.com/in/razinn88307" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+  <div class="cf-os-controls">
+    <button class="cf-os-btn" id="cf-mode-btn" type="button" onclick="toggleExperienceMode()">Recruiter</button>
+    <button class="cf-os-btn" id="cf-launcher-btn" type="button" onclick="openCommandLauncher()">Try asking</button>
+    <select class="cf-os-select" id="cf-theme-select" aria-label="Theme" onchange="setCyberTheme(this.value)">
+      <option value="matrix">Matrix Green</option>
+      <option value="cyan">Cyan Hacker</option>
+      <option value="red">Red Alert</option>
+      <option value="minimal">Minimal Pro</option>
+    </select>
+  </div>
+</header>
+
 <!-- NAV -->
 <nav>
   <a href="#hero"><img src="cyberforge_logo.png" alt="CyberForge" class="nav-logo-img" /></a>
@@ -2487,7 +3372,21 @@
     <li><a href="#achievements">Achieve</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE NAV PANEL -->
+<div class="nav-mobile-panel" id="nav-mobile-panel">
+  <a href="#about"        onclick="closeMobileNav()">About</a>
+  <a href="#skills"       onclick="closeMobileNav()">Capabilities</a>
+  <a href="#projects"     onclick="closeMobileNav()">Projects</a>
+  <a href="#workflow"     onclick="closeMobileNav()">Workflow</a>
+  <a href="#learning"     onclick="closeMobileNav()">Learning</a>
+  <a href="#achievements" onclick="closeMobileNav()">Achievements</a>
+  <a href="#contact"      onclick="closeMobileNav()">Contact</a>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -2535,7 +3434,7 @@
 <!-- ABOUT -->
 <section id="about" data-sys="SYS.01">
   <div class="os-badge">[ IDENTITY ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.01</span>Identity/h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.01</span>Identity</h2>
   <div class="about-grid">
     <div class="about-text reveal">
       <div class="about-block">
@@ -2628,7 +3527,7 @@
 <!-- PROJECTS -->
 <section id="projects" data-sys="SYS.03">
   <div class="os-badge">[ PROJECTS ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.03</span>Projects/h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.03</span>Projects</h2>
   <div class="project-card reveal">
     <div class="project-number">01</div>
     <div class="project-tag">Featured Project</div>
@@ -2648,6 +3547,23 @@
       <div class="metric">
         <div class="metric-value">100%</div>
         <div class="metric-label">Data Quality</div>
+      </div>
+    </div>
+    <div class="project-preview" aria-label="V Connect dashboard preview">
+      <div class="preview-screen" data-title="V CONNECT DASHBOARD PREVIEW">
+        <div class="preview-chart">
+          <span class="preview-bar" style="--h:72%"></span>
+          <span class="preview-bar" style="--h:48%"></span>
+          <span class="preview-bar" style="--h:88%"></span>
+          <span class="preview-bar" style="--h:63%"></span>
+          <span class="preview-bar" style="--h:94%"></span>
+        </div>
+        <div class="preview-line"></div>
+      </div>
+      <div class="preview-kpis">
+        <div class="preview-kpi"><strong>650K+</strong><span>cleaned records</span></div>
+        <div class="preview-kpi"><strong>41%</strong><span>efficiency gain</span></div>
+        <div class="preview-kpi"><strong>100%</strong><span>validated quality</span></div>
       </div>
     </div>
     <button class="tech-stack-btn" onclick="openTechStack('vconnect')">⚡ Tech Stack</button>
@@ -2679,11 +3595,74 @@
         <div class="metric-label">Reduction in Manual Analysis</div>
       </div>
     </div>
+    <div class="project-preview" aria-label="LogiSense dashboard preview">
+      <div class="preview-screen" data-title="LOGISENSE OPS DASHBOARD">
+        <div class="preview-chart">
+          <span class="preview-bar" style="--h:58%"></span>
+          <span class="preview-bar" style="--h:76%"></span>
+          <span class="preview-bar" style="--h:42%"></span>
+          <span class="preview-bar" style="--h:84%"></span>
+          <span class="preview-bar" style="--h:67%"></span>
+        </div>
+        <div class="preview-line"></div>
+      </div>
+      <div class="preview-kpis">
+        <div class="preview-kpi"><strong>3.5K+</strong><span>delivery rows</span></div>
+        <div class="preview-kpi"><strong>30%</strong><span>optimization signals</span></div>
+        <div class="preview-kpi"><strong>20%</strong><span>manual work reduced</span></div>
+      </div>
+    </div>
     <button class="tech-stack-btn" onclick="openTechStack('logisense')">⚡ Tech Stack</button>
     <div class="par-block">
       <div class="par-row"><span class="par-label">Problem</span><span class="par-text">Delivery delays and inefficiencies across logistics operations</span></div>
       <div class="par-row"><span class="par-label">Action</span><span class="par-text">Analyzed shipment data using Python & SQL, identified delay patterns, built performance dashboard</span></div>
       <div class="par-row"><span class="par-label">Result</span><span class="par-text">Detected high-delay zones → improved route planning insights</span></div>
+    </div>
+  </div>
+
+  <div class="project-card reveal" style="margin-top: 28px;">
+    <div class="project-number">03</div>
+    <div class="project-tag">Python Automation Project</div>
+    <h3 class="project-title">CYBERFORGE: INTELLIGENT QUERY RESPONSE CHATBOT SYSTEM</h3>
+    <p class="project-desc">
+      A Python-based automated chatbot system designed to deliver fast and accurate responses using structured keyword-matching logic. Engineered a scalable response architecture with 150+ predefined query mappings to streamline user interaction and improve response efficiency. Developed intelligent text-processing workflows for real-time query detection, response routing, and conversational handling. Focused on creating a lightweight yet reliable chatbot solution capable of maintaining high response accuracy and smooth user experience across multiple interaction scenarios.
+    </p>
+    <div class="project-metrics">
+      <div class="metric">
+        <div class="metric-value">150+</div>
+        <div class="metric-label">Predefined Responses</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">100%</div>
+        <div class="metric-label">Keyword Match Accuracy</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">40%</div>
+        <div class="metric-label">Faster Query Handling</div>
+      </div>
+    </div>
+    <div class="project-preview" aria-label="CyberForge chatbot dashboard preview">
+      <div class="preview-screen" data-title="CYBERFORGE INTENT MATRIX">
+        <div class="preview-chart">
+          <span class="preview-bar" style="--h:92%"></span>
+          <span class="preview-bar" style="--h:80%"></span>
+          <span class="preview-bar" style="--h:72%"></span>
+          <span class="preview-bar" style="--h:96%"></span>
+          <span class="preview-bar" style="--h:64%"></span>
+        </div>
+        <div class="preview-line"></div>
+      </div>
+      <div class="preview-kpis">
+        <div class="preview-kpi"><strong>150+</strong><span>response routes</span></div>
+        <div class="preview-kpi"><strong>100%</strong><span>mapped answers</span></div>
+        <div class="preview-kpi"><strong>40%</strong><span>faster handling</span></div>
+      </div>
+    </div>
+    <button class="tech-stack-btn" onclick="openTechStack('cyberforge')">⚡ Tech Stack</button>
+    <div class="par-block">
+      <div class="par-row"><span class="par-label">Problem</span><span class="par-text">Users required quick and reliable answers for repetitive queries without manual intervention</span></div>
+      <div class="par-row"><span class="par-label">Action</span><span class="par-text">Built a Python chatbot using keyword-matching logic, structured response mapping, and automated query handling workflows</span></div>
+      <div class="par-row"><span class="par-label">Result</span><span class="par-text">Improved response efficiency → reduced repetitive manual support interactions → enhanced user accessibility</span></div>
     </div>
   </div>
 </section>
@@ -2692,7 +3671,7 @@
 <!-- WORKFLOW -->
 <section id="workflow" data-sys="SYS.04">
   <div class="os-badge">[ WORKFLOW PROTOCOL ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.04</span>Workflow Protocol/h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.04</span>Workflow Protocol</h2>
   <div class="workflow-track">
 
     <div class="workflow-step reveal">
@@ -2818,7 +3797,7 @@
 <!-- ACHIEVEMENTS -->
 <section id="achievements" data-sys="SYS.05">
   <div class="os-badge">[ ACHIEVEMENTS ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.05</span>Achievements/h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.05</span>Achievements</h2>
   <div class="achieve-grid">
     <div class="achieve-card reveal">
       <div class="achieve-icon">🏆</div>
@@ -2844,7 +3823,7 @@
 <!-- EDUCATION -->
 <section id="education" data-sys="SYS.06">
   <div class="os-badge">[ EDUCATION LOG ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.06</span>Education Log/h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.06</span>Education Log</h2>
   <div class="edu-timeline reveal">
     <div class="edu-item">
       <div class="edu-year">2024 – 2026</div>
@@ -2863,56 +3842,66 @@
 <!-- CURRENTLY LEARNING -->
 <section id="learning" data-sys="SYS.07">
   <div class="os-badge">[ AI MODULES ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.07</span>AI Modules/h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.07</span>AI Modules</h2>
   <div class="learning-grid">
 
     <div class="learning-card reveal">
       <div class="learning-icon">🗄️</div>
+      <div class="learning-card-body">
       <div class="learning-title">Advanced SQL</div>
       <div class="learning-desc">Joins, Window Functions, Query Optimization</div>
       <div class="learning-bar-wrap">
         <div class="learning-bar"><div class="learning-fill" style="width:65%"></div></div>
         <span class="learning-pct">65%</span>
       </div>
+      </div>
     </div>
 
     <div class="learning-card reveal">
       <div class="learning-icon">🤖</div>
+      <div class="learning-card-body">
       <div class="learning-title">Machine Learning Fundamentals</div>
       <div class="learning-desc">Supervised & Unsupervised Learning, Model Evaluation</div>
       <div class="learning-bar-wrap">
         <div class="learning-bar"><div class="learning-fill" style="width:45%"></div></div>
         <span class="learning-pct">45%</span>
       </div>
+      </div>
     </div>
 
     <div class="learning-card reveal">
       <div class="learning-icon">⚙️</div>
+      <div class="learning-card-body">
       <div class="learning-title">Data Engineering & ETL Optimization</div>
       <div class="learning-desc">Pipeline Architecture, Batch Processing, Automation</div>
       <div class="learning-bar-wrap">
         <div class="learning-bar"><div class="learning-fill" style="width:50%"></div></div>
         <span class="learning-pct">50%</span>
       </div>
+      </div>
     </div>
 
     <div class="learning-card reveal">
       <div class="learning-icon">📊</div>
+      <div class="learning-card-body">
       <div class="learning-title">Advanced Power BI Dashboarding</div>
       <div class="learning-desc">DAX, Custom Visuals, Row-Level Security</div>
       <div class="learning-bar-wrap">
         <div class="learning-bar"><div class="learning-fill" style="width:70%"></div></div>
         <span class="learning-pct">70%</span>
       </div>
+      </div>
     </div>
 
     <div class="learning-card reveal">
       <div class="learning-icon">🐍</div>
+      <div class="learning-card-body">
       <div class="learning-title">Data Structures & Algorithms in Python</div>
       <div class="learning-desc">Arrays, Trees, Sorting, Dynamic Programming</div>
       <div class="learning-bar-wrap">
         <div class="learning-bar"><div class="learning-fill" style="width:80%"></div></div>
         <span class="learning-pct">80%</span>
+      </div>
       </div>
     </div>
 
@@ -2921,7 +3910,7 @@
 
 <section id="certs" data-sys="SYS.08">
   <div class="os-badge">[ CREDENTIALS ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.08</span>Credentials/h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.08</span>Credentials</h2>
   <div class="cert-grid">
     <div class="cert-card reveal">
       <div class="cert-num">01</div>
@@ -2978,6 +3967,7 @@
       <a href="mailto:mohammedrazin22202@gmail.com?subject=Reaching%20out%20from%20your%20Portfolio" class="btn">Send an Email</a>
       <a href="tel:+919342234674" class="btn">Call Me</a>
       <a href="/chatbot" target="_blank" rel="noopener" class="btn">Chatbot</a>
+      <a href="/voice" target="_blank" rel="noopener" class="btn">Voice Agent</a>
       <a href="My_Resume.pdf" download="Mohammed_Razin_H_Resume.pdf" class="btn btn-ghost">Download Resume</a>
     </div>
   </div>
@@ -2988,6 +3978,126 @@
 </footer>
 
 <script>
+const CF_BOOT_KEY = 'cfPortfolioBootDone';
+const CF_THEME_KEY = 'cfTheme';
+const CF_MODE_KEY = 'cfExperienceMode';
+const CF_GITHUB_URL = 'https://github.com/mohammedrazin22202-cyber';
+const CF_LINKEDIN_URL = 'https://www.linkedin.com/in/razinn88307';
+
+function applyStoredCyberState() {
+  const theme = localStorage.getItem(CF_THEME_KEY) || 'matrix';
+  document.body.classList.remove('theme-matrix', 'theme-cyan', 'theme-red', 'theme-minimal');
+  document.body.classList.add('theme-' + theme);
+
+  const mode = localStorage.getItem(CF_MODE_KEY) || 'cyber';
+  document.body.classList.toggle('recruiter-mode', mode === 'recruiter');
+  document.body.classList.toggle('cyber-mode', mode !== 'recruiter');
+}
+applyStoredCyberState();
+
+function setCyberTheme(theme) {
+  localStorage.setItem(CF_THEME_KEY, theme);
+  applyStoredCyberState();
+}
+
+function toggleExperienceMode() {
+  const current = localStorage.getItem(CF_MODE_KEY) || 'cyber';
+  const next = current === 'recruiter' ? 'cyber' : 'recruiter';
+  localStorage.setItem(CF_MODE_KEY, next);
+  applyStoredCyberState();
+  updateModeButton();
+  if (next === 'recruiter') {
+    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+    showWelcomeBack('Recruiter Mode: focused highlights, calmer motion, fast access.');
+  } else {
+    showWelcomeBack('Cyber Mode: full terminal atmosphere restored.');
+  }
+}
+
+function updateModeButton() {
+  const btn = document.getElementById('cf-mode-btn');
+  if (!btn) return;
+  const isRecruiter = localStorage.getItem(CF_MODE_KEY) === 'recruiter';
+  btn.textContent = isRecruiter ? 'Cyber' : 'Recruiter';
+  btn.classList.toggle('active', isRecruiter);
+}
+
+function showWelcomeBack(message) {
+  const toast = document.getElementById('cf-welcome');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(window.__cfWelcomeTimer);
+  window.__cfWelcomeTimer = setTimeout(() => toast.classList.remove('show'), 3600);
+}
+
+function skipBootForever() {
+  localStorage.setItem(CF_BOOT_KEY, '1');
+  enterPortfolio();
+  showWelcomeBack('Boot skipped forever. Welcome back, operator.');
+}
+
+function openCommandLauncher() {
+  document.getElementById('cf-launcher')?.classList.add('open');
+}
+
+function closeCommandLauncher() {
+  document.getElementById('cf-launcher')?.classList.remove('open');
+}
+
+function toggleAssistantDrawer(forceOpen) {
+  const panel = document.getElementById('cf-assistant-panel');
+  const frame = document.getElementById('cf-assistant-frame');
+  if (!panel || !frame) return;
+  const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
+  if (shouldOpen && frame.getAttribute('src') === 'about:blank') frame.src = '/chatbot';
+  panel.classList.toggle('open', shouldOpen);
+}
+
+function askAssistant(prompt) {
+  closeCommandLauncher();
+  toggleAssistantDrawer(true);
+  const frame = document.getElementById('cf-assistant-frame');
+  if (!frame) return;
+  const sendPrompt = () => {
+    try {
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      const input = doc.getElementById('user-input');
+      if (!input || typeof frame.contentWindow.quickAsk !== 'function') return false;
+      frame.contentWindow.quickAsk(prompt);
+      return true;
+    } catch(e) {
+      return false;
+    }
+  };
+  if (!sendPrompt()) {
+    frame.addEventListener('load', () => setTimeout(sendPrompt, 800), { once: true });
+  }
+}
+
+function initCyberForgeOS() {
+  const themeSelect = document.getElementById('cf-theme-select');
+  if (themeSelect) themeSelect.value = localStorage.getItem(CF_THEME_KEY) || 'matrix';
+  updateModeButton();
+
+  document.querySelectorAll('a[href="https://github.com"], a[href="https://github.com/"]').forEach(a => a.href = CF_GITHUB_URL);
+  document.querySelectorAll('a[href="https://linkedin.com"], a[href="https://linkedin.com/"]').forEach(a => a.href = CF_LINKEDIN_URL);
+
+  const float = document.getElementById('cf-chat-toggle');
+  if (float) {
+    float.textContent = 'AI';
+    float.addEventListener('click', (event) => {
+      event.preventDefault();
+      toggleAssistantDrawer(true);
+    });
+  }
+
+  if (localStorage.getItem(CF_BOOT_KEY) === '1') {
+    showWelcomeBack('Welcome back. Portfolio boot skipped; your OS settings are restored.');
+  }
+}
+document.addEventListener('DOMContentLoaded', initCyberForgeOS);
+
 // ── CERT VIEWER ──
 function viewCert(file, title, isPdf = false) {
   document.getElementById('cert-modal-title').textContent = title;
@@ -3019,6 +4129,10 @@ const techStacks = {
   logisense: {
     title: 'LogiSense',
     pills: ['Python', 'Pandas', 'SQL', 'Power BI', 'EDA', 'Data Cleaning', 'KPI Tracking', 'Matplotlib', 'Jupyter Notebook']
+  },
+  cyberforge: {
+    title: 'CyberForge Chatbot',
+    pills: ['Python', 'Flask', 'JSON', 'Keyword Matching', 'NLP Logic', 'Text Processing', 'Response Mapping', 'Automation', 'REST API']
   }
 };
 
@@ -3079,13 +4193,19 @@ function closeTechStack(e) {
     loaderRain = null;
   }
 
-  startRain();
+  if (localStorage.getItem(CF_BOOT_KEY) !== '1') startRain();
   window._stopLoaderRain  = stopRain;
   window._startLoaderRain = startRain;
 })();
 
 // ── LOADER SEQUENCE ──
 (function() {
+  if (localStorage.getItem(CF_BOOT_KEY) === '1') {
+    const loader = document.getElementById('loader');
+    if (loader) loader.classList.add('hidden');
+    document.body.style.overflow = '';
+    return;
+  }
   const lines       = ['lt1','lt2','lt3','lt4','lt5','lt6','lt7','lt8','lt9','lt10'];
   const lineProgress= [8, 18, 28, 40, 52, 63, 74, 84, 93, 100];
   const lineDelays  = [300, 520, 760, 1020, 1260, 1480, 1700, 1940, 2160, 2400];
@@ -3125,6 +4245,7 @@ function closeTechStack(e) {
 })();
 
 function enterPortfolio() {
+  localStorage.setItem(CF_BOOT_KEY, '1');
   window._stopLoaderRain && window._stopLoaderRain();
   document.getElementById('loader').classList.add('hidden');
   document.body.style.overflow = '';
@@ -3134,7 +4255,9 @@ function enterPortfolio() {
 }
 
 // Prevent scroll while loading
-document.body.style.overflow = 'hidden';
+if (localStorage.getItem(CF_BOOT_KEY) !== '1') {
+  document.body.style.overflow = 'hidden';
+}
 
 // ── VISITOR MODAL ──
 const SUPABASE_URL = 'https://xyzcompanysupabase.supabase.co'; // <-- Replace with your Supabase URL
@@ -3345,7 +4468,88 @@ setInterval(() => {
   }, { threshold: 0.4 });
   sections.forEach(s => observer.observe(s));
 })();
+
+// ── MOBILE NAV HAMBURGER ──
+function toggleMobileNav() {
+  const btn   = document.getElementById('nav-hamburger');
+  const panel = document.getElementById('nav-mobile-panel');
+  btn.classList.toggle('open');
+  panel.classList.toggle('open');
+  document.body.style.overflow = panel.classList.contains('open') ? 'hidden' : '';
+}
+function closeMobileNav() {
+  document.getElementById('nav-hamburger').classList.remove('open');
+  document.getElementById('nav-mobile-panel').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Close panel when clicking outside
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('nav-mobile-panel');
+  const btn   = document.getElementById('nav-hamburger');
+  if (panel && panel.classList.contains('open') && !panel.contains(e.target) && !btn.contains(e.target)) {
+    closeMobileNav();
+  }
+});
 </script><a id="cf-chat-toggle" href="/chatbot" target="_blank" rel="noopener" title="CyberForge AI — Open chatbot">⬡</a>
+
+<div id="cf-launcher" role="dialog" aria-modal="true" aria-label="Try asking CyberForge">
+  <div class="cf-launcher-box">
+    <div class="cf-launcher-head">
+      <div class="cf-launcher-title">TRY ASKING ME</div>
+      <button class="cf-os-btn" type="button" onclick="closeCommandLauncher()">Close</button>
+    </div>
+    <div class="cf-prompt-groups">
+      <div class="cf-prompt-group">
+        <h3>PROJECTS</h3>
+        <button class="cf-prompt-chip" onclick="askAssistant('Tell me about VConnect')">VConnect</button>
+        <button class="cf-prompt-chip" onclick="askAssistant('Tell me about LogiSense')">LogiSense</button>
+        <button class="cf-prompt-chip" onclick="askAssistant('What is your best project')">Best project</button>
+      </div>
+      <div class="cf-prompt-group">
+        <h3>SKILLS</h3>
+        <button class="cf-prompt-chip" onclick="askAssistant('What are your skills')">Skills</button>
+        <button class="cf-prompt-chip" onclick="askAssistant('What technologies do you know')">Tech stack</button>
+        <button class="cf-prompt-chip" onclick="askAssistant('Do you know Power BI')">Power BI</button>
+      </div>
+      <div class="cf-prompt-group">
+        <h3>HIRING</h3>
+        <button class="cf-prompt-chip" onclick="askAssistant('Why should we hire you')">Why hire you</button>
+        <button class="cf-prompt-chip" onclick="askAssistant('Are you open to internships')">Internships</button>
+        <button class="cf-prompt-chip" onclick="askAssistant('What roles are you interested in')">Target roles</button>
+      </div>
+      <div class="cf-prompt-group">
+        <h3>TECHNICAL</h3>
+        <button class="cf-prompt-chip" onclick="askAssistant('How do you protect your chatbot against Prompt Injection attacks')">Security</button>
+        <button class="cf-prompt-chip" onclick="askAssistant('How would your village dashboard handle a sudden spike of 100k concurrent users')">Scale</button>
+        <button class="cf-prompt-chip" onclick="askAssistant('Explain the Bias-Variance Trade-off in the context of your weather forecasting model')">ML depth</button>
+      </div>
+      <div class="cf-prompt-group">
+        <h3>FUN</h3>
+        <button class="cf-prompt-chip" onclick="askAssistant('Initialize CyberForge')">Initialize</button>
+        <button class="cf-prompt-chip" onclick="askAssistant('Enter hacker mode')">Hacker mode</button>
+        <button class="cf-prompt-chip" onclick="askAssistant('Wake up CyberForge AI')">Wake up AI</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<aside id="cf-assistant-panel" aria-label="CyberForge AI drawer">
+  <div class="cf-assistant-head">
+    <span>CYBERFORGE AI TERMINAL</span>
+    <div class="cf-assistant-actions">
+      <a href="/chatbot" target="_blank" rel="noopener">Full</a>
+      <button type="button" onclick="toggleAssistantDrawer(false)">Close</button>
+    </div>
+  </div>
+  <iframe id="cf-assistant-frame" title="CyberForge AI Chatbot" src="about:blank"></iframe>
+</aside>
+
+<div id="cf-mobile-actions" aria-label="Quick actions">
+  <button type="button" onclick="toggleAssistantDrawer(true)">Chat</button>
+  <a href="/voice" target="_blank" rel="noopener">Voice</a>
+  <a href="My_Resume.pdf" download="Mohammed_Razin_H_Resume.pdf">Resume</a>
+  <a href="#contact">Contact</a>
+</div>
 
 </body>
 </html>

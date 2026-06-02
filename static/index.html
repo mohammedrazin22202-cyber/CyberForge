@@ -2,10 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000a00">
 <title>CYBERFORGE :: AI TERMINAL</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+  html {
+    background-color: #000a00;
+    /* Ensure the dark bg shows even when body is position:fixed on Android */
+    background:
+      radial-gradient(ellipse at 50% 0%,   rgba(0,255,136,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 0%  100%, rgba(0,238,255,0.04) 0%, transparent 45%),
+      linear-gradient(to bottom, #000500, #000e00 60%, #000a00);
+    height: 100%;
+  }
 
   :root {
     /* ── Core greens (layered palette) ── */
@@ -384,6 +398,7 @@
 
   .header-status {
     display: flex;
+    align-items: center;
     gap: 20px;
     font-size: 0.68rem;  /* meta text ~10-11px */
     font-weight: 300;
@@ -441,7 +456,7 @@
   /* TYPOGRAPHY — Section titles (14-16px equivalent ~0.875rem) */
   .panel-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem;        /* ~11px — keeps sidebar compact but readable */
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.22em;
     color: var(--green-dim);
@@ -449,8 +464,36 @@
     padding-bottom: 8px;
     margin-bottom: 12px;
     text-shadow: 0 0 6px rgba(0,255,65,0.25);
-    /* Ambient text flicker */
     animation: textFlicker 10s steps(1) infinite;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+  .panel-title:hover { color: var(--green); }
+  .panel-chevron {
+    font-size: 0.75rem;
+    color: rgba(0,255,136,0.55);
+    transition: transform 0.22s ease, color 0.18s ease;
+    flex-shrink: 0;
+    margin-left: 6px;
+    font-family: monospace;
+    letter-spacing: 0;
+  }
+  .panel-title:hover .panel-chevron { color: var(--green); }
+  .panel-title.collapsed .panel-chevron { transform: rotate(-90deg); }
+  .panel-collapsible {
+    overflow: hidden;
+    max-height: 600px;
+    transition: max-height 0.28s ease, opacity 0.22s ease, margin 0.22s ease;
+    opacity: 1;
+  }
+  .panel-collapsible.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
   }
 
   /* TYPOGRAPHY — Terminal text (13-14px ~ 0.8rem) */
@@ -537,7 +580,7 @@
     margin-top: 15px;
     font-size: 0.65rem;  /* ~10-11px meta text */
     font-weight: 300;
-    color: #006620;
+    color: rgba(0,255,136,0.50);
     scrollbar-width: none;
     letter-spacing: 0.02em;
   }
@@ -637,6 +680,50 @@
       inset 0 0 8px rgba(0,238,255,0.04);
   }
 
+  /* ── Copy button — floats top-right OVER the bubble via .bubble-wrap ── */
+  .bubble-wrap {
+    position: relative;  /* anchor for .copy-btn absolute positioning */
+  }
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.10em;
+    padding: 4px 12px;
+    border: 1px solid rgba(0,255,136,0.25);
+    border-radius: 2px;
+    background: rgba(0,8,0,0.88);
+    color: rgba(0,255,136,0.45);
+    cursor: pointer;
+    opacity: 0.18;
+    pointer-events: all;
+    transition: opacity 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    white-space: nowrap;
+    user-select: none;
+    z-index: 4;
+  }
+  .msg.bot:hover .copy-btn {
+    opacity: 1;
+  }
+  .copy-btn:hover {
+    color: var(--green);
+    border-color: rgba(0,255,136,0.55);
+    background: rgba(0,255,136,0.08);
+    box-shadow: 0 0 6px rgba(0,255,136,0.15);
+  }
+  .copy-btn.copied {
+    color: var(--green);
+    border-color: rgba(0,255,136,0.60);
+    background: rgba(0,255,136,0.10);
+    opacity: 1 !important;
+    pointer-events: none;
+  }
+  .copy-btn:active { transform: scale(0.93); }
+
   /* ACCENT — bot bubble = green, CINEMATIC = glow + deep shadow */
   .msg.bot .bubble {
     border-color: rgba(0,255,136,0.35);
@@ -661,6 +748,78 @@
       0 6px 20px rgba(0,0,0,0.80);
   }
 
+  /* LOW CONFIDENCE — amber tint signals uncertain match */
+  .msg.bot.hedged .bubble {
+    border-color: rgba(255,180,0,0.45);
+    background: linear-gradient(135deg, rgba(255,180,0,0.07) 0%, rgba(255,180,0,0.02) 100%);
+    color: var(--accent-warn);
+    text-shadow: 0 0 3px rgba(255,180,0,0.18);
+    box-shadow:
+      0 0 8px  rgba(255,180,0,0.18),
+      0 0 20px rgba(255,180,0,0.06),
+      0 6px 24px rgba(0,0,0,0.75),
+      inset 0 0 8px rgba(255,180,0,0.03);
+  }
+
+  /* ── Hedged rephrase block ── */
+  .rephrase-block {
+    margin-top: 10px;
+    padding: 9px 12px 10px;
+    border: 1px solid rgba(255,180,0,0.22);
+    border-radius: 3px;
+    background: rgba(255,180,0,0.04);
+  }
+  .rephrase-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    color: rgba(255,180,0,0.55);
+    margin-bottom: 8px;
+  }
+  .rephrase-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .rephrase-chip {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    padding: 4px 12px;
+    border: 1px solid rgba(255,180,0,0.28);
+    border-radius: 20px;
+    background: rgba(255,180,0,0.05);
+    color: rgba(255,200,60,0.75);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .rephrase-chip:hover {
+    background: rgba(255,180,0,0.14);
+    color: rgba(255,210,80,0.95);
+    border-color: rgba(255,180,0,0.60);
+    box-shadow: 0 0 8px rgba(255,180,0,0.15);
+  }
+  .rephrase-chip:active { transform: scale(0.96); }
+
+  /* ── Timestamp micro-text ── */
+  .msg-time {
+    font-size: 0.56rem;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 0.06em;
+    color: rgba(0,255,136,0.65);
+    margin-top: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    user-select: none;
+  }
+  .msg:hover .msg-time {
+    opacity: 1;
+  }
+  /* bot timestamp left-aligned, user timestamp right-aligned */
+  .msg.bot .msg-time  { text-align: left; }
+  .msg.user .msg-time { text-align: right; }
+
   /* ACCENT — meta text gets amber tint for contrast */
   .meta {
     font-size: 0.625rem;
@@ -669,6 +828,300 @@
     opacity: 0.70;
     margin-top: 5px;
     letter-spacing: 0.04em;
+  }
+
+  /* ── Scroll-to-bottom button ── */
+  #scroll-btn {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    padding: 5px 14px;
+    border: 1px solid rgba(0,255,136,0.35);
+    border-radius: 2px;
+    background: rgba(0,14,0,0.90);
+    color: var(--green-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease, color 0.18s ease, border-color 0.18s ease;
+    z-index: 20;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.60), 0 0 8px rgba(0,255,136,0.10);
+  }
+  #scroll-btn.visible {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(-50%) translateY(0);
+  }
+  #scroll-btn:hover {
+    border-color: var(--green);
+    color: var(--green);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.60), 0 0 12px rgba(0,255,136,0.25);
+  }
+  #scroll-btn:active { transform: translateX(-50%) scale(0.96); }
+
+  /* ── Mute button in header ── */
+  /* ── Header centre group: CLR + mute ── */
+  #header-centre {
+    display: none;
+  }
+  #mute-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1.5px solid rgba(0,255,136,0.45);
+    border-radius: 50%;
+    background: rgba(0,255,136,0.05);
+    color: var(--green);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color 0.18s ease, border-color 0.18s ease,
+                background 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
+    box-shadow: 0 0 6px rgba(0,255,136,0.18), inset 0 0 4px rgba(0,255,136,0.06);
+  }
+  #mute-btn svg {
+    width: 13px;
+    height: 13px;
+    display: block;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 3px rgba(0,255,136,0.50));
+    transition: filter 0.18s ease;
+  }
+  #mute-btn:hover {
+    color: #00ffcc;
+    border-color: rgba(0,255,170,0.80);
+    background: rgba(0,255,136,0.10);
+    box-shadow: 0 0 12px rgba(0,255,136,0.35), inset 0 0 6px rgba(0,255,136,0.08);
+    transform: scale(1.10);
+  }
+  #mute-btn:hover svg {
+    filter: drop-shadow(0 0 5px rgba(0,255,170,0.75));
+  }
+  #mute-btn.muted {
+    color: rgba(255,80,80,0.80);
+    border-color: rgba(255,80,80,0.50);
+    background: rgba(255,60,60,0.06);
+    box-shadow: 0 0 6px rgba(255,60,60,0.20), inset 0 0 4px rgba(255,60,60,0.06);
+  }
+  #mute-btn.muted svg {
+    filter: drop-shadow(0 0 3px rgba(255,60,60,0.45));
+  }
+  #mute-btn.muted:hover {
+    color: rgba(255,120,120,0.95);
+    border-color: rgba(255,80,80,0.80);
+    background: rgba(255,60,60,0.12);
+    box-shadow: 0 0 12px rgba(255,60,60,0.35), inset 0 0 6px rgba(255,60,60,0.08);
+    transform: scale(1.10);
+  }
+  #mute-btn:active { transform: scale(0.92); }
+
+  /* ── CLR button — desktop text, mobile icon ── */
+  #clr-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.70rem;
+    letter-spacing: 0.16em;
+    padding: 6px 18px;
+    border: 1px solid rgba(255,80,80,0.50);
+    border-radius: 2px;
+    background: rgba(255,40,40,0.07);
+    color: rgba(255,100,100,0.80);
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    flex-shrink: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #clr-btn::before { content: "CLEAR"; }  /* desktop label */
+  #clr-btn svg     { display: none; }   /* desktop: hide icon */
+  #clr-btn:hover {
+    border-color: rgba(255,80,80,0.80);
+    color: rgba(255,120,120,0.95);
+    box-shadow: 0 0 10px rgba(255,60,60,0.25);
+  }
+  #clr-btn:active { transform: scale(0.95); }
+
+  /* ── Clear confirm overlay ── */
+  #clr-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.72);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  #clr-overlay.open { display: flex; }
+  #clr-box {
+    border: 1px solid rgba(255,80,80,0.45);
+    background: #000e00;
+    padding: 28px 32px;
+    border-radius: 3px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(0,0,0,0.90), 0 0 20px rgba(255,60,60,0.15);
+    max-width: 320px;
+    width: 90%;
+  }
+  #clr-box p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: rgba(255,120,120,0.85);
+    letter-spacing: 0.08em;
+    line-height: 1.7;
+    margin: 0 0 20px;
+  }
+  #clr-box p span {
+    display: block;
+    font-size: 0.60rem;
+    color: var(--green-muted);
+    margin-top: 6px;
+  }
+  .clr-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .clr-actions button {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.60rem;
+    letter-spacing: 0.14em;
+    padding: 6px 18px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  #clr-confirm {
+    border: 1px solid rgba(255,80,80,0.60);
+    background: rgba(255,60,60,0.10);
+    color: rgba(255,120,120,0.90);
+  }
+  #clr-confirm:hover {
+    background: rgba(255,60,60,0.20);
+    border-color: rgba(255,80,80,0.90);
+  }
+  #clr-cancel {
+    border: 1px solid rgba(0,255,136,0.25);
+    background: transparent;
+    color: var(--green-muted);
+  }
+  #clr-cancel:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  /* ── Empty state chips ── */
+  #empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 18px 0 4px 2px;
+    margin-left: calc(30px + 14px); /* align with bubble — avatar width + gap */
+  }
+  #empty-state-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    color: rgba(0,255,136,0.75);
+    font-family: 'Share Tech Mono', monospace;
+    text-shadow: 0 0 6px rgba(0,255,136,0.30);
+    margin-bottom: 10px;
+  }
+  #empty-state-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    padding: 6px 14px;
+    border: 1px solid rgba(0,255,136,0.20);
+    border-radius: 20px;
+    background: rgba(0,255,136,0.03);
+    color: rgba(0,255,136,0.55);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .chip:hover {
+    background: rgba(0,255,136,0.10);
+    color: var(--green);
+    border-color: rgba(0,255,136,0.50);
+    box-shadow: 0 0 8px rgba(0,255,136,0.12);
+  }
+  .chip:active { transform: scale(0.96); }
+
+  /* ── Skip typewriter button ── */
+  /* Lives outside the message box, right-aligned in the chat flow */
+  .skip-row {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 4px;
+    margin-top: -8px;
+    margin-bottom: 2px;
+    align-self: stretch;
+  }
+  .skip-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.14em;
+    padding: 2px 9px;
+    border: 1px solid rgba(0,255,136,0.22);
+    border-radius: 2px;
+    background: transparent;
+    color: rgba(0,136,68,0.6);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+  }
+  .skip-btn:hover {
+    border-color: rgba(0,255,136,0.55);
+    color: var(--green-dim);
+    text-shadow: 0 0 5px rgba(0,255,136,0.35);
+  }
+  .skip-btn:active { opacity: 0.5; }
+
+  .message-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    transition: opacity 0.25s ease;
+  }
+
+  .action-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 6px 10px;
+    border: 1px solid rgba(0,238,255,0.45);
+    border-radius: 2px;
+    color: var(--accent-ai);
+    background: rgba(0,238,255,0.06);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.2;
+    text-decoration: none;
+    text-shadow: 0 0 4px rgba(0,238,255,0.25);
+  }
+
+  .action-link:hover {
+    border-color: var(--accent-ai);
+    background: rgba(0,238,255,0.12);
+    box-shadow: 0 0 12px rgba(0,238,255,0.18);
   }
 
   /* Typing indicator */
@@ -701,7 +1154,7 @@
     padding: 10px 20px;
     display: flex;
     gap: 10px;
-    align-items: flex-end;
+    align-items: center;
     background:
       radial-gradient(ellipse at 50% 100%, rgba(0,255,136,0.07) 0%, transparent 60%),
       linear-gradient(0deg, #001500 0%, #000e00 100%);
@@ -715,10 +1168,10 @@
 
   .prompt-symbol {
     color: var(--green);
-    font-size: 1rem;
+    font-size: 0.875rem;
     text-shadow: 0 0 6px var(--green);
     flex-shrink: 0;
-    padding-bottom: 2px;
+    line-height: 1.6;
   }
 
   /* TYPOGRAPHY — Input: terminal text size */
@@ -815,6 +1268,158 @@
   .send-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+    transform: none !important;
+    animation: none !important;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.60) !important;
+  }
+
+  .qcmd:disabled,
+  .qcmd[aria-disabled="true"] {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  /* Transmitting pulse on the send button */
+  @keyframes transmitting {
+    0%, 100% { border-color: rgba(255,170,0,0.55); color: var(--accent-warn); }
+    50%       { border-color: rgba(255,170,0,1);    color: #ffd055; box-shadow: 0 0 12px rgba(255,170,0,0.45); }
+  }
+
+  .send-btn.transmitting {
+    animation: transmitting 0.8s ease infinite !important;
+    opacity: 1 !important;
+    cursor: not-allowed;
+  }
+
+  /* ── Mic / Voice button ── */
+  .mic-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(0,255,136,0.06), rgba(0,255,136,0.01));
+    border: 1px solid rgba(0,204,102,0.45);
+    border-radius: 2px;
+    color: var(--green-dim);
+    cursor: pointer;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.55);
+    overflow: hidden;
+  }
+  .mic-btn:hover {
+    border-color: var(--accent-active);
+    color: var(--accent-active);
+    box-shadow: 0 0 10px rgba(0,255,136,0.40), 0 4px 16px rgba(0,0,0,0.65);
+    transform: translateY(-1px);
+  }
+  .mic-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+  /* Listening state */
+  .mic-btn.listening {
+    border-color: #ff4444;
+    color: #ff6666;
+    box-shadow: 0 0 14px rgba(255,60,60,0.55), 0 4px 16px rgba(0,0,0,0.65);
+    animation: micPulse 1.2s ease infinite;
+  }
+  @keyframes micPulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(255,60,60,0.45), 0 4px 16px rgba(0,0,0,0.65); }
+    50%       { box-shadow: 0 0 22px rgba(255,60,60,0.80), 0 4px 16px rgba(0,0,0,0.65); }
+  }
+  .mic-ripple {
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+    background: rgba(255,60,60,0.12);
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .mic-btn.listening .mic-ripple {
+    opacity: 1;
+    transform: scale(1);
+    animation: rippleExpand 1.2s ease infinite;
+  }
+  @keyframes rippleExpand {
+    0%   { transform: scale(0.8); opacity: 0.6; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+  /* TTS speaker button inside bot messages */
+  .tts-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: 1px solid rgba(0,204,102,0.30);
+    border-radius: 2px;
+    color: var(--green-dim);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.50rem;
+    letter-spacing: 0.12em;
+    padding: 3px 8px;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: all 0.2s ease;
+  }
+  .tts-btn:hover {
+    border-color: var(--accent-active);
+    color: var(--accent-active);
+    box-shadow: 0 0 6px rgba(0,255,136,0.30);
+  }
+  .tts-btn.speaking {
+    border-color: var(--amber);
+    color: var(--amber);
+    animation: transmitting 1s ease infinite;
+  }
+  /* Voice not supported notice */
+  #voice-unsupported {
+    display: none;
+    font-size: 0.60rem;
+    color: var(--amber);
+    padding: 2px 6px;
+    border: 1px solid rgba(255,170,0,0.30);
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .input-bar .mic-btn {
+    display: none;
+  }
+
+  .voice-mode-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 30px;
+    padding: 0 10px;
+    border: 1px solid rgba(0,255,136,0.28);
+    border-radius: 2px;
+    color: var(--green-dim);
+    background: rgba(0,255,136,0.04);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .voice-mode-link:hover {
+    color: var(--accent-active);
+    border-color: rgba(0,255,136,0.68);
+    box-shadow: 0 0 12px rgba(0,255,136,0.22);
+  }
+
+  .voice-mode-link svg {
+    width: 15px;
+    height: 15px;
   }
 
   /* ── Score badge ── */
@@ -895,6 +1500,33 @@
     line-height: 1.8;
   }
   #boot-text div { opacity: 0; }
+  #boot-skip-btn {
+    margin-top: 22px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.60rem;
+    letter-spacing: 0.16em;
+    padding: 6px 20px;
+    border: 1px solid rgba(0,255,136,0.25);
+    border-radius: 2px;
+    background: transparent;
+    color: rgba(0,255,136,0.40);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    animation: bootSkipPulse 2.5s ease-in-out infinite;
+  }
+  #boot-skip-btn:hover {
+    border-color: rgba(0,255,136,0.65);
+    color: var(--green);
+    background: rgba(0,255,136,0.06);
+    box-shadow: 0 0 10px rgba(0,255,136,0.18);
+    animation: none;
+  }
+  #boot-skip-btn:active { transform: scale(0.95); }
+  @keyframes bootSkipPulse {
+    0%, 100% { opacity: 0.40; }
+    50%       { opacity: 0.75; }
+  }
+
   #boot-status {
     margin-top: 16px;
     font-size: 0.62rem;
@@ -1063,7 +1695,23 @@
   }
 
   /* ── Autocomplete dropdown (change 12) ── */
-  .input-wrap { flex: 1; position: relative; display: flex; flex-direction: column; }
+  .input-wrap { flex: 1; position: relative; display: flex; flex-direction: column; justify-content: center; }
+  #char-counter {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    color: #004d1a;
+    text-align: right;
+    padding-top: 3px;
+    line-height: 1;
+    transition: color 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+  #char-counter.visible  { opacity: 1; }
+  #char-counter.warn     { color: var(--amber); text-shadow: 0 0 6px rgba(255,170,0,0.40); }
+  #char-counter.critical { color: var(--red);   text-shadow: 0 0 6px rgba(255,0,60,0.45); }
   #autocomplete-list {
     position: absolute;
     bottom: calc(100% + 6px);
@@ -1099,6 +1747,1109 @@
   }
   .ac-item .ac-prefix { color: var(--green-muted); margin-right: 6px; }
 
+  /* ── Queued message label ── */
+  #queued-label {
+    display: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    color: rgba(0,255,136,0.42);
+    padding: 3px 14px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    animation: queuedPulse 2s ease-in-out infinite;
+  }
+  #queued-label.visible { display: block; }
+  @keyframes queuedPulse {
+    0%, 100% { opacity: 0.42; }
+    50%       { opacity: 0.75; }
+  }
+
+  /* ── Hamburger tray button — desktop hidden, mobile shown ── */
+  #quick-tray-btn {
+    display: none; /* shown only inside mobile media query */
+  }
+
+  /* ── Mobile quick-tray sheet ── */
+  #quick-tray {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,10,2,0.97);
+    border-top: 1px solid rgba(0,255,136,0.25);
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.80), 0 -1px 0 rgba(0,255,136,0.10);
+    z-index: 300;
+    padding: 0;
+    transform: translateY(100%);
+    transition: transform 0.30s cubic-bezier(0.32, 0.72, 0, 1);
+    border-radius: 12px 12px 0 0;
+    max-height: 60dvh;
+    overflow-y: auto;
+  }
+  #quick-tray.open {
+    display: block;
+    transform: translateY(0);
+  }
+  #quick-tray-handle {
+    width: 36px; height: 4px;
+    background: rgba(0,255,136,0.25);
+    border-radius: 2px;
+    margin: 10px auto 6px;
+  }
+  #quick-tray-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.60rem;
+    letter-spacing: 0.14em;
+    color: var(--green-muted);
+    text-align: center;
+    padding: 2px 0 10px;
+    border-bottom: 1px solid rgba(0,255,136,0.10);
+  }
+  #quick-tray-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px 14px 20px;
+  }
+  /* Tray suggestion chips row */
+  #tray-suggestions {
+    padding: 10px 14px 6px;
+  }
+  .tray-section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    color: rgba(0,255,136,0.35);
+    margin-bottom: 8px;
+  }
+  #tray-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tray-chip {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    padding: 5px 12px;
+    border: 1px solid rgba(0,255,136,0.22);
+    border-radius: 20px;
+    background: rgba(0,255,136,0.04);
+    color: rgba(0,255,136,0.60);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.14s, color 0.14s, border-color 0.14s;
+  }
+  .tray-chip:active {
+    background: rgba(0,255,136,0.14);
+    color: var(--green);
+    border-color: rgba(0,255,136,0.55);
+  }
+  .tray-divider {
+    height: 1px;
+    background: rgba(0,255,136,0.10);
+    margin: 8px 14px 0;
+  }
+  .tray-cmd {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    padding: 12px 10px;
+    border: 1px solid rgba(0,255,136,0.20);
+    border-radius: 3px;
+    background: rgba(0,255,136,0.04);
+    color: var(--green-dim);
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tray-cmd:hover, .tray-cmd:active {
+    background: rgba(0,255,136,0.12);
+    color: var(--green);
+    border-color: rgba(0,255,136,0.45);
+  }
+  /* backdrop to close tray on tap-outside */
+  #quick-tray-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 299;
+    background: rgba(0,0,0,0.45);
+  }
+  #quick-tray-backdrop.open { display: block; }
+
+  .qcmd:focus-visible,
+  .send-btn:focus-visible,
+  .popup-close:focus-visible,
+  .popup-start-btn:focus-visible,
+  .action-link:focus-visible {
+    outline: 2px solid var(--accent-ai);
+    outline-offset: 3px;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     TABLET — hide side panels, fill chat area
+     ══════════════════════════════════════════════════════ */
+  @media (max-width: 980px) {
+    body { height: 100dvh; }
+
+    /* Header — compact single row */
+    .header { padding: 8px 14px; gap: 8px; }
+    .logo { font-size: 1rem; letter-spacing: 0.10em; }
+    .header-status { font-size: 0.62rem; gap: 10px; }
+
+    /* Hide side decorative panels — chat gets full width */
+    .side-panel,
+    .right-panel { display: none; }
+
+    /* Chat fills full width */
+    .chat-area { width: 100%; }
+    .chat-window { padding: 14px 12px; gap: 12px; }
+
+    /* Messages */
+    .msg { max-width: 96%; gap: 8px; }
+    .avatar { width: 30px; height: 30px; font-size: 0.58rem; }
+    .bubble { font-size: 0.83rem; padding: 10px 12px; line-height: 1.6; }
+
+    /* Input bar */
+    .input-bar { padding: 8px 12px; gap: 8px; align-items: center; }
+    #user-input { font-size: 0.875rem; max-height: 6em; }
+    .send-btn { padding: 9px 14px; font-size: 0.60rem; letter-spacing: 0.10em; white-space: nowrap; flex-shrink: 0; }
+
+    /* Welcome popup */
+    #welcome-popup { width: min(520px, 94vw); max-height: 88dvh; overflow-y: auto; }
+    #welcome-popup .popup-body { padding: 20px 18px 14px; }
+    #welcome-popup .popup-footer { padding: 12px 18px 20px; }
+
+    /* Boot overlay — tighten padding */
+    #boot-overlay { padding: 24px 20px; font-size: 0.80rem; }
+    #boot-text { font-size: 0.72rem; }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     MOBILE — full overhaul for small screens (≤ 600px)
+     ══════════════════════════════════════════════════════ */
+  @media (max-width: 600px) {
+    /* Use dynamic viewport height so the browser chrome doesn't cut off the input */
+    body {
+      height: 100dvh;
+      /* Prevent iOS rubber-band scroll revealing body bg */
+      position: fixed;
+      width: 100%;
+      overflow: hidden;
+      /* Re-declare background — mobile browsers can drop it when position:fixed is applied */
+      background-color: #000a00;
+      background:
+        radial-gradient(ellipse at 50% 0%,   rgba(0,255,136,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 0%  100%, rgba(0,238,255,0.04) 0%, transparent 45%),
+        linear-gradient(to bottom, #000500, #000e00 60%, #000a00);
+    }
+
+    /* ── Header — tight single row, no wrap ── */
+    .header {
+      padding: 7px 12px;
+      flex-wrap: nowrap;
+      gap: 6px;
+    }
+    .logo {
+      font-size: 0.80rem;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    .header-status {
+      font-size: 0.58rem;
+      gap: 8px;
+      flex-shrink: 0;
+      align-items: center;
+    }
+    /* Hide NODE-01 label on very small screens to save space */
+    .header-status span:last-child { display: none; }
+
+    /* ── Mobile header-centre: CLR becomes an icon-only button ── */
+    #header-centre {
+      display: none;
+    }
+    #clr-btn {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border-width: 1px;
+      background: transparent;
+    }
+    #clr-btn::before { content: none; }
+    #clr-btn svg { width: 13px; height: 13px; display: block; }
+
+    /* ── Mobile mute: smaller circle ── */
+    #mute-btn {
+      width: 24px;
+      height: 24px;
+    }
+    #mute-btn svg { width: 11px; height: 11px; }
+
+    /* ── Hamburger — shown on mobile, hidden on desktop ── */
+    #quick-tray-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      height: 30px;
+      padding: 0 10px;
+      gap: 6px;
+      margin: 0;
+      border: 1px solid rgba(0,255,136,0.35);
+      border-radius: 3px;
+      background: rgba(0,255,136,0.06);
+      color: var(--green);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+      order: -1;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-shadow: 0 0 5px rgba(0,255,136,0.40);
+    }
+    #quick-tray-btn svg { width: 12px; height: 12px; display: block; flex-shrink: 0; }
+    #quick-tray-btn:active {
+      background: rgba(0,255,136,0.14);
+      border-color: rgba(0,255,136,0.65);
+      box-shadow: 0 0 8px rgba(0,255,136,0.22);
+    }
+
+    /* ── Chat window — full width, comfortable padding ── */
+    .chat-window {
+      padding: 12px 10px;
+      gap: 10px;
+      /* Ensure it fills all available height between header and input */
+      flex: 1;
+      /* iOS momentum scrolling */
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    /* ── Messages — full width ── */
+    .msg {
+      max-width: 100%;
+      gap: 7px;
+    }
+    .msg.user { max-width: 88%; }
+    .msg.bot  { max-width: 100%; }
+
+    /* ── Avatar — smaller ── */
+    .avatar {
+      width: 28px;
+      height: 28px;
+      font-size: 0.52rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Bubbles — comfortable reading size ── */
+    .bubble {
+      font-size: 0.82rem;
+      padding: 9px 11px;
+      line-height: 1.60;
+    }
+
+    /* ── Meta text ── */
+    .meta { font-size: 0.58rem; }
+
+    /* ── Action buttons — stack full width on mobile ── */
+    .message-actions {
+      gap: 6px;
+      flex-direction: column;
+    }
+    .action-link {
+      width: 100%;
+      justify-content: center;
+      min-height: 36px;   /* larger tap target */
+      font-size: 0.75rem;
+    }
+
+    /* ── Input bar — sticky at bottom, handle iOS keyboard ── */
+    .input-bar {
+      padding: 8px 10px;
+      gap: 7px;
+      align-items: center;
+      /* Stay above iOS home indicator */
+      padding-bottom: max(8px, env(safe-area-inset-bottom));
+      flex-shrink: 0;
+    }
+
+    /* Hide the ">_" symbol — wastes space on mobile */
+    .prompt-symbol { display: none; }
+
+    /* ☰ Hamburger tray trigger — sits in header-status row */
+    /* (styles defined above) */
+
+    /* queued label — slightly larger on mobile */
+    #queued-label { font-size: 0.62rem; padding: 4px 10px 0; }
+
+    /* Suggested chips — hide on mobile since tray covers them */
+    #empty-state { display: none; }
+
+    /* Input field */
+    .input-wrap { min-width: 0; flex: 1; }
+    #user-input {
+      font-size: 1rem;        /* 16px — prevents iOS auto-zoom on focus */
+      max-height: 5em;
+      line-height: 1.5;
+      min-height: 1.5em;
+    }
+
+    /* TRANSMIT button — large tap target */
+    .send-btn {
+      padding: 10px 14px;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      min-width: 80px;
+      min-height: 40px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    /* Autocomplete — full width, bigger tap targets */
+    #autocomplete-list {
+      max-height: 140px;
+      /* Keep above keyboard */
+      bottom: calc(100% + 4px);
+    }
+    .ac-item {
+      padding: 10px 12px;     /* bigger tap target */
+      font-size: 0.80rem;
+    }
+
+    /* ── Welcome popup — full screen feel on very small phones ── */
+    #welcome-popup {
+      width: 94vw;
+      max-height: 90dvh;
+      overflow-y: auto;
+      top: 50%;
+    }
+    #welcome-popup .popup-body {
+      padding: 18px 16px 12px;
+    }
+    #welcome-popup .popup-body p {
+      font-size: 0.78rem;
+      line-height: 1.65;
+    }
+    #welcome-popup .popup-footer {
+      padding: 10px 16px 18px;
+    }
+    #welcome-popup .popup-start-btn {
+      width: 100%;
+      text-align: center;
+      padding: 12px 16px;
+    }
+
+    /* ── Boot overlay ── */
+    #boot-overlay {
+      padding: 20px 16px;
+      font-size: 0.72rem;
+      line-height: 1.7;
+      justify-content: flex-start;
+      padding-top: 60px;
+    }
+    #boot-logo {
+      font-size: clamp(1.4rem, 8vw, 2.2rem);
+      letter-spacing: 0.15em;
+    }
+    #boot-sub {
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      margin-bottom: 20px;
+    }
+    #boot-text { font-size: 0.68rem; line-height: 1.7; }
+    #boot-status { font-size: 0.56rem; }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     VERY SMALL (≤ 360px) — tiny phones like Galaxy A series
+     ══════════════════════════════════════════════════════ */
+  @media (max-width: 360px) {
+    .logo { font-size: 0.70rem; }
+    .bubble { font-size: 0.78rem; }
+    .send-btn { min-width: 68px; padding: 9px 10px; font-size: 0.52rem; }
+    #user-input { font-size: 0.95rem; }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     REDUCED MOTION
+     ══════════════════════════════════════════════════════ */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+
+
+  /* ══════════════════════════════════════════════════════
+     ENHANCED UI — DESKTOP & MOBILE OVERHAUL
+     ══════════════════════════════════════════════════════ */
+
+  /* ── Hex grid background overlay ── */
+  @keyframes hexGridDrift {
+    0%   { background-position: 0px 0px; }
+    100% { background-position: 40px 70px; }
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    left: 0; right: 0;
+    top: -8%;
+    height: 8%;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0,255,65,0.04) 40%,
+      rgba(0,255,65,0.06) 50%,
+      rgba(0,255,65,0.04) 60%,
+      transparent 100%
+    );
+    animation: scanPulse 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 998;
+  }
+
+  /* Hex grid on main body background */
+  .hex-bg-layer {
+    position: fixed;
+    inset: 0;
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='70' viewBox='0 0 40 70'%3E%3Cpath d='M20 0 L40 10 L40 30 L20 40 L0 30 L0 10 Z' fill='none' stroke='%2300ff88' stroke-width='0.6'/%3E%3Cpath d='M20 40 L40 50 L40 70 L20 80 L0 70 L0 50 Z' fill='none' stroke='%2300ff88' stroke-width='0.6'/%3E%3Cpath d='M-20 20 L0 10 M40 10 L60 20' stroke='%2300ff88' stroke-width='0.6'/%3E%3C/svg%3E");
+    animation: hexGridDrift 18s linear infinite;
+  }
+
+  /* ── Enhanced header ── */
+  .header {
+    border-bottom: 1px solid rgba(0,255,136,0.25) !important;
+  }
+
+  /* Operator badge in header */
+  .operator-badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(0,255,136,0.06);
+    border: 1px solid rgba(0,255,136,0.18);
+    border-radius: 2px;
+    padding: 4px 10px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: rgba(0,255,136,0.65);
+  }
+
+  .operator-badge .op-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 5px var(--green);
+    animation: pulse 2s infinite;
+    flex-shrink: 0;
+  }
+
+  /* ── Enhanced side panel ── */
+  .side-panel {
+    width: 240px !important;
+    background:
+      linear-gradient(160deg, rgba(0,255,136,0.04) 0%, transparent 40%),
+      linear-gradient(180deg, #001200 0%, #000900 100%) !important;
+  }
+
+  /* Waveform visualizer bar */
+  .waveform-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 28px;
+    margin: 8px 0 12px;
+    padding: 0 4px;
+  }
+
+  .waveform-bar {
+    flex: 1;
+    max-width: 5px;
+    border-radius: 1px;
+    background: var(--green-dim);
+    box-shadow: 0 0 4px rgba(0,255,136,0.30);
+    animation: waveAnim var(--dur, 0.8s) ease-in-out infinite alternate;
+    transform-origin: bottom;
+  }
+
+  @keyframes waveAnim {
+    from { height: 3px; opacity: 0.3; }
+    to   { height: var(--h, 20px); opacity: 0.9; }
+  }
+
+  /* Divider accent */
+  .panel-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,255,136,0.25), transparent);
+    margin: 10px 0;
+  }
+
+  /* Operator card in side panel */
+  .op-card {
+    border: 1px solid rgba(0,255,136,0.18);
+    border-radius: 3px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    background: rgba(0,255,136,0.03);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .op-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green-dim), transparent);
+    animation: borderShimmer 3s ease infinite;
+  }
+
+  .op-card-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    color: var(--green);
+    text-shadow: 0 0 8px rgba(0,255,136,0.35);
+    margin-bottom: 2px;
+  }
+
+  .op-card-role {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    color: rgba(0,255,136,0.45);
+    letter-spacing: 0.12em;
+  }
+
+  .op-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .op-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    padding: 2px 7px;
+    border: 1px solid rgba(0,238,255,0.25);
+    border-radius: 1px;
+    color: rgba(0,238,255,0.60);
+    background: rgba(0,238,255,0.04);
+  }
+
+  /* ── Enhanced right panel ── */
+  .right-panel {
+    width: 230px !important;
+    gap: 8px !important;
+  }
+
+  /* Social links module */
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border: 1px solid rgba(0,255,136,0.15);
+    border-radius: 2px;
+    text-decoration: none;
+    color: var(--green-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    background: rgba(0,255,136,0.02);
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .social-link:hover {
+    border-color: rgba(0,255,136,0.40);
+    color: var(--green);
+    background: rgba(0,255,136,0.07);
+    transform: translateX(2px);
+    box-shadow: 0 0 8px rgba(0,255,136,0.12);
+  }
+
+  .social-link .sl-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.70rem;
+    color: var(--green-dim);
+  }
+
+  /* Tech stack badges */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .tech-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.05em;
+    text-align: center;
+    padding: 4px 3px;
+    border-radius: 2px;
+    border: 1px solid rgba(0,255,136,0.15);
+    color: rgba(0,255,136,0.50);
+    background: rgba(0,255,136,0.02);
+    transition: all 0.18s ease;
+  }
+
+  .tech-badge:hover {
+    border-color: rgba(0,255,136,0.35);
+    color: var(--green);
+    background: rgba(0,255,136,0.06);
+  }
+
+  .tech-badge.cyan {
+    border-color: rgba(0,238,255,0.18);
+    color: rgba(0,238,255,0.50);
+    background: rgba(0,238,255,0.02);
+  }
+
+  .tech-badge.cyan:hover {
+    border-color: rgba(0,238,255,0.40);
+    color: var(--accent-ai);
+  }
+
+  /* ── Enhanced input bar ── */
+  .input-bar {
+    padding: 12px 22px !important;
+    border-top: 1px solid rgba(0,255,136,0.18) !important;
+  }
+
+  #user-input {
+    padding: 4px 0;
+  }
+
+  /* Input bar glow ring */
+  .input-glow-ring {
+    position: absolute;
+    inset: -1px;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    pointer-events: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .input-bar:focus-within .input-glow-ring {
+    border-color: rgba(0,255,136,0.30);
+    box-shadow: 0 0 0 3px rgba(0,255,136,0.06), 0 0 20px rgba(0,255,136,0.08);
+  }
+
+  /* ── Enhanced chat bubbles ── */
+  .msg.bot .bubble {
+    border-left: 2px solid rgba(0,255,136,0.40) !important;
+    border-left-color: rgba(0,255,136,0.40) !important;
+    border-radius: 0 3px 3px 0 !important;
+  }
+
+  .msg.user .bubble {
+    border-right: 2px solid rgba(0,238,255,0.45) !important;
+    border-radius: 3px 0 3px 3px !important;
+  }
+
+  /* ── Mobile: enhanced input area ── */
+  @media (max-width: 600px) {
+    /* Frosted glass input bar */
+    .input-bar {
+      padding: 10px 12px !important;
+      background:
+        rgba(0, 14, 4, 0.92) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border-top: 1px solid rgba(0,255,136,0.22) !important;
+      box-shadow:
+        0 -2px 20px rgba(0,0,0,0.80),
+        0 -1px 0 rgba(0,255,136,0.12) !important;
+    }
+
+    /* Mobile send button — icon style */
+    .send-btn {
+      width: 42px !important;
+      height: 42px !important;
+      min-width: 42px !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 0 !important;
+      letter-spacing: 0 !important;
+      border: 1.5px solid rgba(0,204,102,0.60) !important;
+      background: rgba(0,255,136,0.10) !important;
+    }
+
+    .send-btn::after {
+      content: '';
+      display: block;
+      width: 16px;
+      height: 16px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='22' y1='2' x2='11' y2='13'%3E%3C/line%3E%3Cpolygon points='22 2 15 22 11 13 2 9 22 2'%3E%3C/polygon%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .send-btn.transmitting::after {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffaa00' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolyline points='12 6 12 12 16 14'%3E%3C/polyline%3E%3C/svg%3E");
+    }
+
+    /* Mobile: input field */
+    #user-input {
+      background: rgba(0,255,136,0.03) !important;
+      border: 1px solid rgba(0,255,136,0.15) !important;
+      border-radius: 20px !important;
+      padding: 8px 14px !important;
+      font-size: 1rem !important;
+    }
+
+    #user-input:focus {
+      border-color: rgba(0,255,136,0.35) !important;
+      box-shadow: 0 0 0 3px rgba(0,255,136,0.07) !important;
+    }
+
+    /* Mobile quick tray enhancements */
+    #quick-tray {
+      border-radius: 16px 16px 0 0 !important;
+      background: rgba(0, 8, 2, 0.98) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+    }
+
+    #quick-tray-title {
+      font-family: 'Rajdhani', sans-serif !important;
+      font-weight: 700 !important;
+      font-size: 0.85rem !important;
+      letter-spacing: 0.18em !important;
+      padding: 2px 16px 12px !important;
+      color: rgba(0,255,136,0.70) !important;
+    }
+
+    /* Category tabs inside tray */
+    .tray-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 0 14px 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tray-tabs::-webkit-scrollbar { display: none; }
+
+    .tray-tab {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      padding: 5px 12px;
+      border: 1px solid rgba(0,255,136,0.20);
+      border-radius: 12px;
+      background: transparent;
+      color: rgba(0,255,136,0.45);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      min-height: 32px;
+    }
+
+    .tray-tab.active,
+    .tray-tab:active {
+      background: rgba(0,255,136,0.12);
+      border-color: rgba(0,255,136,0.45);
+      color: var(--green);
+    }
+
+    /* Context strip at top of chat on mobile */
+    #mobile-context-strip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      background: rgba(0,255,136,0.04);
+      border-bottom: 1px solid rgba(0,255,136,0.10);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.10em;
+      color: rgba(0,255,136,0.45);
+      overflow: hidden;
+    }
+
+    #mobile-context-strip .ctx-label {
+      color: rgba(0,238,255,0.50);
+      flex-shrink: 0;
+    }
+
+    #mobile-context-strip .ctx-value {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Tray grid: 2-column */
+    #quick-tray-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Hamburger — already styled above */
+
+    /* Chat bubble: softer radius on mobile */
+    .msg.bot .bubble {
+      border-left: 2px solid rgba(0,255,136,0.35) !important;
+      border-radius: 0 10px 10px 10px !important;
+    }
+
+    .msg.user .bubble {
+      border-right: 2px solid rgba(0,238,255,0.40) !important;
+      border-radius: 10px 0 10px 10px !important;
+    }
+
+    /* Larger, more comfortable chips on mobile */
+    #empty-state { display: none !important; }
+  }
+
+  /* ── Desktop: enhanced panel title ── */
+  .panel-title {
+    font-family: 'Rajdhani', sans-serif !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.24em !important;
+  }
+
+  .r-module-title {
+    font-family: 'Rajdhani', sans-serif !important;
+    font-size: 0.64rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.22em !important;
+  }
+
+  /* ── Animation: data pulse on stat rows ── */
+  @keyframes dataPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; color: var(--green); }
+  }
+
+  .sys-row .val {
+    transition: color 0.3s ease;
+  }
+
+  .sys-row .val.updated {
+    animation: dataPulse 0.6s ease;
+  }
+
+  /* ── Stat row icons ── */
+  .sys-row span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── Neon corner brackets on r-module ── */
+  .r-module {
+    position: relative !important;
+  }
+
+  .r-module::before,
+  .r-module::after {
+    content: '';
+    position: absolute;
+    width: 8px; height: 8px;
+    border-color: rgba(0,255,136,0.45);
+    border-style: solid;
+  }
+
+  .r-module::before {
+    top: -1px; left: -1px;
+    border-width: 2px 0 0 2px;
+  }
+
+  .r-module::after {
+    bottom: -1px; right: -1px;
+    border-width: 0 2px 2px 0;
+  }
+
+  /* ── Logo enhancement ── */
+  .logo {
+    font-size: clamp(1.1rem, 2vw, 1.8rem) !important;
+  }
+
+  /* Version tag */
+  .logo-version {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    color: rgba(0,255,136,0.35);
+    letter-spacing: 0.15em;
+    vertical-align: super;
+    margin-left: 4px;
+  }
+
+  /* ── Tray grid (already 2-col on desktop, override for aesthetics) ── */
+  #quick-tray-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 10px 14px 18px;
+  }
+
+  .tray-cmd {
+    border-radius: 4px !important;
+    font-family: 'Rajdhani', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.06em !important;
+  }
+
+
+  /* CyberForge OS shared controls */
+  body.theme-matrix {
+    --green: #00ff88;
+    --green-bright: #00ffaa;
+    --green-dim: #00cc66;
+    --green-muted: #008844;
+    --accent-ai: #00eeff;
+    --accent-active: #00ff88;
+  }
+  body.theme-cyan {
+    --green: #55f7ff;
+    --green-bright: #9effff;
+    --green-dim: #20c7de;
+    --green-muted: #14788a;
+    --accent-ai: #8ffff7;
+    --accent-active: #55f7ff;
+  }
+  body.theme-red {
+    --green: #ff315a;
+    --green-bright: #ff6f89;
+    --green-dim: #c91d3f;
+    --green-muted: #7a1026;
+    --accent-ai: #ffd166;
+    --accent-active: #ff315a;
+  }
+  body.theme-minimal {
+    --green: #e7fff1;
+    --green-bright: #ffffff;
+    --green-dim: #abc8b7;
+    --green-muted: #6f8779;
+    --accent-ai: #ffffff;
+    --accent-active: #e7fff1;
+  }
+  body.recruiter-mode #matrix-canvas,
+  body.recruiter-mode .hex-bg-layer {
+    opacity: 0.08 !important;
+  }
+  body.recruiter-mode *,
+  body.recruiter-mode *::before,
+  body.recruiter-mode *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  @media (min-width: 981px) {
+    body.recruiter-mode .side-panel,
+    body.recruiter-mode .right-panel {
+      display: flex !important;
+      opacity: 1 !important;
+    }
+  }
+  body.cyber-mode #matrix-canvas {
+    opacity: 1;
+  }
+  .os-link,
+  .os-select,
+  .os-mode-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: var(--green-dim);
+    border: 1px solid rgba(0,255,136,0.2);
+    background: rgba(0,0,0,0.34);
+    padding: 7px 8px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .os-link:hover,
+  .os-select:focus,
+  .os-mode-btn:hover,
+  .os-mode-btn.active {
+    color: #000;
+    background: var(--green);
+    border-color: var(--green);
+    box-shadow: 0 0 16px rgba(0,255,136,0.3);
+  }
+  @media (max-width: 720px) {
+    .os-link,
+    .os-select,
+    .os-mode-btn {
+      display: none;
+    }
+  }
+
+/* ===== MATRIX LAYER FIX ===== */
+#matrix-canvas{
+    position:fixed !important;
+    inset:0 !important;
+    z-index:-1 !important;
+    pointer-events:none !important;
+    opacity:0.06 !important;
+}
+
+.main,
+.chat-area,
+.side-panel,
+.right-panel,
+.header,
+.chat-window,
+.input-bar{
+    position:relative;
+    z-index:1;
+}
+
+.r-module,
+.bubble,
+.side-panel > *,
+.right-panel > *{
+    background:rgba(0,10,0,0.92) !important;
+}
+/* ===== END MATRIX LAYER FIX ===== */
+
 </style>
 </head>
 <body>
@@ -1123,6 +2874,7 @@
   </div>
 </div>
 
+<div class="hex-bg-layer" aria-hidden="true"></div>
 <canvas id="matrix-canvas"></canvas>
 
 <!-- Boot overlay (enhanced startup sequence) -->
@@ -1132,15 +2884,80 @@
   <div id="boot-progress-wrap"><div id="boot-progress-bar"></div></div>
   <div id="boot-text"></div>
   <div id="boot-status">INITIALIZING AI CORE...</div>
+  <button id="boot-skip-btn" aria-label="Skip boot sequence">▶▶ SKIP</button>
 </div>
 
 <!-- Header -->
 <div class="header">
-  <div class="logo">CYBER<span>FORGE</span> :: AI NODE</div>
+  <!-- Hamburger — hidden on desktop, shown on mobile, sits LEFT of logo -->
+  <button id="quick-tray-btn" aria-label="Quick commands" aria-expanded="false">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <line x1="3" y1="6"  x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+    <span style="display:inline-block;">MENU</span>
+  </button>
+  <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+    <div class="logo">CYBER<span>FORGE</span><span class="logo-version">v3.7</span></div>
+    <button id="clr-btn" aria-label="Clear chat" title="Clear conversation">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6l-1 14H6L5 6"/>
+        <path d="M10 11v6M14 11v6"/>
+        <path d="M9 6V4h6v2"/>
+      </svg>
+    </button>
+  </div>
+
   <div class="header-status">
+    <a class="os-link" href="/" title="Open portfolio">PORTFOLIO</a>
+    <a class="voice-mode-link" href="/voice" target="_blank" rel="noopener" title="Open voice mode" aria-label="Open voice mode">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/>
+        <path d="M5 10a7 7 0 0 0 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M12 17v4M9 21h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      VOICE
+    </a>
+    <button class="os-mode-btn" id="cf-mode-btn" type="button" onclick="toggleExperienceMode()">RECRUITER</button>
+    <select class="os-select" id="cf-theme-select" aria-label="Theme" onchange="setCyberTheme(this.value)">
+      <option value="matrix">MATRIX</option>
+      <option value="cyan">CYAN</option>
+      <option value="red">RED</option>
+      <option value="minimal">MINIMAL</option>
+    </select>
+    <button id="mute-btn" aria-label="Toggle sound" title="Mute / Unmute">
+      <!-- sound-on icon -->
+      <svg id="mute-icon-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      </svg>
+      <!-- muted icon -->
+      <svg id="mute-icon-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <line x1="23" y1="9" x2="17" y2="15"/>
+        <line x1="17" y1="9" x2="23" y2="15"/>
+      </svg>
+    </button>
     <span><span class="status-dot" id="conn-dot"></span><span id="conn-label">CONNECTING...</span></span>
+    <div class="operator-badge"><span class="op-dot"></span>M.RAZIN</div>
     <span id="clock">00:00:00</span>
     <span>NODE-01</span>
+  </div>
+</div>
+
+<!-- Clear confirm overlay -->
+<div id="clr-overlay" role="dialog" aria-modal="true" aria-labelledby="clr-title">
+  <div id="clr-box">
+    <p id="clr-title">CLEAR CONVERSATION?<span>This will erase all messages and cannot be undone.</span></p>
+    <div class="clr-actions">
+      <button id="clr-confirm">CONFIRM</button>
+      <button id="clr-cancel">CANCEL</button>
+    </div>
   </div>
 </div>
 
@@ -1149,46 +2966,127 @@
 
   <!-- Side panel -->
   <div class="side-panel">
+    <div class="op-card">
+      <div class="op-card-name">MOHAMMED RAZIN</div>
+      <div class="op-card-role">// AI &amp; DATA ENGINEER</div>
+      <div class="op-card-tags">
+        <span class="op-tag">PYTHON</span>
+        <span class="op-tag">ML</span>
+        <span class="op-tag">DATA</span>
+        <span class="op-tag">AI</span>
+        <span class="op-tag">OPEN TO WORK</span>
+      </div>
+    </div>
+    <div class="waveform-wrap" id="waveform-wrap">
+    </div>
     <div class="panel-title">:: SYSTEM STATUS ::</div>
 
-    <div class="sys-row"><span>CPU</span><span class="val" id="cpu-val">72%</span></div>
-    <div class="bar-wrap"><div class="bar-fill" id="cpu-bar" style="width:72%"></div></div>
+    <div class="sys-row"><span>UPTIME</span><span class="val" id="uptime-val">00:00</span></div>
+    <div class="bar-wrap"><div class="bar-fill" id="uptime-bar" style="width:0%"></div></div>
 
-    <div class="sys-row"><span>MEM</span><span class="val" id="mem-val">48%</span></div>
-    <div class="bar-wrap"><div class="bar-fill" id="mem-bar" style="width:48%"></div></div>
+    <div class="sys-row"><span>AVG SCORE</span><span class="val" id="avgscore-val">—</span></div>
+    <div class="bar-wrap"><div class="bar-fill" id="avgscore-bar" style="width:0%"></div></div>
 
-    <div class="sys-row"><span>NET</span><span class="val" id="net-val">91%</span></div>
-    <div class="bar-wrap"><div class="bar-fill" id="net-bar" style="width:91%"></div></div>
+    <div class="sys-row"><span>RESP TIME</span><span class="val" id="resptime-val">—</span></div>
+    <div class="bar-wrap"><div class="bar-fill" id="resptime-bar" style="width:0%"></div></div>
 
     <div class="sys-row"><span>ENTRIES</span><span class="val" id="entries-val">—</span></div>
     <div class="sys-row"><span>LOADED</span><span class="val" id="loaded-val">—</span></div>
+    <div class="sys-row"><span>TURNS</span><span class="val" id="turns-val">0</span></div>
+    <div class="sys-row"><span>MSGS</span><span class="val" id="msgs-val">0</span></div>
 
-    <div class="panel-title" style="margin-top:15px;">:: QUICK ACCESS ::</div>
-    <div class="quick-cmds" id="quick-cmds">
-      <button class="qcmd" onclick="quickAsk('Who are you')">Who are you?</button>
-      <button class="qcmd" onclick="quickAsk('What is VConnect')">VConnect</button>
-      <button class="qcmd" onclick="quickAsk('Tell me about LogiSense')">LogiSense</button>
-      <button class="qcmd" onclick="quickAsk('What are your skills')">Skills</button>
-      <button class="qcmd" onclick="quickAsk('What technologies do you know')">Tech Stack</button>
-      <button class="qcmd" onclick="quickAsk('Why should we hire you')">Hire you?</button>
-      <button class="qcmd" onclick="quickAsk('What is your best project')">Best Project</button>
+    <div class="panel-title collapsed" style="margin-top:15px;" id="qa-title" onclick="togglePanel('qa')">
+      :: QUICK ACCESS ::
+      <span class="panel-chevron">&#9660;</span>
+    </div>
+    <div class="panel-collapsible collapsed" id="qa-body">
+      <div class="quick-cmds" id="quick-cmds">
+        <button class="qcmd" onclick="quickAsk('Who are you')">Who are you?</button>
+        <button class="qcmd" onclick="quickAsk('What is VConnect')">VConnect</button>
+        <button class="qcmd" onclick="quickAsk('Tell me about LogiSense')">LogiSense</button>
+        <button class="qcmd" onclick="quickAsk('Tell me about CyberForge chatbot')">CyberForge</button>
+        <button class="qcmd" onclick="quickAsk('What are your skills')">Skills</button>
+        <button class="qcmd" onclick="quickAsk('What technologies do you know')">Tech Stack</button>
+        <button class="qcmd" onclick="quickAsk('Why should we hire you')">Hire you?</button>
+        <button class="qcmd" onclick="quickAsk('What is your best project')">Best Project</button>
+      </div>
     </div>
 
-    <div class="panel-title" style="margin-top:15px;">:: ACTIVITY ::</div>
-    <div class="activity-log" id="activity-log"></div>
+    <div class="panel-title" style="margin-top:15px;" id="act-title" onclick="togglePanel('act')">
+      :: ACTIVITY ::
+      <span class="panel-chevron">&#9660;</span>
+    </div>
+    <div class="panel-collapsible" id="act-body">
+      <div class="activity-log" id="activity-log"></div>
+    </div>
   </div>
 
   <!-- Chat -->
-  <div class="chat-area">
-    <div class="chat-window" id="chat-window"></div>
+  <div class="chat-area" style="position:relative;">
+    <div id="mobile-context-strip" style="display:none;">
+      <span class="ctx-label">&gt;&gt;</span>
+      <span class="ctx-value" id="ctx-value">READY</span>
+    </div>
+    <div class="chat-window" id="chat-window" role="log" aria-live="polite" aria-relevant="additions"></div>
+    <button id="scroll-btn" aria-label="Scroll to bottom">↓ NEW MESSAGE</button>
+
+    <!-- Queued message indicator — shows while transmitting -->
+    <div id="queued-label" aria-live="polite"></div>
+
+    <!-- hamburger is in header-status — see above -->
 
     <div class="input-bar">
       <span class="prompt-symbol">&gt;_</span>
       <div class="input-wrap">
-      <div id="autocomplete-list"></div>
-        <div id="user-input" contenteditable="true" data-placeholder="Enter query, human..." spellcheck="false"></div>
+      <div id="autocomplete-list" role="listbox"></div>
+        <div id="user-input" contenteditable="true" role="textbox" aria-label="Ask CyberForge AI" aria-multiline="true" data-placeholder="Enter query, human..." spellcheck="false"></div>
+        <div id="char-counter" aria-live="polite" aria-atomic="true"></div>
       </div>
-      <button class="send-btn" id="send-btn" onclick="sendMessage()">TRANSMIT</button>
+      <button class="mic-btn" id="mic-btn" aria-label="Voice input" title="Hold to speak">
+        <svg id="mic-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+          <rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/>
+          <path d="M5 10a7 7 0 0 0 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="9" y1="21" x2="15" y2="21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="mic-ripple"></span>
+      </button>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()" aria-label="Send message">TRANSMIT</button>
+    </div>
+
+    <!-- Mobile quick-command tray -->
+    <div id="quick-tray-backdrop"></div>
+    <div id="quick-tray" role="dialog" aria-label="Quick commands">
+      <div id="quick-tray-handle"></div>
+      <div id="quick-tray-title">:: QUICK ACCESS ::</div>
+      <div class="tray-tabs">
+        <button class="tray-tab active" onclick="filterTray('all')">ALL</button>
+        <button class="tray-tab" onclick="filterTray('projects')">PROJECTS</button>
+        <button class="tray-tab" onclick="filterTray('skills')">SKILLS</button>
+        <button class="tray-tab" onclick="filterTray('career')">CAREER</button>
+        <button class="tray-tab" onclick="filterTray('easter')">SECRETS</button>
+      </div>
+      <!-- Suggested queries row inside tray -->
+      <div id="tray-suggestions">
+        <div class="tray-section-label">>> SUGGESTED</div>
+        <div id="tray-chip-row">
+          <button class="tray-chip" onclick="trayAsk('Who are you')" data-cat="all">Who are you?</button>
+          <button class="tray-chip" onclick="trayAsk('What is your best project')" data-cat="projects">Best project?</button>
+          <button class="tray-chip" onclick="trayAsk('Why should we hire you')" data-cat="career">Hire you?</button>
+          <button class="tray-chip" onclick="trayAsk('What are your skills')" data-cat="skills">Skills?</button>
+        </div>
+      </div>
+      <div class="tray-divider"></div>
+      <div id="quick-tray-grid">
+        <button class="tray-cmd" onclick="trayAsk('Who are you')" data-cat="all">Who are you?</button>
+        <button class="tray-cmd" onclick="trayAsk('What is VConnect')" data-cat="projects">VConnect</button>
+        <button class="tray-cmd" onclick="trayAsk('Tell me about LogiSense')" data-cat="projects">LogiSense</button>
+        <button class="tray-cmd" onclick="trayAsk('Tell me about CyberForge chatbot')" data-cat="projects">CyberForge</button>
+        <button class="tray-cmd" onclick="trayAsk('What are your skills')" data-cat="skills">Skills</button>
+        <button class="tray-cmd" onclick="trayAsk('What technologies do you know')" data-cat="skills">Tech Stack</button>
+        <button class="tray-cmd" onclick="trayAsk('Why should we hire you')" data-cat="career">Hire you?</button>
+        <button class="tray-cmd" onclick="trayAsk('What is your best project')" data-cat="projects">Best Project</button>
+      </div>
     </div>
   </div>
 
@@ -1269,12 +3167,84 @@
       </div>
     </div>
 
+    <!-- MODULE 4: Social Links -->
+    <div class="r-module">
+      <div class="r-module-title">:: CONNECT ::</div>
+      <div class="social-links">
+        <a class="social-link" href="https://github.com/mohammedrazin22202-cyber" target="_blank" rel="noopener">
+          <span class="sl-icon">&#123;&#125;</span>GITHUB
+        </a>
+        <a class="social-link" href="https://www.linkedin.com/in/razinn88307" target="_blank" rel="noopener">
+          <span class="sl-icon">in</span>LINKEDIN
+        </a>
+        <a class="social-link" href="/" target="_blank" rel="noopener">
+          <span class="sl-icon">&#9671;</span>PORTFOLIO
+        </a>
+      </div>
+    </div>
+
+    <!-- MODULE 5: Tech Stack Grid -->
+    <div class="r-module">
+      <div class="r-module-title">:: TECH STACK ::</div>
+      <div class="tech-grid">
+        <div class="tech-badge">PYTHON</div>
+        <div class="tech-badge cyan">FLASK</div>
+        <div class="tech-badge">PANDAS</div>
+        <div class="tech-badge">NUMPY</div>
+        <div class="tech-badge cyan">REACT</div>
+        <div class="tech-badge">SKLEARN</div>
+        <div class="tech-badge">OPENAI</div>
+        <div class="tech-badge cyan">MYSQL</div>
+        <div class="tech-badge">XGBoost</div>
+      </div>
+    </div>
+
   </div><!-- /right-panel -->
 
 </div><!-- /main -->
 
 
 <script>
+const CF_THEME_KEY = 'cfTheme';
+const CF_MODE_KEY = 'cfExperienceMode';
+
+function applyStoredCyberState() {
+  const theme = localStorage.getItem(CF_THEME_KEY) || 'matrix';
+  document.body.classList.remove('theme-matrix', 'theme-cyan', 'theme-red', 'theme-minimal');
+  document.body.classList.add('theme-' + theme);
+  const mode = localStorage.getItem(CF_MODE_KEY) || 'cyber';
+  document.body.classList.toggle('recruiter-mode', mode === 'recruiter');
+  document.body.classList.toggle('cyber-mode', mode !== 'recruiter');
+}
+applyStoredCyberState();
+
+function setCyberTheme(theme) {
+  localStorage.setItem(CF_THEME_KEY, theme);
+  applyStoredCyberState();
+}
+
+function toggleExperienceMode() {
+  const current = localStorage.getItem(CF_MODE_KEY) || 'cyber';
+  localStorage.setItem(CF_MODE_KEY, current === 'recruiter' ? 'cyber' : 'recruiter');
+  applyStoredCyberState();
+  updateModeButton();
+}
+
+function updateModeButton() {
+  const btn = document.getElementById('cf-mode-btn');
+  if (!btn) return;
+  const isRecruiter = localStorage.getItem(CF_MODE_KEY) === 'recruiter';
+  btn.textContent = isRecruiter ? 'CYBER' : 'RECRUITER';
+  btn.classList.toggle('active', isRecruiter);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const select = document.getElementById('cf-theme-select');
+  if (select) select.value = localStorage.getItem(CF_THEME_KEY) || 'matrix';
+  updateModeButton();
+});
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 // ══════════════════════════════════════════════════════════════════════════════
 // AUDIO ENGINE (change 13) — Web Audio API, zero external files
 // ══════════════════════════════════════════════════════════════════════════════
@@ -1284,7 +3254,10 @@ function getAC() {
   return _ac;
 }
 
+let _muted = false;
+
 function playTone({ freq = 440, type = 'sine', vol = 0.08, dur = 0.06, attack = 0.004, decay = 0.05 } = {}) {
+  if (_muted) return;
   try {
     const ac  = getAC();
     const osc = ac.createOscillator();
@@ -1351,6 +3324,21 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.send-btn, .qcmd').forEach(btn => {
     btn.addEventListener('mouseenter', sndHover);
   });
+
+  /* Mute toggle */
+  const muteBtn = document.getElementById('mute-btn');
+  if (muteBtn) {
+    muteBtn.addEventListener('click', () => {
+      _muted = !_muted;
+        const iconOn  = document.getElementById('mute-icon-on');
+      const iconOff = document.getElementById('mute-icon-off');
+      if (iconOn)  iconOn.style.display  = _muted ? 'none'  : 'block';
+      if (iconOff) iconOff.style.display = _muted ? 'block' : 'none';
+      muteBtn.classList.toggle('muted', _muted);
+      muteBtn.setAttribute('aria-label', _muted ? 'Unmute sound' : 'Mute sound');
+      muteBtn.title = _muted ? 'Unmute' : 'Mute sound';
+    });
+  }
 });
 
 // ── Matrix Rain ──────────────────────────────────────────────────────────────
@@ -1399,23 +3387,46 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 
-// ── Fake system stats ─────────────────────────────────────────────────────────
-function jitter(cur, min, max) {
-  return Math.min(max, Math.max(min, cur + (Math.random() - 0.5) * 8));
+// ── Real system stats ────────────────────────────────────────────────────────
+// UPTIME     — seconds since page load
+// AVG SCORE  — rolling average of backend confidence scores this session
+// RESP TIME  — last response round-trip in ms
+
+const _sessionStart = Date.now();
+let   _scoreHistory = [];    // stores pct values from real responses
+let   _lastRespMs   = null;  // ms for last query round-trip
+
+function _setBar(barId, valId, label, barPct) {
+  const b = document.getElementById(barId);
+  const v = document.getElementById(valId);
+  if (b) b.style.width = Math.min(100, barPct) + '%';
+  if (v) v.textContent = label;
 }
 
-let cpuV = 72, memV = 48, netV = 91;
+// Called by sendMessage with the actual response time
+function recordRespTime(ms) {
+  _lastRespMs = ms;
+  const label = ms < 1000 ? ms + 'ms' : (ms/1000).toFixed(1) + 's';
+  const barPct = Math.max(4, 100 - Math.min(100, ms / 30)); // fast=full bar
+  _setBar('resptime-bar', 'resptime-val', label, barPct);
+}
+
+// Called by setConfidence when a real score lands
+function recordScore(pct) {
+  _scoreHistory.push(pct);
+  if (_scoreHistory.length > 20) _scoreHistory.shift(); // rolling window
+  const avg = Math.round(_scoreHistory.reduce((a,b)=>a+b,0) / _scoreHistory.length);
+  _setBar('avgscore-bar', 'avgscore-val', avg + '%', avg);
+}
+
+// Uptime ticker — updates every second
 setInterval(() => {
-  cpuV = jitter(cpuV, 30, 97);
-  memV = jitter(memV, 20, 80);
-  netV = jitter(netV, 60, 99);
-  document.getElementById('cpu-val').textContent = cpuV.toFixed(0) + '%';
-  document.getElementById('cpu-bar').style.width = cpuV + '%';
-  document.getElementById('mem-val').textContent = memV.toFixed(0) + '%';
-  document.getElementById('mem-bar').style.width = memV + '%';
-  document.getElementById('net-val').textContent = netV.toFixed(0) + '%';
-  document.getElementById('net-bar').style.width = netV + '%';
-}, 1800);
+  const secs  = Math.floor((Date.now() - _sessionStart) / 1000);
+  const mm    = String(Math.floor(secs / 60)).padStart(2, '0');
+  const ss    = String(secs % 60).padStart(2, '0');
+  const maxUp = 30 * 60; // bar fills over 30 minutes
+  _setBar('uptime-bar', 'uptime-val', mm + ':' + ss, (secs / maxUp) * 100);
+}, 1000);
 
 // ── Activity log ──────────────────────────────────────────────────────────────
 function addActivity(msg) {
@@ -1428,7 +3439,7 @@ function addActivity(msg) {
 
 // ── MODULE 1: AI Confidence Ring ──────────────────────────────────────────────
 const CIRC = 2 * Math.PI * 35; // circumference ≈ 219.9
-function setConfidence(pct, label) {
+function setConfidence(pct, label, isRealScore = false) {
   const ring  = document.getElementById('conf-ring');
   const pctEl = document.getElementById('conf-pct');
   const lblEl = document.getElementById('conf-label');
@@ -1439,13 +3450,40 @@ function setConfidence(pct, label) {
   ring.style.stroke = pct > 70 ? '#00ffaa' : pct > 40 ? '#00ff88' : '#00cc66';
   pctEl.textContent = pct + '%';
   if (lblEl) lblEl.textContent = label || 'MATCH';
+  // If this is a real backend score, freeze ring + record for avg
+  if (isRealScore && typeof freezeRing === 'function') {
+    freezeRing();
+    if (typeof recordScore === 'function') recordScore(pct);
+  }
 }
-// idle drift animation
+// ── Confidence ring state management ────────────────────────────────────────
+// _confLocked = true  → a real score was set this query; freeze the ring
+// _confLocked = false → standby; idle drift is allowed
+let _confLocked = false;
+let _idleDriftId = null;
+
+function startIdleDrift() {
+  if (_idleDriftId) return;                   // already running
+  _idleDriftId = setInterval(() => {
+    if (_confLocked || _isBusy) return;       // never drift mid-query
+    const v = 55 + Math.floor(Math.random() * 30);
+    setConfidence(v, 'STANDBY');
+  }, 5000);
+}
+
+function freezeRing() {
+  // Called when a real score arrives — stop drift for this query
+  _confLocked = true;
+}
+
+function resetRingToStandby() {
+  // Called at the START of a new query — unlock and allow drift again
+  _confLocked = false;
+}
+
+// Initial standby state
 setConfidence(75, 'AWAITING QUERY');
-setInterval(() => {
-  const v = 55 + Math.floor(Math.random() * 30);
-  setConfidence(v, 'STANDBY');
-}, 5000);
+startIdleDrift();
 
 // ── MODULE 2: Packet Log ticker ───────────────────────────────────────────────
 const PKT_NODES = ['192.168.0.1','10.0.0.2','NODE-07','RELAY-C','AI-CORE','SYN-01'];
@@ -1501,45 +3539,85 @@ const bootStatuses = [
 ];
 
 async function runBoot() {
+  const overlay = document.getElementById('boot-overlay');
+  if (!overlay) { initChat(); return; }
+
+  if (prefersReducedMotion || localStorage.getItem('cfBootSeen') === '1') {
+    overlay.remove();
+    initChat();
+    return;
+  }
+
+  // ── Skip flag — set true by button or keyboard shortcut ─────────────────
+  let _bootSkipped = false;
+  const skipBtn = document.getElementById('boot-skip-btn');
+
+  const doSkip = () => { _bootSkipped = true; };
+
+  if (skipBtn) skipBtn.addEventListener('click', doSkip);
+
+  // Escape or Space also skips
+  const _bootKeyHandler = (e) => {
+    if (e.key === 'Escape' || e.key === ' ') { e.preventDefault(); doSkip(); }
+  };
+  document.addEventListener('keydown', _bootKeyHandler);
+
   sndBoot();   // startup hum
   const container  = document.getElementById('boot-text');
   const progressEl = document.getElementById('boot-progress-bar');
   const statusEl   = document.getElementById('boot-status');
 
   for (let i = 0; i < bootLines.length; i++) {
-    // Update status label
+    if (_bootSkipped) break;
+
     if (statusEl) statusEl.textContent = bootStatuses[i] || 'READY';
 
-    // Advance progress bar
     const pct = Math.round(((i + 1) / bootLines.length) * 100);
     if (progressEl) progressEl.style.width = pct + '%';
 
-    // Render log line
     const d = document.createElement('div');
     d.textContent = bootLines[i];
     d.style.opacity = '0';
-    // Color the VERIFIED / ONLINE lines brighter
     if (bootLines[i].includes('VERIFIED') || bootLines[i].includes('ONLINE')) {
       d.style.color = 'var(--green-bright)';
       d.style.textShadow = '0 0 8px rgba(0,255,170,0.6)';
     }
     container.appendChild(d);
     await delay(170);
+    if (_bootSkipped) break;
     d.style.transition = 'opacity 0.25s';
     d.style.opacity = '1';
   }
 
-  // Brief hold at 100%
-  await delay(500);
+  // If skipped — instantly show all remaining lines + fill bar
+  if (_bootSkipped) {
+    if (progressEl) progressEl.style.width = '100%';
+    if (statusEl) statusEl.textContent = 'READY';
+    // Render any lines not yet shown
+    const rendered = container.children.length;
+    for (let i = rendered; i < bootLines.length; i++) {
+      const d = document.createElement('div');
+      d.textContent = bootLines[i];
+      if (bootLines[i].includes('VERIFIED') || bootLines[i].includes('ONLINE')) {
+        d.style.color = 'var(--green-bright)';
+        d.style.textShadow = '0 0 8px rgba(0,255,170,0.6)';
+      }
+      container.appendChild(d);
+    }
+  } else {
+    await delay(500);  // brief hold only if not skipped
+  }
 
-  // Terminal-unlock flash
-  const overlay = document.getElementById('boot-overlay');
+  // Clean up keyboard handler
+  document.removeEventListener('keydown', _bootKeyHandler);
+
+  // Terminal-unlock flash then fade out
   overlay.style.animation = 'terminalUnlock 0.4s ease forwards';
   await delay(420);
-
-  overlay.style.transition = 'opacity 0.55s';
+  overlay.style.transition = 'opacity 0.45s';
   overlay.style.opacity = '0';
-  await delay(560);
+  await delay(460);
+  localStorage.setItem('cfBootSeen', '1');
   overlay.remove();
   initChat();
 }
@@ -1663,6 +3741,21 @@ const AC_SUGGESTIONS = [
   'wake up cyberforge ai',
 ];
 
+let acSuggestions = [...AC_SUGGESTIONS];
+
+async function loadSuggestions() {
+  try {
+    const res = await fetch('/suggestions');
+    const data = await res.json();
+    if (Array.isArray(data.suggestions) && data.suggestions.length) {
+      acSuggestions = data.suggestions;
+      buildAcIdf();  // rebuild IDF weights from the real suggestion list
+    }
+  } catch {
+    // Fallback to the local starter list when the API is unavailable.
+  }
+}
+
 const acList = document.getElementById('autocomplete-list');
 let acIndex = -1;
 
@@ -1673,7 +3766,13 @@ function renderAC(matches) {
   matches.forEach(m => {
     const div = document.createElement('div');
     div.className = 'ac-item';
-    div.innerHTML = `<span class="ac-prefix">&gt;</span>${m}`;
+    div.setAttribute('role', 'option');
+    div.setAttribute('aria-selected', 'false');
+    const prefix = document.createElement('span');
+    prefix.className = 'ac-prefix';
+    prefix.textContent = '>';
+    div.appendChild(prefix);
+    div.appendChild(document.createTextNode(m));
     div.addEventListener('mousedown', e => {
       e.preventDefault();
       userInput.textContent = m;
@@ -1692,12 +3791,121 @@ function renderAC(matches) {
   acList.classList.add('open');
 }
 
+// ── IDF-style client-side scoring ────────────────────────────────────────────
+// Mirrors the backend token scoring so the local fallback ranks the same way.
+// We pre-compute a simple token→frequency table from the loaded suggestion list
+// once, then use it to score each suggestion for a given query.
+
+const _acIdf = {};  // token → inverse doc frequency weight (0–1)
+
+function buildAcIdf() {
+  const freq = {};
+  const n = acSuggestions.length || 1;
+  acSuggestions.forEach(s => {
+    const toks = new Set(s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean));
+    toks.forEach(t => { freq[t] = (freq[t] || 0) + 1; });
+  });
+  Object.keys(freq).forEach(t => {
+    _acIdf[t] = 1 - (freq[t] / n);  // 0 = ubiquitous, 1 = unique
+  });
+}
+
+const STOP = new Set(['a','an','and','are','as','at','be','can','do','does','for',
+  'from','have','how','i','in','is','it','me','my','of','on','or','the','this',
+  'to','what','when','where','who','why','with','you','your','about','tell','show',
+  'please','give','get','find','help','know','see','need','want','like']);
+
+function scoreAcItem(itemNorm, queryToks, queryMeaningful) {
+  // Tier 1: prefix
+  if (itemNorm.startsWith(queryToks._raw)) return 4 + Math.random() * 0.01;
+  // Tier 2: substring
+  if (itemNorm.includes(queryToks._raw)) return 3 + Math.random() * 0.01;
+  // Tier 3: IDF token overlap on meaningful tokens
+  if (!queryMeaningful.size) return 0;
+  const itemToks = new Set(itemNorm.replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean));
+  let overlap = 0, total = 0;
+  queryMeaningful.forEach(t => {
+    const w = _acIdf[t] ?? 0.5;
+    total += w;
+    if (itemToks.has(t)) overlap += w;
+  });
+  return total > 0 ? overlap / total : 0;
+}
+
+function rankSuggestions(q, list) {
+  const raw = q.toLowerCase().trim();
+  const allToks = raw.replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean);
+  const meaningful = new Set(allToks.filter(t => !STOP.has(t)));
+  const queryToks = { _raw: raw };
+
+  const scored = list
+    .map(s => ({ s, score: scoreAcItem(s.toLowerCase(), queryToks, meaningful) }))
+    .filter(x => x.score > 0.12)
+    .sort((a, b) => b.score - a.score);
+
+  return scored.slice(0, 6).map(x => x.s);
+}
+
+// Debounce timer for the backend ?q= call
+let _acDebounce = null;
+
 // ── contenteditable input listener ───────────────────────────────────────────
+const MAX_CHARS = 350;
+const WARN_CHARS = 280;
+const charCounter = document.getElementById('char-counter');
+
+function updateCharCounter() {
+  const len = userInput.textContent.length;
+  if (len === 0) {
+    charCounter.classList.remove('visible', 'warn', 'critical');
+    return;
+  }
+  charCounter.textContent = len + '/' + MAX_CHARS;
+  charCounter.classList.add('visible');
+  if (len >= MAX_CHARS) {
+    charCounter.classList.add('critical');
+    charCounter.classList.remove('warn');
+  } else if (len >= WARN_CHARS) {
+    charCounter.classList.add('warn');
+    charCounter.classList.remove('critical');
+  } else {
+    charCounter.classList.remove('warn', 'critical');
+  }
+}
+
 userInput.addEventListener('input', () => {
-  const q = userInput.textContent.trim().toLowerCase();
+  // Hard-enforce 350 char limit on paste or any input
+  if (userInput.textContent.length > MAX_CHARS) {
+    const sel = window.getSelection();
+    const range = sel.getRangeAt(0);
+    const offset = range.startOffset;
+    userInput.textContent = userInput.textContent.slice(0, MAX_CHARS);
+    // Restore caret to end
+    const newRange = document.createRange();
+    newRange.selectNodeContents(userInput);
+    newRange.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(newRange);
+  }
+  updateCharCounter();
+  const q = userInput.textContent.trim();
   if (!q) { acList.classList.remove('open'); return; }
-  const matches = AC_SUGGESTIONS.filter(s => s.toLowerCase().includes(q)).slice(0, 6);
-  renderAC(matches);
+
+  // Instant local ranking (no network wait)
+  renderAC(rankSuggestions(q, acSuggestions));
+
+  // Debounced backend call for IDF-ranked results (fires after 220ms idle)
+  clearTimeout(_acDebounce);
+  _acDebounce = setTimeout(async () => {
+    try {
+      const res = await fetch('/suggestions?q=' + encodeURIComponent(q));
+      const data = await res.json();
+      if (Array.isArray(data.suggestions) && data.suggestions.length) {
+        // Only update if the user hasn't cleared the input since we fired
+        if (userInput.textContent.trim()) renderAC(data.suggestions.slice(0, 6));
+      }
+    } catch { /* backend unavailable — local ranking already shown */ }
+  }, 220);
 });
 
 userInput.addEventListener('keydown', e => {
@@ -1705,11 +3913,19 @@ userInput.addEventListener('keydown', e => {
   if (e.key === 'ArrowDown') {
     e.preventDefault();
     acIndex = Math.min(acIndex + 1, items.length - 1);
-    items.forEach((el, i) => el.classList.toggle('ac-active', i === acIndex));
+    items.forEach((el, i) => {
+      const active = i === acIndex;
+      el.classList.toggle('ac-active', active);
+      el.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
   } else if (e.key === 'ArrowUp') {
     e.preventDefault();
     acIndex = Math.max(acIndex - 1, -1);
-    items.forEach((el, i) => el.classList.toggle('ac-active', i === acIndex));
+    items.forEach((el, i) => {
+      const active = i === acIndex;
+      el.classList.toggle('ac-active', active);
+      el.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
   } else if (e.key === 'Tab' && acList.classList.contains('open')) {
     e.preventDefault();
     const chosen = acIndex >= 0 && items[acIndex] ? items[acIndex] : items[0];
@@ -1727,7 +3943,7 @@ userInput.addEventListener('keydown', e => {
     } else {
       e.preventDefault();
       acList.classList.remove('open');
-      sendMessage();
+      if (!_isBusy) sendMessage();            // guard: ignore Enter while busy
     }
   }
 });
@@ -1736,40 +3952,95 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.input-wrap')) acList.classList.remove('open');
 });
 
-// ── Typewriter engine ─────────────────────────────────────────────────────────
-async function typewrite(bubble, text, metaEl, speed = 18) {
+// ── Typewriter engine ─────────────────────────────────────────────────────────────────────────────
+// _skipTypewriter is set to true by the skip button.
+// The loop checks it on every character; if true, breaks out and dumps
+// the remaining text instantly, then resets the flag.
+let _skipTypewriter = false;
+
+async function typewrite(bubble, text, metaEl, speed = 18, actionEl = null, skipRow = null) {
+  if (prefersReducedMotion) {
+    bubble.textContent = text;
+    if (skipRow) skipRow.remove();
+    if (actionEl) actionEl.style.opacity = '1';
+    if (metaEl) metaEl.style.opacity = '1';
+    return;
+  }
+
   // Blinking cursor span
   const cursor = document.createElement('span');
   cursor.style.cssText = 'display:inline-block;width:0.6ch;background:var(--green);animation:cursorBlink 0.7s step-end infinite;margin-left:1px;vertical-align:text-bottom;';
   bubble.appendChild(cursor);
 
   const lines = text.split('\n');
+  let skipped = false;
+
+  outer:
   for (let li = 0; li < lines.length; li++) {
     const line = lines[li];
     for (let ci = 0; ci < line.length; ci++) {
-      // Insert char node before cursor
+      if (_skipTypewriter) { skipped = true; break outer; }
       const ch = document.createTextNode(line[ci]);
       bubble.insertBefore(ch, cursor);
       chatWindow.scrollTop = chatWindow.scrollHeight;
       await delay(speed);
     }
-    // Newline between lines (not after last)
+    if (_skipTypewriter) { skipped = true; break; }
     if (li < lines.length - 1) {
       bubble.insertBefore(document.createTextNode('\n'), cursor);
       chatWindow.scrollTop = chatWindow.scrollHeight;
-      await delay(speed * 3); // brief pause at line break
+      await delay(speed * 3);
     }
   }
 
-  // Remove cursor, show meta
+  // If skipped mid-way, count rendered chars then dump the rest instantly
+  if (skipped) {
+    let rendered = 0;
+    for (const node of bubble.childNodes) {
+      if (node === cursor) break;
+      rendered += node.textContent.length;
+    }
+    const remaining = text.slice(rendered);
+    if (remaining) bubble.insertBefore(document.createTextNode(remaining), cursor);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  // Reset flag, remove skip row & cursor, reveal meta/actions
+  _skipTypewriter = false;
   cursor.remove();
+  if (skipRow) skipRow.remove();
+  if (actionEl) actionEl.style.opacity = '1';
   if (metaEl) metaEl.style.opacity = '1';
 }
 
-function addMessage(role, text, meta = '') {
+// session counters
+let _totalMsgs = 0;   // every message (user + bot)
+let _turnCount  = 0;  // one turn = one user message + one bot reply
+
+function updateMsgCounters(role) {
+  _totalMsgs++;
+  if (role === 'user') _turnCount++;
+  const turnsEl = document.getElementById('turns-val');
+  const msgsEl  = document.getElementById('msgs-val');
+  if (turnsEl) turnsEl.textContent = _turnCount;
+  if (msgsEl)  msgsEl.textContent  = _totalMsgs;
+}
+
+function addMessage(role, text, meta = '', actions = [], hedged = false) {
+  // ── Chat sync: persist & broadcast ──
+  const _syncEntry = _saveChatMessage(role, text, meta, actions, hedged);
+  _broadcastChatMessage(_syncEntry);
+  const _instantRender = _isSyncMessage || _isReplayingHistory;
+
+  updateMsgCounters(role);
   const msg = document.createElement('div');
   msg.className = 'msg ' + role;
   if (role === 'bot' && text.startsWith('>> ERROR')) msg.classList.add('error');
+  if (role === 'bot' && hedged) msg.classList.add('hedged');
+
+  // Rephrase suggestions for hedged (low-confidence) responses
+  // Injected into right div after bubbleWrap — only for bot hedged msgs
+  const _isHedged = (role === 'bot' && hedged);
 
   const avatar = document.createElement('div');
   avatar.className = 'avatar';
@@ -1780,30 +4051,180 @@ function addMessage(role, text, meta = '') {
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
 
+  let actionEl = null;
+  if (Array.isArray(actions) && actions.length) {
+    actionEl = document.createElement('div');
+    actionEl.className = 'message-actions';
+    actionEl.style.opacity = role === 'bot' ? '0' : '1';
+
+    actions.forEach(action => {
+      if (!action || !action.url) return;
+      const link = document.createElement('a');
+      link.className = 'action-link';
+      link.href = action.url;
+      link.textContent = action.label || 'Open';
+      if (action.external) {
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+      }
+      if (action.download) {
+        link.setAttribute('download', action.download);
+      }
+      actionEl.appendChild(link);
+    });
+  }
+
+  // Timestamp
+  const now = new Date();
+  const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  const timeEl = document.createElement('div');
+  timeEl.className = 'msg-time';
+  timeEl.textContent = timeStr;
+
+  // meta (confidence score)
   let metaEl = null;
   if (meta) {
     metaEl = document.createElement('div');
     metaEl.className = 'meta';
-    metaEl.innerHTML = meta;
-    metaEl.style.opacity = '0'; // hidden until typewriter done
+    metaEl.textContent = meta;
+    metaEl.style.opacity = '0';
     metaEl.style.transition = 'opacity 0.4s ease';
-    right.appendChild(bubble);
-    right.appendChild(metaEl);
-  } else {
-    right.appendChild(bubble);
   }
+
+  // DOM order built per role:
+  // bot:  right → [bubbleWrap[bubble + copyBtn], actionEl, metaEl, timeEl]
+  // user: right → [bubble, actionEl, metaEl, timeEl]
+  // (bubbleWrap and copyBtn created in bot branch below)
 
   msg.appendChild(avatar);
   msg.appendChild(right);
   chatWindow.appendChild(msg);
-  chatWindow.scrollTop = chatWindow.scrollHeight;
 
-  // Bot messages get typewriter; user messages appear instantly
-  if (role === 'bot') {
-    typewrite(bubble, text, metaEl);
+  // If user is scrolled near bottom, auto-scroll; otherwise show the button
+  const distFromBottom = chatWindow.scrollHeight - chatWindow.scrollTop - chatWindow.clientHeight;
+  if (distFromBottom < 120) {
+    chatWindow.scrollTop = chatWindow.scrollHeight;
   } else {
+    const sb = document.getElementById('scroll-btn');
+    if (sb) sb.classList.add('visible');
+  }
+
+  // Bot messages get typewriter; user messages appear instantly.
+  // Return the promise so callers can await full completion.
+  if (role === 'bot') {
+    // Copy button — absolutely positioned over the bubble via .bubble-wrap
+    // Lives as a sibling of bubble so typewriter text nodes never touch it
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.textContent = '⎘ COPY';
+    copyBtn.setAttribute('aria-label', 'Copy response');
+    copyBtn.addEventListener('click', () => {
+      const textToCopy = bubble.textContent.trim();
+      const succeed = () => {
+        copyBtn.textContent = '✓ COPIED';
+        copyBtn.classList.add('copied');
+        setTimeout(() => {
+          copyBtn.textContent = '⎘ COPY';
+          copyBtn.classList.remove('copied');
+        }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy).then(succeed).catch(() => {
+          // Fallback
+          const sel = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(bubble);
+          sel.removeAllRanges(); sel.addRange(range);
+          document.execCommand('copy');
+          sel.removeAllRanges();
+          succeed();
+        });
+      } else {
+        const sel = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(bubble);
+        sel.removeAllRanges(); sel.addRange(range);
+        document.execCommand('copy');
+        sel.removeAllRanges();
+        succeed();
+      }
+    });
+
+    // Wrap bubble + copy btn together so copy-btn can position over bubble
+    const bubbleWrap = document.createElement('div');
+    bubbleWrap.className = 'bubble-wrap';
+    bubbleWrap.appendChild(bubble);
+    bubbleWrap.appendChild(copyBtn);
+    // Build right in order: bubbleWrap → actions → meta → timestamp
+    right.appendChild(bubbleWrap);
+    if (actionEl && actionEl.children.length) right.appendChild(actionEl);
+    if (metaEl) right.appendChild(metaEl);
+    right.appendChild(timeEl);
+
+    // Rephrase block — appended to right for hedged responses
+    if (_isHedged) {
+      const rephraseQueries = [
+        'Who are you?',
+        'What are your skills?',
+        'Tell me about your projects',
+        'Why should I hire you?',
+        'What is your best project?',
+      ];
+      // Pick 3 random suggestions
+      const picked = rephraseQueries
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 3);
+
+      const rephraseBlock = document.createElement('div');
+      rephraseBlock.className = 'rephrase-block';
+
+      const rephraseLabel = document.createElement('div');
+      rephraseLabel.className = 'rephrase-label';
+      rephraseLabel.textContent = '>> NOT SURE? TRY ONE OF THESE:';
+      rephraseBlock.appendChild(rephraseLabel);
+
+      const chipsRow = document.createElement('div');
+      chipsRow.className = 'rephrase-chips';
+      picked.forEach(q => {
+        const chip = document.createElement('button');
+        chip.className = 'rephrase-chip';
+        chip.textContent = q;
+        chip.addEventListener('click', () => quickAsk(q));
+        chipsRow.appendChild(chip);
+      });
+      rephraseBlock.appendChild(chipsRow);
+      right.appendChild(rephraseBlock);
+    }
+
+    // Skip row lives OUTSIDE the message box — appended to chatWindow
+    // directly after msg so it never crowds the bubble content
+    const skipBtn = document.createElement('button');
+    skipBtn.className = 'skip-btn';
+    skipBtn.textContent = '▶▶ SKIP';
+    skipBtn.setAttribute('aria-label', 'Skip typewriter animation');
+    skipBtn.addEventListener('click', () => { _skipTypewriter = true; });
+    const skipRow = document.createElement('div');
+    skipRow.className = 'skip-row';
+    skipRow.appendChild(skipBtn);
+    chatWindow.appendChild(skipRow);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    if (_instantRender) {
+      bubble.textContent = text;
+      skipRow.remove();
+      if (actionEl) actionEl.style.opacity = '1';
+      if (metaEl) metaEl.style.opacity = '1';
+      return Promise.resolve();
+    }
+    return typewrite(bubble, text, metaEl, 18, actionEl, skipRow);
+  } else {
+    right.appendChild(bubble);
     bubble.textContent = text;
+    if (actionEl && actionEl.children.length) right.appendChild(actionEl);
+    if (metaEl) right.appendChild(metaEl);
+    right.appendChild(timeEl);
+    if (actionEl) actionEl.style.opacity = '1';
     if (metaEl) metaEl.style.opacity = '1';
+    return Promise.resolve();
   }
 
   return msg;
@@ -1837,13 +4258,443 @@ function hideTyping() {
   if (t) t.remove();
 }
 
+// Generate a shared session ID (persisted in localStorage) so all tabs/iframes
+// share the same backend conversation context. Expires after 30 min of inactivity.
+const SESSION_ID = (() => {
+  const KEY = 'cfSessionId';
+  const TS_KEY = 'cfSessionTs';
+  const TTL = 30 * 60 * 1000;
+  const ts = parseInt(localStorage.getItem(TS_KEY) || '0', 10);
+  const now = Date.now();
+  if (now - ts > TTL) {
+    localStorage.removeItem('cfChatHistory');
+  }
+  let id = localStorage.getItem(KEY);
+  if (!id || now - ts > TTL) {
+    id = (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : Math.random().toString(36).slice(2) + now.toString(36);
+    localStorage.setItem(KEY, id);
+  }
+  localStorage.setItem(TS_KEY, now.toString());
+  return id;
+})();
+
+// ── Chat Sync Engine ──────────────────────────────────────────────────────────
+// Shares chat history across tabs/iframes via localStorage + BroadcastChannel.
+// - localStorage: persists message history so new instances can replay it
+// - BroadcastChannel: pushes messages to other open instances in real-time
+const CF_HISTORY_KEY  = 'cfChatHistory';
+const CF_SYNC_KEY     = 'cfChatSyncEvent';
+const CF_MAX_HISTORY  = 100;
+const CF_INSTANCE_ID  = ((typeof crypto !== 'undefined' && crypto.randomUUID)
+  ? crypto.randomUUID()
+  : Math.random().toString(36).slice(2) + Date.now().toString(36));
+
+let _isSyncMessage      = false;  // true when rendering a message from another tab
+let _isReplayingHistory = false;  // true when replaying stored history on load
+let _lastClearSyncTs    = 0;
+
+const _chatChannel = (typeof BroadcastChannel !== 'undefined')
+  ? new BroadcastChannel('cf-chat-sync')
+  : null;
+
+function _getChatHistory() {
+  try {
+    const history = JSON.parse(localStorage.getItem(CF_HISTORY_KEY) || '[]');
+    return Array.isArray(history) ? history : [];
+  }
+  catch { return []; }
+}
+
+const _seenChatMessageIds = new Set(
+  _getChatHistory()
+    .map(entry => entry && entry.id)
+    .filter(Boolean)
+);
+
+function _newChatMessageId() {
+  return CF_INSTANCE_ID + ':' + Date.now().toString(36) + ':' + Math.random().toString(36).slice(2, 8);
+}
+
+function _normalizeChatEntry(entry) {
+  if (!entry) return null;
+  return {
+    id: entry.id || _newChatMessageId(),
+    role: entry.role,
+    text: entry.text || '',
+    meta: entry.meta || '',
+    actions: Array.isArray(entry.actions) ? entry.actions : [],
+    hedged: !!entry.hedged,
+    ts: entry.ts || Date.now()
+  };
+}
+
+function _saveChatMessage(role, text, meta, actions, hedged) {
+  if (_isReplayingHistory || _isSyncMessage) return null;
+  const entry = _normalizeChatEntry({ role, text, meta, actions, hedged });
+  const history = _getChatHistory();
+  history.push(entry);
+  while (history.length > CF_MAX_HISTORY) history.shift();
+  localStorage.setItem(CF_HISTORY_KEY, JSON.stringify(history));
+  localStorage.setItem('cfSessionTs', Date.now().toString());
+  _seenChatMessageIds.add(entry.id);
+  return entry;
+}
+
+function _publishSyncEvent(payload) {
+  const event = { ...payload, source: CF_INSTANCE_ID, ts: Date.now() };
+  try { localStorage.setItem(CF_SYNC_KEY, JSON.stringify(event)); } catch {}
+  if (_chatChannel) _chatChannel.postMessage(event);
+}
+
+function _broadcastChatMessage(entry) {
+  if (_isSyncMessage || _isReplayingHistory || !entry) return;
+  _publishSyncEvent({ type: 'message', entry });
+}
+
+function _broadcastClear() {
+  _publishSyncEvent({ type: 'clear' });
+}
+
+function _clearChatHistory() {
+  localStorage.removeItem(CF_HISTORY_KEY);
+  _seenChatMessageIds.clear();
+}
+
+function _resetChatWindow() {
+  chatWindow.innerHTML = '';
+  const sb = document.getElementById('scroll-btn');
+  if (sb) sb.classList.remove('visible');
+  _totalMsgs = 0; _turnCount = 0;
+  const te = document.getElementById('turns-val'); if (te) te.textContent = '0';
+  const me = document.getElementById('msgs-val');  if (me) me.textContent  = '0';
+}
+
+function _renderSyncedMessage(entry) {
+  const normalized = _normalizeChatEntry(entry);
+  if (!normalized || !normalized.role || normalized.ts < _lastClearSyncTs || _seenChatMessageIds.has(normalized.id)) return;
+  _seenChatMessageIds.add(normalized.id);
+  _isSyncMessage = true;
+  addMessage(normalized.role, normalized.text, normalized.meta, normalized.actions, normalized.hedged);
+  _isSyncMessage = false;
+}
+
+function _renderClearedState(eventTs = Date.now()) {
+  _lastClearSyncTs = Math.max(_lastClearSyncTs, eventTs);
+  _resetChatWindow();
+  _seenChatMessageIds.clear();
+  _isSyncMessage = true;
+  addMessage('bot',
+    '>> SESSION CLEARED. Terminal reset.\n>> CYBERFORGE AI \u2014 standing by.\n\n>> Ask me anything.',
+    '', [], false
+  );
+  _isSyncMessage = false;
+}
+
+function _handleSyncEvent(event) {
+  if (!event || event.source === CF_INSTANCE_ID) return;
+  if (event.type === 'message') {
+    _renderSyncedMessage(event.entry || event);
+  } else if (event.type === 'clear') {
+    _renderClearedState(event.ts);
+  }
+}
+
+if (_chatChannel) {
+  _chatChannel.onmessage = (e) => {
+    _handleSyncEvent(e.data);
+  };
+}
+
+window.addEventListener('storage', (e) => {
+  if (e.key !== CF_SYNC_KEY || !e.newValue) return;
+  try { _handleSyncEvent(JSON.parse(e.newValue)); } catch {}
+});
+
+// ── Busy state helpers ────────────────────────────────────────────────────────
+let _isBusy = false;
+
+function setInputLocked(locked) {
+  _isBusy = locked;
+
+  // Send button
+  sendBtn.disabled = locked;
+  if (locked) {
+    sendBtn.textContent = 'TRANSMITTING';
+    sendBtn.classList.add('transmitting');
+  } else {
+    sendBtn.textContent = 'TRANSMIT';
+    sendBtn.classList.remove('transmitting');
+  }
+
+  // Input field — stays editable even while transmitting so the user can
+  // pre-type their next message. Send (button + Enter) is still blocked by
+  // _isBusy, so nothing fires until the response is fully received.
+  userInput.contentEditable = 'true';
+  userInput.setAttribute('aria-disabled', 'false');
+
+  // Clear queued label when transmission ends
+  if (!locked) {
+    const ql = document.getElementById('queued-label');
+    if (ql) ql.classList.remove('visible');
+  }
+
+  // Quick access sidebar buttons
+  document.querySelectorAll('.qcmd').forEach(btn => {
+    btn.disabled = locked;
+    btn.setAttribute('aria-disabled', locked ? 'true' : 'false');
+  });
+}
+
+// ── Voice Integration ─────────────────────────────────────────────────────────
+// Speech-to-text (STT) via Web Speech API + Text-to-speech (TTS) via SpeechSynthesis
+
+const micBtn = document.getElementById('mic-btn');
+let _recognition = null;
+let _isListening = false;
+let _ttsEnabled = false;        // Dedicated voice mode lives at /voice.
+let _currentUtterance = null;
+
+// Check browser support
+const STT_SUPPORTED = ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
+const TTS_SUPPORTED = ('speechSynthesis' in window);
+
+if (!STT_SUPPORTED) {
+  // Show a small warning badge but keep the button visible (grayed)
+  micBtn.disabled = true;
+  micBtn.title = 'Voice input not supported in this browser';
+  const notice = document.getElementById('voice-unsupported');
+  if (notice) { notice.style.display = 'inline-block'; notice.textContent = 'MIC UNAVAILABLE'; }
+}
+
+// ── Speech-to-Text ────────────────────────────────────────────────────────────
+function initRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const rec = new SR();
+  rec.lang = 'en-US';
+  rec.interimResults = true;
+  rec.maxAlternatives = 1;
+  rec.continuous = false;
+
+  let _finalTranscript = '';
+
+  rec.onstart = () => {
+    _isListening = true;
+    _finalTranscript = '';
+    micBtn.classList.add('listening');
+    micBtn.title = 'Listening… click to stop';
+    // Show interim placeholder in input
+    if (!userInput.textContent.trim()) {
+      userInput.setAttribute('data-placeholder', '🎙 Listening…');
+    }
+  };
+
+  rec.onresult = (e) => {
+    let interim = '';
+    _finalTranscript = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) {
+        _finalTranscript += e.results[i][0].transcript;
+      } else {
+        interim += e.results[i][0].transcript;
+      }
+    }
+    // Show interim result live in input
+    userInput.textContent = _finalTranscript || interim;
+    updateCharCounter();
+    // Move cursor to end
+    const range = document.createRange();
+    const sel = window.getSelection();
+    range.selectNodeContents(userInput);
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  };
+
+  rec.onerror = (e) => {
+    console.warn('[Voice] STT error:', e.error);
+    stopListening();
+    if (e.error === 'not-allowed') {
+      addActivity('MIC ACCESS DENIED');
+    }
+  };
+
+  rec.onend = () => {
+    stopListening();
+    // Auto-send if we got a final transcript
+    if (_finalTranscript.trim()) {
+      userInput.textContent = _finalTranscript.trim();
+      updateCharCounter();
+      setTimeout(() => sendMessage(), 120);
+    }
+  };
+
+  return rec;
+}
+
+function startListening() {
+  if (_isBusy) return;
+  if (!STT_SUPPORTED) return;
+  // Stop any ongoing TTS before listening
+  stopTTS();
+  _recognition = initRecognition();
+  try {
+    _recognition.start();
+  } catch(e) {
+    console.warn('[Voice] Could not start recognition:', e);
+  }
+}
+
+function stopListening() {
+  _isListening = false;
+  micBtn.classList.remove('listening');
+  micBtn.title = 'Voice input';
+  userInput.setAttribute('data-placeholder', 'Enter query, human...');
+  if (_recognition) {
+    try { _recognition.stop(); } catch(e) {}
+    _recognition = null;
+  }
+}
+
+micBtn.addEventListener('click', () => {
+  if (_isListening) {
+    stopListening();
+  } else {
+    startListening();
+  }
+});
+
+// Also disable mic when input is locked (patch: voice-aware setInputLocked)
+// We patch via a post-call hook using a MutationObserver on send-btn disabled attr
+const _micLockObserver = new MutationObserver(() => {
+  const locked = sendBtn.disabled;
+  if (locked && _isListening) stopListening();
+  if (STT_SUPPORTED) micBtn.disabled = locked;
+});
+_micLockObserver.observe(sendBtn, { attributes: true, attributeFilter: ['disabled'] });
+
+// ── Text-to-Speech ────────────────────────────────────────────────────────────
+function speak(text) {
+  if (!TTS_SUPPORTED || !_ttsEnabled) return;
+  stopTTS();
+  // Strip special characters / >> prefixes common in responses
+  const clean = text
+    .replace(/>>?\s*/g, '')
+    .replace(/[*_`#]/g, '')
+    .replace(/\n{2,}/g, '. ')
+    .replace(/\n/g, ' ')
+    .trim();
+  if (!clean) return;
+
+  // Trim to reasonable length for TTS (avoid reading walls of text)
+  const MAX_TTS_CHARS = 500;
+  const snippet = clean.length > MAX_TTS_CHARS
+    ? clean.slice(0, MAX_TTS_CHARS) + '…'
+    : clean;
+
+  const utterance = new SpeechSynthesisUtterance(snippet);
+  utterance.rate = 1.0;
+  utterance.pitch = 1.0;
+  utterance.volume = 1.0;
+  // Try to pick a good voice — prefer a natural English one
+  const voices = speechSynthesis.getVoices();
+  const preferred = voices.find(v =>
+    v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Samantha'))
+  ) || voices.find(v => v.lang.startsWith('en')) || null;
+  if (preferred) utterance.voice = preferred;
+
+  _currentUtterance = utterance;
+  speechSynthesis.speak(utterance);
+}
+
+function stopTTS() {
+  if (TTS_SUPPORTED) speechSynthesis.cancel();
+  _currentUtterance = null;
+  // Reset any speaking TTS buttons
+  document.querySelectorAll('.tts-btn.speaking').forEach(b => {
+    b.classList.remove('speaking');
+    b.textContent = '▶ SPEAK';
+  });
+}
+
+// ── Auto-speak bot responses ──────────────────────────────────────────────────
+// Watch for new bot messages appearing in the chat window and speak them + add TTS button
+const _chatObserver = new MutationObserver((mutations) => {
+  for (const mut of mutations) {
+    for (const node of mut.addedNodes) {
+      if (node.nodeType !== 1) continue;
+      if (!node.classList.contains('msg') || !node.classList.contains('bot')) continue;
+      // Wait for typewriter to finish by watching for the bubble's text to stabilize
+      const bubble = node.querySelector('.bubble');
+      if (!bubble) continue;
+      // Add TTS button row when bubble content is done (we poll briefly)
+      let _checkCount = 0;
+      let _lastLen = 0;
+      const _pollId = setInterval(() => {
+        _checkCount++;
+        const len = bubble.textContent.length;
+        if (len === _lastLen && len > 0) {
+          clearInterval(_pollId);
+          // Speak the final text
+          const finalText = bubble.textContent;
+          if (_ttsEnabled) speak(finalText);
+          return;
+          // Add TTS button inside bubble-wrap
+          const wrap = node.querySelector('.bubble-wrap');
+          if (!wrap || wrap.querySelector('.tts-btn')) return;
+          const ttsRow = document.createElement('div');
+          ttsRow.style.cssText = 'display:flex;gap:6px;margin-top:6px;align-items:center;';
+          const ttsBtn = document.createElement('button');
+          ttsBtn.className = 'tts-btn';
+          ttsBtn.textContent = '▶ SPEAK';
+          ttsBtn.setAttribute('aria-label', 'Read aloud');
+          ttsBtn.addEventListener('click', () => {
+            if (ttsBtn.classList.contains('speaking')) {
+              stopTTS();
+            } else {
+              stopTTS();
+              ttsBtn.classList.add('speaking');
+              ttsBtn.textContent = '■ STOP';
+              const utt = new SpeechSynthesisUtterance(
+                finalText.replace(/>>?\s*/g,'').replace(/[*_`#]/g,'').replace(/\n+/g,' ').trim().slice(0,600)
+              );
+              utt.rate = 1.0;
+              const voices = speechSynthesis.getVoices();
+              const v = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google')||v.name.includes('Samantha')))
+                     || voices.find(v => v.lang.startsWith('en')) || null;
+              if (v) utt.voice = v;
+              utt.onend = utt.onerror = () => {
+                ttsBtn.classList.remove('speaking');
+                ttsBtn.textContent = '▶ SPEAK';
+              };
+              speechSynthesis.speak(utt);
+            }
+          });
+          ttsRow.appendChild(ttsBtn);
+          wrap.appendChild(ttsRow);
+        }
+        _lastLen = len;
+        if (_checkCount > 120) clearInterval(_pollId); // 12s timeout
+      }, 100);
+    }
+  }
+});
+_chatObserver.observe(chatWindow, { childList: true });
+
 async function sendMessage() {
+  if (_isBusy) return;                        // hard guard — ignore any stray calls
   const text = userInput.textContent.trim();
   if (!text) return;
+  // Remove suggested chips the moment user sends anything manually
+  const _es = document.getElementById('empty-state');
+  if (_es) _es.remove();
 
   userInput.textContent = '';
+  updateCharCounter();
   acList.classList.remove('open');
-  sendBtn.disabled = true;
+  setInputLocked(true);                       // lock everything
+  resetRingToStandby();                       // unlock ring so THINKING shows clean
 
   // Show THINKING on the confidence ring
   setConfidence(0, 'THINKING...');
@@ -1852,42 +4703,170 @@ async function sendMessage() {
   addMessage('user', text);
   addActivity('Query: ' + text.substring(0, 25));
   sndBlip();   // terminal blip on transmit
+  const _queryStart = Date.now();
   showTyping();
 
   try {
     const res = await fetch('/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text })
+      body: JSON.stringify({ message: text, session_id: SESSION_ID })
     });
 
     const data = await res.json();
     hideTyping();
 
     // Update confidence ring with real score (scale to 0–100%)
-    const scorePct = Math.min(100, Math.round((data.score / 20) * 100));
-    const scoreLabel = scorePct > 60 ? 'MATCHED' : scorePct > 30 ? 'PARTIAL' : 'LOW MATCH';
-    setConfidence(scorePct, scoreLabel);
+    const scorePct = Math.min(100, Math.round(data.confidence ?? data.score ?? 0));
+    const scoreLabel = scorePct >= 85 ? 'HIGH MATCH' : scorePct >= 60 ? 'GOOD MATCH' : scorePct > 0 ? 'LOW MATCH' : 'NO MATCH';
+    setConfidence(scorePct, scoreLabel, true);   // real score — freeze ring
 
     const scoreInfo = data.score > 0
-      ? `SCORE: <span class="score-badge">${data.score}pts</span>  FILE: ${data.file || '—'}`
-      : 'SCORE: 0 — no match';
+      ? `CONFIDENCE: ${scoreLabel}`
+      : 'NO CONFIDENT MATCH';
 
-    addMessage('bot', data.response, scoreInfo);
+    // Await typewriter — unlock only after text is fully typed out
+    await addMessage('bot', data.response, scoreInfo, data.actions || [], data.is_hedged || false);
     sndChime();   // success chime on bot reply
-    addActivity('Response: score=' + data.score);
+    if (typeof recordRespTime === 'function') recordRespTime(Date.now() - _queryStart);
+    addActivity('Response: ' + scoreLabel);
 
   } catch (err) {
     hideTyping();
-    addMessage('bot', '>> CONNECTION ERROR. Backend unreachable.\n>> Ensure app.py is running on port 5000.');
+    await addMessage('bot', '>> CONNECTION ERROR. Backend unreachable.\n>> Ensure app.py is running on port 5000.');
     addActivity('ERROR: fetch failed');
   }
 
-  sendBtn.disabled = false;
-  userInput.focus();
+  setInputLocked(false);                      // unlock everything
+  // Only auto-focus on desktop — on mobile this would pop up the keyboard
+  // immediately after every response which is jarring
+  if (window.innerWidth > 600) userInput.focus();
+
+}
+
+// ── Scroll-to-bottom button ──────────────────────────────────────────────────
+const scrollBtn = document.getElementById('scroll-btn');
+
+chatWindow.addEventListener('scroll', () => {
+  const distFromBottom = chatWindow.scrollHeight - chatWindow.scrollTop - chatWindow.clientHeight;
+  scrollBtn.classList.toggle('visible', distFromBottom > 120);
+});
+
+scrollBtn.addEventListener('click', () => {
+  chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
+  scrollBtn.classList.remove('visible');
+});
+
+// ── Clear chat ────────────────────────────────────────────────────────────────
+const clrBtn     = document.getElementById('clr-btn');
+const clrOverlay = document.getElementById('clr-overlay');
+const clrConfirm = document.getElementById('clr-confirm');
+const clrCancel  = document.getElementById('clr-cancel');
+
+clrBtn.addEventListener('click', () => {
+  clrOverlay.classList.add('open');
+  setTimeout(() => clrConfirm.focus(), 50);
+});
+clrCancel.addEventListener('click', () => clrOverlay.classList.remove('open'));
+clrOverlay.addEventListener('click', (e) => {
+  if (e.target === clrOverlay) clrOverlay.classList.remove('open');
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && clrOverlay.classList.contains('open'))
+    clrOverlay.classList.remove('open');
+});
+
+clrConfirm.addEventListener('click', () => {
+  _clearChatHistory();
+  _resetChatWindow();
+  clrOverlay.classList.remove('open');
+  addMessage('bot',
+    '>> SESSION CLEARED. Terminal reset.\n>> CYBERFORGE AI — standing by.\n\n>> Ask me anything.',
+    '', [], false
+  );
+  _broadcastClear();
+});
+
+// ── Queued message label ─────────────────────────────────────────────────────
+// Shows below the input bar while transmitting so the user knows their
+// pre-typed message is queued and will fire once the response lands.
+const queuedLabel = document.getElementById('queued-label');
+
+function updateQueuedLabel() {
+  if (!_isBusy) { queuedLabel.classList.remove('visible'); return; }
+  const draft = userInput.textContent.trim();
+  if (draft) {
+    queuedLabel.textContent = '⏎ queued: ' + (draft.length > 48 ? draft.slice(0, 48) + '…' : draft);
+    queuedLabel.classList.add('visible');
+  } else {
+    queuedLabel.classList.remove('visible');
+  }
+}
+
+// Update queued label on every keystroke
+userInput.addEventListener('input', updateQueuedLabel);
+
+// Also hook into setInputLocked so label clears when transmission ends
+const _origSetInputLocked = setInputLocked;
+// patch: wrap to also update label
+const _patchedSetInputLocked = function(locked) {
+  _origSetInputLocked(locked);
+  if (!locked) queuedLabel.classList.remove('visible');
+};
+// replace reference (setInputLocked is called by name inside async fn, so patch via wrapper)
+// We handle this by calling updateQueuedLabel inside the input event above +
+// watching _isBusy in sendMessage completion path instead.
+
+// ── Mobile quick-command tray ─────────────────────────────────────────────────
+const quickTrayBtn      = document.getElementById('quick-tray-btn');
+const quickTray         = document.getElementById('quick-tray');
+const quickTrayBackdrop = document.getElementById('quick-tray-backdrop');
+
+function openTray() {
+  quickTray.classList.add('open');
+  quickTrayBackdrop.classList.add('open');
+  quickTrayBtn.setAttribute('aria-expanded', 'true');
+  // animate in
+  requestAnimationFrame(() => quickTray.style.transform = 'translateY(0)');
+}
+
+function closeTray() {
+  quickTray.classList.remove('open');
+  quickTrayBackdrop.classList.remove('open');
+  quickTrayBtn.setAttribute('aria-expanded', 'false');
+}
+
+quickTrayBtn.addEventListener('click', () => {
+  quickTray.classList.contains('open') ? closeTray() : openTray();
+});
+quickTrayBackdrop.addEventListener('click', closeTray);
+
+// Swipe-down to close the tray
+let _trayTouchStartY = 0;
+quickTray.addEventListener('touchstart', e => { _trayTouchStartY = e.touches[0].clientY; }, { passive: true });
+quickTray.addEventListener('touchend', e => {
+  const dy = e.changedTouches[0].clientY - _trayTouchStartY;
+  if (dy > 60) closeTray();  // swiped down ≥60px → close
+}, { passive: true });
+
+function trayAsk(q) {
+  closeTray();
+  // small delay so the tray animates out before the message fires
+  setTimeout(() => quickAsk(q), 160);
+}
+
+// ── Sidebar section toggle ────────────────────────────────────────────────────
+function togglePanel(id) {
+  const title = document.getElementById(id + '-title');
+  const body  = document.getElementById(id + '-body');
+  if (!title || !body) return;
+  const isCollapsed = body.classList.contains('collapsed');
+  body.classList.toggle('collapsed', !isCollapsed);
+  title.classList.toggle('collapsed', !isCollapsed);
 }
 
 function quickAsk(q) {
+  if (_isBusy) return;                        // ignore clicks while processing
   userInput.textContent = q;
   sendMessage();
 }
@@ -1898,6 +4877,8 @@ window.addEventListener('resize', () => {});  // no-op, contenteditable handles 
 
 // ── Init chat after boot ──────────────────────────────────────────────────────
 async function initChat() {
+  await loadSuggestions();
+
   // Fetch system status
   try {
     const s = await fetch('/status');
@@ -1907,20 +4888,76 @@ async function initChat() {
     document.getElementById('conn-dot').classList.remove('red');
     document.getElementById('conn-label').textContent = 'ONLINE';
     addActivity('System status: ONLINE');
-    addActivity(`${d.responses_loaded}/${d.total_entries} responses loaded`);
+    // responses loaded line removed
   } catch {
     document.getElementById('conn-dot').classList.add('red');
     document.getElementById('conn-label').textContent = 'OFFLINE';
   }
 
-  addMessage('bot',
+  // ── Chat sync: replay stored history if available ──
+  const _storedHistory = _getChatHistory();
+  if (_storedHistory.length > 0) {
+    _isReplayingHistory = true;
+    for (const entry of _storedHistory) {
+      await addMessage(entry.role, entry.text, entry.meta, entry.actions, entry.hedged);
+    }
+    _isReplayingHistory = false;
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    if (window.innerWidth > 600) userInput.focus();
+    return;
+  }
+
+  await addMessage('bot',
     '>> CYBERFORGE AI ONLINE.\n' +
-    '>> Neural matrix loaded. Keyword scoring engine ACTIVE.\n' +
+    '>> Neural matrix loaded. Natural intent matching ACTIVE.\n' +
     '>> Enter your query, Operator.\n' +
-    '>> Type anything — I will find the best match.'
+    '>> Ask naturally - I will find the best match.'
   );
 
-  userInput.focus();
+  // ── Suggested prompt chips — first load only ─────────────────────────────
+  const emptyState = document.createElement('div');
+  emptyState.id = 'empty-state';
+
+  const esLabel = document.createElement('div');
+  esLabel.id = 'empty-state-label';
+  esLabel.textContent = '>> SUGGESTED QUERIES';
+  emptyState.appendChild(esLabel);
+
+  const chipsWrap = document.createElement('div');
+  chipsWrap.id = 'empty-state-chips';
+
+  const suggestions = [
+    ['Who are you?',     'Who are you'],
+    ['Best project?',    'What is your best project'],
+    ['Skills?',          'What are your skills'],
+    ['Hire you?',        'Why should we hire you'],
+    ['VConnect?',        'What is VConnect'],
+    ['Tech Stack?',      'What technologies do you know'],
+    ['LogiSense?',       'Tell me about LogiSense'],
+    ['CyberForge?',      'Tell me about CyberForge chatbot'],
+  ];
+
+  const removeChips = () => {
+    const es = document.getElementById('empty-state');
+    if (es) es.remove();
+  };
+
+  suggestions.forEach(([lbl, query]) => {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.textContent = lbl;
+    chip.addEventListener('click', () => { removeChips(); quickAsk(query); });
+    chipsWrap.appendChild(chip);
+  });
+
+  emptyState.appendChild(chipsWrap);
+  chatWindow.appendChild(emptyState);
+
+  // Remove chips the moment user starts typing or sends manually
+  const _chipInputHandler = () => { removeChips(); userInput.removeEventListener('input', _chipInputHandler); };
+  userInput.addEventListener('input', _chipInputHandler);
+
+  if (window.innerWidth > 600) userInput.focus();
 }
 
 // ── Welcome Popup ─────────────────────────────────────────────────────────────
@@ -1928,7 +4965,16 @@ async function initChat() {
   const overlay = document.getElementById('welcome-overlay');
   const popup   = document.getElementById('welcome-popup');
 
+  if (!overlay || !popup) return;
+
+  if (localStorage.getItem('cfWelcomeSeen') === '1') {
+    overlay.remove();
+    popup.remove();
+    return;
+  }
+
   function closePopup() {
+    localStorage.setItem('cfWelcomeSeen', '1');
     overlay.classList.add('fade-out');
     popup.classList.add('fade-out');
     setTimeout(() => {
@@ -1945,6 +4991,89 @@ async function initChat() {
 })();
 
 runBoot();
+
+// ── Waveform Visualizer ────────────────────────────────────────────────────
+(function() {
+  const wrap = document.getElementById('waveform-wrap');
+  if (!wrap) return;
+  const bars = 24;
+  const heights = [4,8,14,20,16,10,6,18,22,14,8,12,20,16,10,7,18,14,9,20,12,8,16,10];
+  const durs = [0.7,0.9,0.6,1.1,0.8,1.0,0.7,0.85,0.65,0.95,1.2,0.75,0.9,0.6,1.1,0.8,0.7,1.0,0.85,0.65,0.9,0.75,0.8,1.1];
+  for (let i = 0; i < bars; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'waveform-bar';
+    bar.style.setProperty('--h', heights[i] + 'px');
+    bar.style.setProperty('--dur', durs[i] + 's');
+    bar.style.animationDelay = (i * 0.03) + 's';
+    wrap.appendChild(bar);
+  }
+
+  // Speed up bars when AI is responding
+  function setWaveActive(active) {
+    document.querySelectorAll('.waveform-bar').forEach((bar, i) => {
+      bar.style.setProperty('--dur', active ? (durs[i] * 0.35 + 's') : (durs[i] + 's'));
+      bar.style.background = active ? 'var(--green)' : 'var(--green-dim)';
+      bar.style.boxShadow = active ? '0 0 6px rgba(0,255,136,0.55)' : '0 0 4px rgba(0,255,136,0.30)';
+    });
+  }
+
+  // Observe _isBusy via polling
+  setInterval(() => {
+    if (typeof _isBusy !== 'undefined') setWaveActive(_isBusy);
+  }, 300);
+})();
+
+// ── Mobile Context Strip ────────────────────────────────────────────────────
+function updateContextStrip(text) {
+  const strip = document.getElementById('mobile-context-strip');
+  const val   = document.getElementById('ctx-value');
+  if (!strip || !val) return;
+  if (window.innerWidth <= 600) {
+    strip.style.display = 'flex';
+    val.textContent = text;
+  }
+}
+
+// Hook into addMessage to update context strip
+const _origAddMessage = typeof addMessage === 'function' ? addMessage : null;
+
+// ── Mobile Tray Filter ──────────────────────────────────────────────────────
+function filterTray(cat) {
+  document.querySelectorAll('.tray-tab').forEach(t => t.classList.remove('active'));
+  const clicked = Array.from(document.querySelectorAll('.tray-tab')).find(t => t.textContent.toLowerCase() === cat.toLowerCase() || (cat === 'all' && t.textContent === 'ALL') || (cat === 'projects' && t.textContent === 'PROJECTS') || (cat === 'skills' && t.textContent === 'SKILLS') || (cat === 'career' && t.textContent === 'CAREER') || (cat === 'easter' && t.textContent === 'SECRETS'));
+  if (clicked) clicked.classList.add('active');
+
+  const cmds = document.querySelectorAll('#quick-tray-grid .tray-cmd');
+  if (cat === 'all') {
+    cmds.forEach(c => { c.style.display = ''; });
+  } else if (cat === 'easter') {
+    cmds.forEach(c => { c.style.display = 'none'; });
+    // Show easter egg commands
+    const eggs = ['Initialize CyberForge', 'Enter hacker mode', 'Run system scan', 'Wake up CyberForge AI'];
+    cmds.forEach(c => {
+      if (eggs.some(e => c.textContent.trim() === e)) c.style.display = '';
+    });
+  } else {
+    cmds.forEach(c => {
+      const dataCat = c.getAttribute('data-cat') || 'all';
+      c.style.display = (dataCat === cat || dataCat === 'all') ? '' : 'none';
+    });
+  }
+}
+
+// Show mobile strip when user sends
+document.addEventListener('DOMContentLoaded', () => {
+  const sBtn = document.getElementById('send-btn');
+  if (sBtn) {
+    const _origClick = sBtn.onclick;
+    sBtn.onclick = function() {
+      const inp = document.getElementById('user-input');
+      if (inp) updateContextStrip(inp.textContent.trim().slice(0, 38) || 'PROCESSING...');
+      if (_origClick) _origClick.apply(this, arguments);
+    };
+  }
+});
+
 </script>
 </body>
 </html>

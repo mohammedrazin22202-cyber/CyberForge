@@ -1,7 +1,5 @@
-You're already here. Welcome to CyberForge.
+You are inside CyberForge already.
 
-This is the full portfolio: projects, technical depth, background, and this chatbot — all built by Mohammed Razin H.
+This portfolio brings together my projects, technical depth, background, achievements, certifications, contact links, and this chatbot.
 
-Navigate using the chips below, ask me anything directly, or check the contact section to start a conversation.
-
-→ Add your deployed portfolio URL here if you host it publicly.
+Use the portfolio button below to return to the main page anytime.

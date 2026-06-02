@@ -1,60 +1,63 @@
 # CYBERFORGE AI CHATBOT
 
+CyberForge is a portfolio chatbot built around a curated response dataset. It serves the main portfolio at `/` and the standalone chatbot at `/chatbot`.
+
 ## Project Structure
 
-```
-cyberforge_chatbot/
-│
-├── app.py              ← Flask backend (run this)
-├── dataset.json        ← Auto-generated from DataSet.xlsx
-├── requirements.txt    ← Python dependencies
-│
-├── responses/          ← ⚡ PUT YOUR .txt RESPONSE FILES HERE
-│   ├── 1.1.Who are you.txt
-│   ├── 1.2.What is CyberForge.txt
-│   ├── ... (all 150 response files)
-│   └── fallback.txt    ← shown when no match is found
-│
-└── static/
-    └── index.html      ← Matrix-style UI (auto-served)
+```text
+CyberForge/
+├── app.py              Flask backend and matching engine
+├── dataset.json        Generated from DataSet.xlsx
+├── DataSet.xlsx        Source response trigger sheet
+├── build_dataset.py    Regenerates dataset.json
+├── requirements.txt    Python dependencies
+├── responses/          Curated response text files
+├── static/index.html   Chatbot UI
+└── portfolio/          Portfolio page, resume, and assets
 ```
 
 ## Setup
 
-1. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-
-2. Place all your response `.txt` files inside the `responses/` folder.
-   File names must exactly match those in `dataset.json` (column: File Name).
-
-3. Run the chatbot:
-   ```
-   python app.py
-   ```
-
-   The browser will open automatically at http://localhost:5000
-
-## How the Scoring Works
-
-For every user message, each of the 150 entries is scored:
-
-| Match Type       | Points |
-|------------------|--------|
-| Key sentence     | +5 pts |
-| Single keyword   | +1 pt  |
-
-Key sentences include: Core Intent, Response triggers (Recruiter/Casual/Technical),
-Short Triggers, Typos, and Fuzzy matches.
-
-Keywords include: all Technical, Casual, Fuzzy, and Typo keyword columns.
-
-The entry with the **highest total score** wins and its response file is served.
-
-## Regenerating dataset.json
-
-If you update DataSet.xlsx, re-run:
+```bash
+pip install -r requirements.txt
+python app.py
 ```
+
+Then open:
+
+```text
+http://localhost:5000/
+http://localhost:5000/chatbot
+```
+
+## Matching Engine
+
+The chatbot now uses a hybrid intent matcher:
+
+| Layer | Purpose |
+| --- | --- |
+| Exact sentence match | Preserves curated answers for known questions |
+| Intent shortcuts | Handles actions like resume, GitHub, LinkedIn, contact, projects, and skills |
+| Token overlap | Matches natural wording such as "show me your skills" |
+| Fuzzy similarity | Catches small typos and phrasing differences |
+| Fallback response | Guides the user when no confident match is found |
+
+Responses may include action metadata, so the UI can show buttons like `Download Resume`, `Open GitHub`, or `Email`.
+
+## API Routes
+
+```text
+GET  /status       Dataset and response health
+GET  /suggestions  Autocomplete suggestions from dataset.json
+POST /chat         Chat response endpoint
+```
+
+## Regenerating Dataset
+
+If you update `DataSet.xlsx`, run:
+
+```bash
 python build_dataset.py
 ```
+
+Make sure every `File Name` value in the sheet has a matching file in `responses/`.

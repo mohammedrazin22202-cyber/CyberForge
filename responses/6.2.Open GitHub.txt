@@ -1,5 +1,5 @@
-GitHub: github.com/[yourusername]
+GitHub: https://github.com/mohammedrazin22202-cyber
 
-That's where the actual code lives. Commit history doesn't lie — it shows how I work, how I iterate, and what I've shipped.
+That is where the actual code belongs: project structure, commit history, and the way I think through implementation.
 
-→ Update this with your real GitHub handle in responses.json and link it directly in index.html.
+If you are reviewing me as a candidate, GitHub is the best place to inspect how I build beyond the portfolio surface.
