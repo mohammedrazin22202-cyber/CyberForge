@@ -7,7 +7,7 @@
 [SCAN] LogiSense system ............... ✅ OPERATIONAL
 [SCAN] Power BI dashboards ............. ✅ ACTIVE
 [SCAN] SQL engine ..................... ✅ CONNECTED
-[SCAN] LeetCode module ................ ✅ 1000+ problems | 90% acceptance
+[SCAN] LeetCode module ................ ✅ 1750+ problems | 90% acceptance
 [SCAN] Hackathon record ............... ✅ 2x 2nd Prize
 [SCAN] Certifications ................. ✅ 3 verified
 [SCAN] Career mode .................... ✅ SEEKING DATA ANALYST ROLE

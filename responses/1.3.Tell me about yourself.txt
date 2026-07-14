@@ -6,6 +6,6 @@ Core skills: Python (Pandas, NumPy), SQL, Power BI, MySQL, MongoDB, data cleanin
 
 Real-world output: processed 650K+ records in a production pipeline, improved processing efficiency by 41%, built dashboards that stakeholders actually use.
 
-Beyond the resume: 2x hackathon winner, 1000+ LeetCode problems solved at 90% acceptance rate, 3 professional certifications.
+Beyond the resume: 2x hackathon winner, 1750+ LeetCode problems solved at 90% acceptance rate, 3 professional certifications.
 
 I don't just know the tools. I've used them on real problems at real scale.

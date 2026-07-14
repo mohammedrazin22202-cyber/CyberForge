@@ -6,7 +6,7 @@ ACHIEVEMENT LOG:
 🏆 2nd Prize — Hackathon by Department of IT
    MGR University | Chennai | 2025
 
-⭐ 1000+ LeetCode Problems Solved
+⭐ 1750+ LeetCode Problems Solved
    ~90% acceptance rate | 2026
    Consistent, daily problem-solving discipline
 

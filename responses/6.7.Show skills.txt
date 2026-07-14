@@ -8,4 +8,4 @@ Tools: Git, Docker, Jupyter Notebook, VS Code
 Concepts: Data Cleaning, EDA, ETL, KPI Reporting, Statistical Analysis, Data Validation
 
 Certifications: Data Science & Analytics (GUVI) | Data Visualization (Great Learning)
-LeetCode: 1000+ problems | ~90% acceptance rate
+LeetCode: 1750+ problems | ~90% acceptance rate
