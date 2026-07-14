@@ -8,7 +8,7 @@ EXPERIENCE LOG:
    → Built interactive Power BI dashboards for KPI tracking
 
 🎓 MCA — Measi Institute of Information Technology
-   University of Madras | Graduating May 2026
+   University of Madras | Completed 2026
    Coursework: SQL, MongoDB, AI, Machine Learning
 
 🎓 B.Com — The New College

@@ -1,6 +1,6 @@
 Entry-level by title. More capable than that in practice.
 
-Final-year MCA student, graduating May 2026.
+MCA Graduate (Completed 2026).
 
 Hands-on experience:
 → Data pipeline engineering at 650K+ record scale

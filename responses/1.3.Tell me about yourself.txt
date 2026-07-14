@@ -1,6 +1,6 @@
 Sure — I'll keep it honest and specific.
 
-I'm Mohammed Razin H, a final-year MCA student at Measi Institute of Information Technology, graduating May 2026. Before tech, I did my B.Com at The New College — which means I came into data from a business background. That's not a detour. That's why I think about data in terms of impact, not just code.
+I'm Mohammed Razin H, an MCA graduate from Measi Institute of Information Technology (2026). Before tech, I did my B.Com at The New College — which means I came into data from a business background. That's not a detour. That's why I think about data in terms of impact, not just code.
 
 Core skills: Python (Pandas, NumPy), SQL, Power BI, MySQL, MongoDB, data cleaning, EDA, and ETL pipeline design.
 
