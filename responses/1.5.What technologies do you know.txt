@@ -1,6 +1,6 @@
 Here's my honest stack — no inflation:
 
-Languages: Python (primary), SQL, R
+Languages: Python (primary), SQL (joins, CTEs, window functions), R
 Libraries: Pandas, NumPy, Matplotlib, Seaborn
 Databases: MySQL, MongoDB
 Visualization: Power BI, Excel, Matplotlib

@@ -4,7 +4,7 @@ HARD SKILLS:
 → Python data pipelines (Pandas, NumPy) at scale — 650K+ records processed in production
 → Exploratory Data Analysis and statistical pattern recognition
 → Power BI dashboards for business KPI tracking
-→ SQL and database management (MySQL + MongoDB)
+→ SQL (joins, CTEs, window functions) and database management (MySQL + MongoDB)
 → Data cleaning, validation, and multi-stage ETL processes
 → Git, Docker, Jupyter workflows
 
