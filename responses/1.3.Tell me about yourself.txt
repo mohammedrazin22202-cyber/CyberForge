@@ -2,7 +2,7 @@ Sure — I'll keep it honest and specific.
 
 I'm Mohammed Razin H, an MCA graduate from Measi Institute of Information Technology (2026). Before tech, I did my B.Com at The New College — which means I came into data from a business background. That's not a detour. That's why I think about data in terms of impact, not just code.
 
-Core skills: Python (Pandas, NumPy), SQL, Power BI, MySQL, MongoDB, data cleaning, EDA, and ETL pipeline design.
+Core skills: Python (Pandas, NumPy), R, SQL, Power BI, MySQL, MongoDB, data cleaning, EDA, and ETL pipeline design.
 
 Real-world output: processed 650K+ records in a production pipeline, improved processing efficiency by 41%, built dashboards that stakeholders actually use.
 

@@ -1,6 +1,6 @@
 SKILLS — FULL MANIFEST:
 
-Languages: Python, SQL
+Languages: Python, SQL, R
 Libraries: Pandas, NumPy, Matplotlib, Seaborn
 Databases: MySQL, MongoDB
 Visualization: Power BI, Excel, Matplotlib
