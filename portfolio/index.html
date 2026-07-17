@@ -1581,6 +1581,24 @@
     letter-spacing: 2px;
     color: var(--matrix-green);
     margin-bottom: 4px;
+    transition: color 0.2s, text-shadow 0.2s;
+  }
+
+  .exp-link-wrapper {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .exp-link-wrapper:hover .exp-company {
+    color: var(--cyan);
+    text-shadow: 0 0 16px var(--cyan-glow), 0 0 32px rgba(0,229,255,0.2);
+  }
+
+  .exp-link-wrapper:hover .project-link-icon {
+    opacity: 1;
+    transform: translate(0, 0);
   }
 
   .exp-role {
@@ -3614,26 +3632,28 @@
   <div class="os-badge">[ WORK LOG ]</div>
   <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.03</span>Experience</h2>
   <div class="exp-timeline reveal">
-    <div class="exp-item">
-      <div class="exp-company">Al Haseena Exports Pvt. Ltd.</div>
-      <div class="exp-role">Data Analyst &amp; Python Developer (Dec 2025 – Apr 2026)</div>
-      <div class="exp-desc">
-        Developed and deployed <a href="https://logisense-rc4l.onrender.com/" target="_blank" rel="noopener" class="project-title-link"><strong>LogiSense 360</strong> <span class="project-link-icon">↗</span></a>, a predictive logistics &amp; delivery analytics platform, to automate operational workflows and improve delivery performance tracking.
-        <ul>
-          <li>Engineered end-to-end pipelines using Python, Flask, SQLite, and MongoDB to automate shipment monitoring and forecast delivery delays.</li>
-          <li>Built and evaluated regression and classification models using scikit-learn to identify operational risks and improve forecasting accuracy.</li>
-          <li>Designed interactive dashboards for admins, drivers, and customers to monitor business metrics and key performance indicators.</li>
-          <li>Automated shipment monitoring via intelligent alert generation, reducing exception resolution times.</li>
-        </ul>
-        <div class="workflow-tags" style="margin-top: 20px;">
-          <span class="workflow-tag">Python</span>
-          <span class="workflow-tag">Flask</span>
-          <span class="workflow-tag">Scikit-learn</span>
-          <span class="workflow-tag">SQLite</span>
-          <span class="workflow-tag">MongoDB</span>
+    <a href="https://logisense-rc4l.onrender.com/" target="_blank" rel="noopener" class="exp-link-wrapper">
+      <div class="exp-item">
+        <div class="exp-company">Al Haseena Exports Pvt. Ltd. <span class="project-link-icon">↗</span></div>
+        <div class="exp-role">Data Analyst &amp; Python Developer (Dec 2025 – Apr 2026)</div>
+        <div class="exp-desc">
+          Developed and deployed <strong>LogiSense 360</strong>, a predictive logistics &amp; delivery analytics platform, to automate operational workflows and improve delivery performance tracking.
+          <ul>
+            <li>Engineered end-to-end pipelines using Python, Flask, SQLite, and MongoDB to automate shipment monitoring and forecast delivery delays.</li>
+            <li>Built and evaluated regression and classification models using scikit-learn to identify operational risks and improve forecasting accuracy.</li>
+            <li>Designed interactive dashboards for admins, drivers, and customers to monitor business metrics and key performance indicators.</li>
+            <li>Automated shipment monitoring via intelligent alert generation, reducing exception resolution times.</li>
+          </ul>
+          <div class="workflow-tags" style="margin-top: 20px;">
+            <span class="workflow-tag">Python</span>
+            <span class="workflow-tag">Flask</span>
+            <span class="workflow-tag">Scikit-learn</span>
+            <span class="workflow-tag">SQLite</span>
+            <span class="workflow-tag">MongoDB</span>
+          </div>
         </div>
       </div>
-    </div>
+    </a>
   </div>
 </section>
 
