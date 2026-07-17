@@ -1531,6 +1531,73 @@
     text-transform: uppercase;
   }
 
+  /* ── WORK EXPERIENCE ── */
+  #experience { border-top: 1px solid var(--border); }
+
+  .exp-timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .exp-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, var(--matrix-green), transparent);
+  }
+
+  .exp-item {
+    position: relative;
+    margin-bottom: 44px;
+  }
+
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: -45px;
+    top: 8px;
+    width: 10px; height: 10px;
+    border: 1px solid var(--matrix-green);
+    background: var(--black);
+    box-shadow: 0 0 12px var(--matrix-green);
+    transform: rotate(45deg);
+  }
+
+  .exp-company {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--matrix-green);
+    margin-bottom: 4px;
+  }
+
+  .exp-role {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    color: var(--matrix-mid);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .exp-desc {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.05rem;
+    color: #ffffff;
+    line-height: 1.7;
+  }
+
+  .exp-desc ul {
+    margin-top: 8px;
+    padding-left: 20px;
+    list-style-type: square;
+  }
+
+  .exp-desc li {
+    margin-bottom: 6px;
+  }
+
   /* ── EDUCATION ── */
   #education { border-top: 1px solid var(--border); }
 
@@ -3367,6 +3434,7 @@
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Capabilities</a></li>
+    <li><a href="#experience">Experience</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#workflow">Workflow</a></li>
     <li><a href="#learning">Learning</a></li>
@@ -3382,6 +3450,7 @@
 <div class="nav-mobile-panel" id="nav-mobile-panel">
   <a href="#about"        onclick="closeMobileNav()">About</a>
   <a href="#skills"       onclick="closeMobileNav()">Capabilities</a>
+  <a href="#experience"   onclick="closeMobileNav()">Experience</a>
   <a href="#projects"     onclick="closeMobileNav()">Projects</a>
   <a href="#workflow"     onclick="closeMobileNav()">Workflow</a>
   <a href="#learning"     onclick="closeMobileNav()">Learning</a>
@@ -3526,10 +3595,31 @@
   </div>
 </section>
 
+<!-- EXPERIENCE -->
+<section id="experience" data-sys="SYS.03">
+  <div class="os-badge">[ WORK LOG ]</div>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.03</span>Experience</h2>
+  <div class="exp-timeline reveal">
+    <div class="exp-item">
+      <div class="exp-company">Al Haseena Exports Pvt. Ltd.</div>
+      <div class="exp-role">Data Analyst &amp; Python Developer (Dec 2025 – Apr 2026)</div>
+      <div class="exp-desc">
+        Developed and deployed <strong>LogiSense 360</strong>, a predictive logistics &amp; delivery analytics platform, to automate operational workflows and improve delivery performance tracking.
+        <ul>
+          <li>Engineered end-to-end pipelines using Python, Flask, SQLite, and MongoDB to automate shipment monitoring and forecast delivery delays.</li>
+          <li>Built and evaluated regression and classification models using scikit-learn to identify operational risks and improve forecasting accuracy.</li>
+          <li>Designed interactive dashboards for admins, drivers, and customers to monitor business metrics and key performance indicators.</li>
+          <li>Automated shipment monitoring via intelligent alert generation, reducing exception resolution times.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- PROJECTS -->
-<section id="projects" data-sys="SYS.03">
+<section id="projects" data-sys="SYS.04">
   <div class="os-badge">[ PROJECTS ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.03</span>Projects</h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.04</span>Projects</h2>
   <div class="project-card reveal">
     <div class="project-number">01</div>
     <div class="project-tag">Featured Project</div>
@@ -3578,52 +3668,6 @@
 
   <div class="project-card reveal" style="margin-top: 28px;">
     <div class="project-number">02</div>
-    <div class="project-tag">Real-World Data Analytics Project</div>
-    <h3 class="project-title"><a href="https://logisense-rc4l.onrender.com/" target="_blank" rel="noopener" class="project-title-link">LOGISENSE: INTELLIGENT LOGISTICS &amp; DELIVERY ANALYTICS SYSTEM <span class="project-link-icon">↗</span></a></h3>
-    <p class="project-desc">
-      A data-driven logistics analytics system designed to optimize delivery operations, reduce delays, and uncover inefficiencies across transportation pipelines. Engineered end-to-end workflows for data ingestion, cleaning, and analysis on large-scale shipment datasets. Transformed raw operational data into actionable insights through dynamic dashboards, enabling smarter routing decisions and performance tracking. Focused on identifying delivery bottlenecks, improving turnaround time, and enhancing overall logistics efficiency.
-    </p>
-    <div class="project-metrics">
-      <div class="metric">
-        <div class="metric-value">3500+</div>
-        <div class="metric-label">Delivery Records</div>
-      </div>
-      <div class="metric">
-        <div class="metric-value">30%</div>
-        <div class="metric-label">Improvement Opportunities</div>
-      </div>
-      <div class="metric">
-        <div class="metric-value">20%</div>
-        <div class="metric-label">Reduction in Manual Analysis</div>
-      </div>
-    </div>
-    <div class="project-preview" aria-label="LogiSense dashboard preview">
-      <div class="preview-screen" data-title="LOGISENSE OPS DASHBOARD">
-        <div class="preview-chart">
-          <span class="preview-bar" style="--h:58%"></span>
-          <span class="preview-bar" style="--h:76%"></span>
-          <span class="preview-bar" style="--h:42%"></span>
-          <span class="preview-bar" style="--h:84%"></span>
-          <span class="preview-bar" style="--h:67%"></span>
-        </div>
-        <div class="preview-line"></div>
-      </div>
-      <div class="preview-kpis">
-        <div class="preview-kpi"><strong>3.5K+</strong><span>delivery rows</span></div>
-        <div class="preview-kpi"><strong>30%</strong><span>optimization signals</span></div>
-        <div class="preview-kpi"><strong>20%</strong><span>manual work reduced</span></div>
-      </div>
-    </div>
-    <button class="tech-stack-btn" onclick="openTechStack('logisense')">⚡ Tech Stack</button>
-    <div class="par-block">
-      <div class="par-row"><span class="par-label">Problem</span><span class="par-text">Delivery delays and inefficiencies across logistics operations</span></div>
-      <div class="par-row"><span class="par-label">Action</span><span class="par-text">Analyzed shipment data using Python & SQL, identified delay patterns, built performance dashboard</span></div>
-      <div class="par-row"><span class="par-label">Result</span><span class="par-text">Detected high-delay zones → improved route planning insights</span></div>
-    </div>
-  </div>
-
-  <div class="project-card reveal" style="margin-top: 28px;">
-    <div class="project-number">03</div>
     <div class="project-tag">Python Automation Project</div>
     <h3 class="project-title">CYBERFORGE: INTELLIGENT QUERY RESPONSE CHATBOT SYSTEM</h3>
     <p class="project-desc">
@@ -3671,9 +3715,9 @@
 
 <!-- ACHIEVEMENTS -->
 <!-- WORKFLOW -->
-<section id="workflow" data-sys="SYS.04">
+<section id="workflow" data-sys="SYS.05">
   <div class="os-badge">[ WORKFLOW PROTOCOL ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.04</span>Workflow Protocol</h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.05</span>Workflow Protocol</h2>
   <div class="workflow-track">
 
     <div class="workflow-step reveal">
@@ -3797,9 +3841,9 @@
 </section>
 
 <!-- ACHIEVEMENTS -->
-<section id="achievements" data-sys="SYS.05">
+<section id="achievements" data-sys="SYS.06">
   <div class="os-badge">[ ACHIEVEMENTS ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.05</span>Achievements</h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.06</span>Achievements</h2>
   <div class="achieve-grid">
     <div class="achieve-card reveal">
       <div class="achieve-icon">🏆</div>
@@ -3823,9 +3867,9 @@
 </section>
 
 <!-- EDUCATION -->
-<section id="education" data-sys="SYS.06">
+<section id="education" data-sys="SYS.07">
   <div class="os-badge">[ EDUCATION LOG ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.06</span>Education Log</h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.07</span>Education Log</h2>
   <div class="edu-timeline reveal">
     <div class="edu-item">
       <div class="edu-year">2024 – 2026</div>
@@ -3842,9 +3886,9 @@
 
 <!-- CERTIFICATIONS -->
 <!-- CURRENTLY LEARNING -->
-<section id="learning" data-sys="SYS.07">
+<section id="learning" data-sys="SYS.08">
   <div class="os-badge">[ AI MODULES ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.07</span>AI Modules</h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.08</span>AI Modules</h2>
   <div class="learning-grid">
 
     <div class="learning-card reveal">
@@ -3910,9 +3954,9 @@
   </div>
 </section>
 
-<section id="certs" data-sys="SYS.08">
+<section id="certs" data-sys="SYS.09">
   <div class="os-badge">[ CREDENTIALS ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.08</span>Credentials</h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.09</span>Credentials</h2>
   <div class="cert-grid">
     <div class="cert-card reveal">
       <div class="cert-num">01</div>
@@ -3951,9 +3995,9 @@
 </section>
 
 <!-- CONTACT -->
-<section id="contact" data-sys="SYS.09">
+<section id="contact" data-sys="SYS.10">
   <div class="os-badge">[ CONNECT ]</div>
-  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.09</span>Connect</h2>
+  <h2 class="section-title reveal"><span style="color:var(--cyan-mid);font-size:0.5em;letter-spacing:4px;vertical-align:middle;margin-right:12px;">SYS.10</span>Connect</h2>
   <br><br>
   <div class="contact-box reveal">
     <div class="section-label" style="margin-bottom:10px; font-size:0.95rem;">I'd love to hear from you</div>
