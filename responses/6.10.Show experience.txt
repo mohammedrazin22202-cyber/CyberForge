@@ -1,11 +1,11 @@
 EXPERIENCE LOG:
 
-💼 Data Analyst Intern
-   → Processed and analyzed 650K+ records using Python (Pandas, NumPy)
-   → Built data cleaning and validation pipelines from scratch
-   → Optimized processing workflows — 41% efficiency improvement
-   → Performed EDA to identify trends and patterns
-   → Built interactive Power BI dashboards for KPI tracking
+💼 Data Analyst & Python Developer | Al Haseena Exports Pvt. Ltd.
+   (Dec 2025 – Apr 2026)
+   → Developed LogiSense 360, a predictive logistics analytics platform using Python, Flask, Scikit-learn, SQLite, and MongoDB
+   → Built and evaluated regression/classification models to identify operational risks and improve forecasting accuracy
+   → Designed interactive dashboards and business reporting modules for admins, drivers, and customers
+   → Automated shipment monitoring via alert generation for early exception identification
 
 🎓 MCA — Measi Institute of Information Technology
    University of Madras | Completed 2026

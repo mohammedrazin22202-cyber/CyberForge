@@ -1,13 +1,14 @@
-Entry-level by title. More capable than that in practice.
+I am an MCA graduate (2026) with real-world development and analyst experience.
 
-MCA Graduate (Completed 2026).
+Professional Experience:
+→ Data Analyst & Python Developer at Al Haseena Exports Pvt. Ltd. (Dec 2025 – Apr 2026)
+  • Developed LogiSense 360, a predictive logistics analytics platform (Python, Flask, Scikit-learn, SQLite, MongoDB)
+  • Built classification & regression models to identify operational risks and improve forecasting accuracy
 
-Hands-on experience:
-→ Data pipeline engineering at 650K+ record scale
-→ 41% processing efficiency improvement through optimization
-→ Power BI dashboards used by actual stakeholders
-→ 2x hackathon winner (Measi Institute + MGR University)
+Hands-on output:
+→ Data pipeline engineering at 650K+ record scale (VConnect)
+→ 70% manual effort reduction through workflow automation
 → 1750+ LeetCode problems at 90% acceptance rate
-→ 3 professional data certifications
+→ 2x hackathon winner (Measi Institute + MGR University)
 
-I don't have years of job titles. What I have is demonstrated output and a proven ability to learn fast and deliver. That's the more relevant signal.
+I have a proven ability to learn fast, manage databases, write clean code, and deliver measurable business outcomes.
