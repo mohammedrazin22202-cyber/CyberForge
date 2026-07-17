@@ -12,7 +12,7 @@ CyberForge/
 ├── build_dataset.py    Regenerates dataset.json
 ├── requirements.txt    Python dependencies
 ├── responses/          Curated response text files
-├── static/index.html   Chatbot UI
+├── static/chatbot.html Chatbot UI
 └── portfolio/          Portfolio page, resume, and assets
 ```
 
@@ -26,8 +26,8 @@ python app.py
 Then open:
 
 ```text
-http://localhost:5000/
-http://localhost:5000/chatbot
+http://localhost:6161/
+http://localhost:6161/chatbot
 ```
 
 ## Matching Engine

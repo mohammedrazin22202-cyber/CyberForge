@@ -31,7 +31,16 @@ limiter = Limiter(
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATASET_PATH = os.path.join(BASE_DIR, 'dataset.json')
 RESPONSES_DIR = os.path.join(BASE_DIR, 'responses')
+
+# Graceful safety check for frontend directory fallback
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend'))
+if not os.path.exists(FRONTEND_DIR):
+    print(f">> WARNING: Frontend directory not found at {FRONTEND_DIR}. Graceful fallback to internal check.")
+    FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
+
 PORTFOLIO_DIR = os.path.join(BASE_DIR, 'portfolio')
+if not os.path.exists(PORTFOLIO_DIR) and os.path.exists(FRONTEND_DIR):
+    PORTFOLIO_DIR = FRONTEND_DIR
 
 with open(DATASET_PATH, 'r', encoding='utf-8') as f:
     DATASET = json.load(f)
@@ -544,7 +553,7 @@ def token_weight(tok: str) -> float:
 
 ACTION_MAP = {
     '6.1.Show projects.txt': [
-        {'label': 'View Projects', 'url': '/#projects'},
+        {'label': 'View Projects', 'url': 'index.html#projects'},
     ],
     '6.2.Open GitHub.txt': [
         {'label': 'Open GitHub', 'url': 'https://github.com/mohammedrazin22202-cyber', 'external': True},
@@ -553,7 +562,7 @@ ACTION_MAP = {
         {'label': 'Open LinkedIn', 'url': 'https://www.linkedin.com/in/razinn88307', 'external': True},
     ],
     '6.4.Download resume.txt': [
-        {'label': 'Download Resume', 'url': '/My_Resume.pdf', 'download': 'Mohammed_Razin_H_Resume.pdf'},
+        {'label': 'Download Resume', 'url': 'My_Resume.pdf', 'download': 'Mohammed_Razin_H_Resume.pdf'},
     ],
     '6.5.Contact information.txt': [
         {'label': 'Email', 'url': 'mailto:mohammedrazin22202@gmail.com?subject=Reaching%20out%20from%20your%20Portfolio'},
@@ -561,19 +570,19 @@ ACTION_MAP = {
         {'label': 'LinkedIn', 'url': 'https://www.linkedin.com/in/razinn88307', 'external': True},
     ],
     '6.6.Show certifications.txt': [
-        {'label': 'View Certifications', 'url': '/#achievements'},
+        {'label': 'View Certifications', 'url': 'index.html#achievements'},
     ],
     '6.7.Show skills.txt': [
-        {'label': 'View Skills', 'url': '/#skills'},
+        {'label': 'View Skills', 'url': 'index.html#skills'},
     ],
     '6.8.Open portfolio.txt': [
-        {'label': 'Open Portfolio', 'url': '/'},
+        {'label': 'Open Portfolio', 'url': 'index.html'},
     ],
     '6.9.Show achievements.txt': [
-        {'label': 'View Achievements', 'url': '/#achievements'},
+        {'label': 'View Achievements', 'url': 'index.html#achievements'},
     ],
     '6.10.Show experience.txt': [
-        {'label': 'View Workflow', 'url': '/#workflow'},
+        {'label': 'View Workflow', 'url': 'index.html#workflow'},
     ],
     '2.4.Tell me about LogiSense.txt': [
         {'label': 'Open LogiSense', 'url': 'https://logisense-rc4l.onrender.com/', 'external': True},
@@ -1432,7 +1441,7 @@ def rate_limit_handler(e):
 
 @app.route('/chatbot')
 def chatbot():
-    return send_from_directory('static', 'index.html')
+    return send_from_directory('static', 'chatbot.html')
 
 
 @app.route('/voice')
@@ -1445,12 +1454,12 @@ def index():
     portfolio_index = os.path.join(PORTFOLIO_DIR, 'index.html')
     if os.path.exists(portfolio_index):
         return send_from_directory(PORTFOLIO_DIR, 'index.html')
-    return send_from_directory('static', 'index.html')
+    return send_from_directory('static', 'chatbot.html')
 
 
 @app.route('/<path:filename>')
 def portfolio_assets(filename):
-    if filename.startswith(('chat', 'status', 'suggestions', 'static/')):
+    if filename in ('chat', 'status', 'suggestions'):
         return jsonify({'error': 'not found'}), 404
 
     portfolio_file = os.path.join(PORTFOLIO_DIR, filename)
@@ -1602,7 +1611,7 @@ if __name__ == '__main__':
         print("\n>> Created 'portfolio/' folder.")
         print(f">> Copy your portfolio index.html + assets into: {PORTFOLIO_DIR}")
 
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 6161))
     print("\n>> MEGATRON OS - CYBERFORGE AI SYSTEM INITIALIZING...")
     print(f">> Portfolio:  http://localhost:{port}/")
     print(f">> Chatbot UI: http://localhost:{port}/chatbot")

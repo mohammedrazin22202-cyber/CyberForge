@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#000a00">
 <title>CYBERFORGE :: AI TERMINAL</title>
-<link rel="icon" type="image/png" href="/cyberforge_logo.png">
+<link rel="icon" type="image/png" href="cyberforge_logo.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
@@ -2914,8 +2914,8 @@
   </div>
 
   <div class="header-status">
-    <a class="os-link" href="/" title="Open portfolio">PORTFOLIO</a>
-    <a class="voice-mode-link" href="/voice" target="_blank" rel="noopener" title="Open voice mode" aria-label="Open voice mode">
+    <a class="os-link" href="index.html" title="Open portfolio">PORTFOLIO</a>
+    <a class="voice-mode-link" href="voice.html" target="_blank" rel="noopener" title="Open voice mode" aria-label="Open voice mode">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/>
         <path d="M5 10a7 7 0 0 0 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -3178,7 +3178,7 @@
         <a class="social-link" href="https://www.linkedin.com/in/razinn88307" target="_blank" rel="noopener">
           <span class="sl-icon">in</span>LINKEDIN
         </a>
-        <a class="social-link" href="/" target="_blank" rel="noopener">
+        <a class="social-link" href="index.html" target="_blank" rel="noopener">
           <span class="sl-icon">&#9671;</span>PORTFOLIO
         </a>
       </div>
@@ -3206,6 +3206,13 @@
 
 
 <script>
+const PROD_BACKEND_URL = ''; // Filled in with your Render link during deploy
+const API_BASE_URL = PROD_BACKEND_URL || (
+  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? (window.location.port === '6161' ? '' : 'http://localhost:6161')
+    : ''
+);
+
 const CF_THEME_KEY = 'cfTheme';
 const CF_MODE_KEY = 'cfExperienceMode';
 
@@ -3746,7 +3753,7 @@ let acSuggestions = [...AC_SUGGESTIONS];
 
 async function loadSuggestions() {
   try {
-    const res = await fetch('/suggestions');
+    const res = await fetch(API_BASE_URL + '/suggestions');
     const data = await res.json();
     if (Array.isArray(data.suggestions) && data.suggestions.length) {
       acSuggestions = data.suggestions;
@@ -3899,7 +3906,7 @@ userInput.addEventListener('input', () => {
   clearTimeout(_acDebounce);
   _acDebounce = setTimeout(async () => {
     try {
-      const res = await fetch('/suggestions?q=' + encodeURIComponent(q));
+      const res = await fetch(API_BASE_URL + '/suggestions?q=' + encodeURIComponent(q));
       const data = await res.json();
       if (Array.isArray(data.suggestions) && data.suggestions.length) {
         // Only update if the user hasn't cleared the input since we fired
@@ -4708,7 +4715,7 @@ async function sendMessage() {
   showTyping();
 
   try {
-    const res = await fetch('/chat', {
+    const res = await fetch(API_BASE_URL + '/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: text, session_id: SESSION_ID })
@@ -4734,7 +4741,7 @@ async function sendMessage() {
 
   } catch (err) {
     hideTyping();
-    await addMessage('bot', '>> CONNECTION ERROR. Backend unreachable.\n>> Ensure app.py is running on port 5000.');
+    await addMessage('bot', '>> CONNECTION ERROR. Backend unreachable.\n>> Ensure app.py is running on port 6161.');
     addActivity('ERROR: fetch failed');
   }
 
@@ -4882,7 +4889,7 @@ async function initChat() {
 
   // Fetch system status
   try {
-    const s = await fetch('/status');
+    const s = await fetch(API_BASE_URL + '/status');
     const d = await s.json();
     document.getElementById('entries-val').textContent = d.total_entries;
     document.getElementById('loaded-val').textContent  = d.responses_loaded;

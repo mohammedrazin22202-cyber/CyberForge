@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#020503">
 <title>CYBERFORGE :: VOICE AGENT</title>
-<link rel="icon" type="image/png" href="/cyberforge_logo.png">
+<link rel="icon" type="image/png" href="cyberforge_logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -1215,8 +1215,8 @@ body.cyber-mode #matrix-rain {
     </div>
     <div class="nav-actions">
       <span class="session-timer" id="session-timer">00:00:00</span>
-      <a class="os-text-link" href="/">PORTFOLIO</a>
-      <a class="icon-link" href="/chatbot" aria-label="Open text chatbot" title="Text chatbot">
+      <a class="os-text-link" href="index.html">PORTFOLIO</a>
+      <a class="icon-link" href="chatbot.html" aria-label="Open text chatbot" title="Text chatbot">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
         </svg>
@@ -1448,6 +1448,20 @@ const hudQueries = document.getElementById('hud-queries');
 const SESSION_ID = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).slice(2);
 const STT_SUPPORTED = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
 const TTS_SUPPORTED = 'speechSynthesis' in window;
+if (TTS_SUPPORTED) {
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = () => {
+    speechSynthesis.getVoices();
+  };
+}
+
+const PROD_BACKEND_URL = ''; // Filled in with your Render link during deploy
+const API_BASE_URL = PROD_BACKEND_URL || (
+  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? (window.location.port === '6161' ? '' : 'http://localhost:6161')
+    : ''
+);
+
 let recognition = null;
 let listening = false;
 let busy = false;
@@ -1704,7 +1718,9 @@ function speak(text) {
   utterance.pitch = 0.74;
   utterance.volume = 1;
   const voices = speechSynthesis.getVoices();
-  const preferred = voices.find(v => v.lang.startsWith('en') && /Microsoft|Google|Natural|Daniel|David/i.test(v.name))
+  const preferred = voices.find(v => v.lang.startsWith('en') && v.localService && /Microsoft|Daniel|David|Zira/i.test(v.name))
+    || voices.find(v => v.lang.startsWith('en') && v.localService)
+    || voices.find(v => v.lang.startsWith('en') && /Microsoft|Google|Natural|Daniel|David/i.test(v.name))
     || voices.find(v => v.lang.startsWith('en'))
     || null;
   if (preferred) utterance.voice = preferred;
@@ -1880,7 +1896,7 @@ async function submitQuery(text) {
   setResponse('>> ANALYZING SIGNAL...', true);
 
   try {
-    const res = await fetch('/chat', {
+    const res = await fetch(API_BASE_URL + '/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: query, session_id: SESSION_ID })
@@ -1926,8 +1942,10 @@ function createRecognition() {
   rec.maxAlternatives = 1;
   rec.continuous = false;
   let finalTranscript = '';
+  let silenceTimer = null;
 
   rec.onstart = () => {
+    if (silenceTimer) clearTimeout(silenceTimer);
     listening = true;
     recognitionHadError = false;
     finalTranscript = '';
@@ -1940,6 +1958,7 @@ function createRecognition() {
   };
 
   rec.onresult = (event) => {
+    if (silenceTimer) clearTimeout(silenceTimer);
     let interim = '';
     finalTranscript = '';
     for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -1948,9 +1967,17 @@ function createRecognition() {
       else interim += phrase;
     }
     setResponse('>> ' + (finalTranscript || interim || 'LISTENING...'), true);
+
+    if (finalTranscript.trim()) {
+      silenceTimer = setTimeout(() => {
+        console.log('[Voice] Silence debounce trigger: manually stopping recognition.');
+        rec.stop();
+      }, 750);
+    }
   };
 
   rec.onerror = (event) => {
+    if (silenceTimer) clearTimeout(silenceTimer);
     recognitionHadError = true;
     stopListeningVisuals();
     if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
@@ -1978,6 +2005,7 @@ function createRecognition() {
   };
 
   rec.onend = () => {
+    if (silenceTimer) clearTimeout(silenceTimer);
     stopListeningVisuals();
     if (recognitionHadError) return;
     if (finalTranscript.trim()) {
