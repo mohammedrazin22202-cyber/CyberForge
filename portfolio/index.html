@@ -1550,18 +1550,29 @@
   .exp-item {
     position: relative;
     margin-bottom: 44px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    padding: 30px;
+    transition: all 0.3s;
+  }
+
+  .exp-item:hover {
+    border-color: var(--matrix-green);
+    box-shadow: 0 0 30px rgba(0,255,65,0.12);
+    transform: translateX(4px);
   }
 
   .exp-item::before {
     content: '';
     position: absolute;
     left: -45px;
-    top: 8px;
+    top: 35px;
     width: 10px; height: 10px;
     border: 1px solid var(--matrix-green);
     background: var(--black);
     box-shadow: 0 0 12px var(--matrix-green);
     transform: rotate(45deg);
+    z-index: 2;
   }
 
   .exp-company {
@@ -3611,6 +3622,13 @@
           <li>Designed interactive dashboards for admins, drivers, and customers to monitor business metrics and key performance indicators.</li>
           <li>Automated shipment monitoring via intelligent alert generation, reducing exception resolution times.</li>
         </ul>
+        <div class="workflow-tags" style="margin-top: 20px;">
+          <span class="workflow-tag">Python</span>
+          <span class="workflow-tag">Flask</span>
+          <span class="workflow-tag">Scikit-learn</span>
+          <span class="workflow-tag">SQLite</span>
+          <span class="workflow-tag">MongoDB</span>
+        </div>
       </div>
     </div>
   </div>
